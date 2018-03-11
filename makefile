@@ -1,7 +1,7 @@
 # setup
 
 COMPILE_OPTS = -mcpu=cortex-m3 -mthumb -Wall -g -O0
-INCLUDE_DIRS = -I . -I lib/inc
+INCLUDE_DIRS = -I . -I lib/inc -I obj
 LIBRARY_DIRS = -L lib
 
 CC = arm-none-eabi-gcc
@@ -14,7 +14,8 @@ AS = arm-none-eabi-gcc
 ASFLAGS = $(COMPILE_OPTS) -c
 
 LD = arm-none-eabi-gcc
-LDFLAGS = -Wl,--gc-sections,-Map=$@.map,-cref,-u,Reset_Handler $(INCLUDE_DIRS) $(LIBRARY_DIRS) -T stm32.ld
+LDFLAGS = -Wl,--gc-sections,-Map=$(OUT_PATH)/$(MAIN_OUT).map,-cref,-u,Reset_Handler $(INCLUDE_DIRS) $(LIBRARY_DIRS) -T stm32.ld
+
 
 OBJCP = arm-none-eabi-objcopy
 OBJCPFLAGS = -O binary
@@ -22,9 +23,14 @@ OBJCPFLAGS = -O binary
 AR = arm-none-eabi-ar
 ARFLAGS = cr
 
+OBJ_PATH = obj
+OUT_PATH = out
+
 MAIN_OUT = main
-MAIN_OUT_ELF = $(MAIN_OUT).elf
-MAIN_OUT_BIN = $(MAIN_OUT).bin
+MAIN_OUT_ELF = $(OUT_PATH)/$(MAIN_OUT).elf
+#MAIN_OUT_ELF = $(MAIN_OUT).elf
+MAIN_OUT_BIN = $(OUT_PATH)/$(MAIN_OUT).bin
+#MAIN_OUT_BIN = $(MAIN_OUT).bin
 
 # all
 
@@ -32,20 +38,24 @@ all: $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
 
 # main
 
-$(MAIN_OUT_ELF): main.o stm32f10x_it.o lib/libstm32.a
-	$(LD) $(LDFLAGS) main.o stm32f10x_it.o lib/libstm32.a --output $@
+$(MAIN_OUT_ELF): $(OBJ_PATH)/main.o $(OBJ_PATH)/stm32f10x_it.o lib/libstm32.a
+	$(LD) $(LDFLAGS) $(OBJ_PATH)/main.o $(OBJ_PATH)/stm32f10x_it.o lib/libstm32.a --output $@
 
 $(MAIN_OUT_BIN): $(MAIN_OUT_ELF)
 	$(OBJCP) $(OBJCPFLAGS) $< $@
 
+$(OBJ_PATH)/%.o: %.c
+	$(CC) -o $@ -c $< $(CFLAGS)
 
 # flash
 
-flash: $(MAIN_OUT)
-	@cp $(MAIN_OUT_ELF) jtag/flash
-	@cd jtag; openocd -f flash.cfg
-	@rm jtag/flash
+#flash: $(MAIN_OUT)
+#	@cp $(MAIN_OUT_ELF) jtag/flash
+#	@cd jtag; openocd -f flash.cfg
+#	@rm jtag/flash
 
+flash: $(MAIN_OUT)
+	st-flash write $(MAIN_OUT_BIN) 0x8000000
 
 # libstm32.a
 
@@ -82,4 +92,4 @@ $(LIBSTM32_OBJS): stm32f10x_conf.h
 
 
 clean:
-	-rm *.o lib/src/*.o $(LIBSTM32_OUT) $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
+	-rm lib/src/*.o obj/*.o out/*.map $(LIBSTM32_OUT) $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
