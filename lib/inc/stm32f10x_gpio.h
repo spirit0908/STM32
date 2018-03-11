@@ -35,14 +35,14 @@ typedef enum
                                          
 /* Configuration Mode enumeration --------------------------------------------*/
 typedef enum
-{ GPIO_Mode_AIN = 0x0,
-  GPIO_Mode_IN_FLOATING = 0x04,
-  GPIO_Mode_IPD = 0x28,
-  GPIO_Mode_IPU = 0x48,
-  GPIO_Mode_Out_OD = 0x14,
-  GPIO_Mode_Out_PP = 0x10,
-  GPIO_Mode_AF_OD = 0x1C,
-  GPIO_Mode_AF_PP = 0x18
+{ GPIO_Mode_AIN = 0x0,          //Analog Input
+  GPIO_Mode_IN_FLOATING = 0x04, //Input floating
+  GPIO_Mode_IPD = 0x28,         //Input Pull-Down
+  GPIO_Mode_IPU = 0x48,         //Input Pull-Up
+  GPIO_Mode_Out_OD = 0x14,      //Out Open Drain
+  GPIO_Mode_Out_PP = 0x10,      //Out Push-Pull
+  GPIO_Mode_AF_OD = 0x1C,       //Alternate Function Open Drain
+  GPIO_Mode_AF_PP = 0x18        //Alternate Function Push-Pull
 }GPIOMode_TypeDef;
 
 #define IS_GPIO_MODE(MODE) ((MODE == GPIO_Mode_AIN) || (MODE == GPIO_Mode_IN_FLOATING) || \

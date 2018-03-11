@@ -564,6 +564,11 @@ void SPI2_IRQHandler(void)
 *******************************************************************************/
 void USART1_IRQHandler(void)
 {
+	int i;
+	for(i=0; i<20000; i++)
+	{
+		;
+	}
 }
 
 /*******************************************************************************
@@ -575,6 +580,26 @@ void USART1_IRQHandler(void)
 *******************************************************************************/
 void USART2_IRQHandler(void)
 {
+	u16 usart2_Rdvdata;
+
+	if(USART_GetITStatus(USART2, USART_IT_TXE) != RESET)
+	{
+
+		USART_ClearITPendingBit(USART2, USART_IT_TXE);
+	}
+
+	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+	{
+		//Read data
+		usart2_Rdvdata = USART_ReceiveData(USART2);
+
+		//Send data
+		USART_SendData(USART2, usart2_Rdvdata);
+
+		/* Clear IT flag */
+		USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+	}
+
 }
 
 /*******************************************************************************
