@@ -16,14 +16,28 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_lib.h"
 #include "stm32f10x_usart.h"
+#include "picture.h"
+#include "n3310.h"
+#include "stm32f10x_can.h"
+
+#include "stm32f10x_flash.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_map.h"
+#include "stm32f10x_nvic.h"
+#include "stm32f10x_rcc.h"
+#include "stm32f10x_type.h"
+
+#include "teleinfo.h"
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 GPIO_InitTypeDef GPIO_InitStructure;
 ErrorStatus HSEStartUpStatus;
-USART_InitTypeDef USART_InitStruct;
 
+CAN_InitTypeDef CAN_InitStructure;
+CAN_FilterInitTypeDef CAN_FilterInitStructure;
 
 //unsigned char UsartQueue[5]={'S', 'T', 'A', 'R', 'T'};
 
@@ -32,7 +46,16 @@ void RCC_Configuration(void);
 void NVIC_Configuration(void);
 void Delay(vu32 nCount);
 
+void GPIOInit(void);
+void SerialInit(void);
+void CanInit(void);
+void ITInit(void);
+
+//void CAN_Config(void);
+
 /* Private functions ---------------------------------------------------------*/
+
+CanTxMsg CanTxMessage;
 
 /*******************************************************************************
  * Function Name  : main
@@ -41,27 +64,28 @@ void Delay(vu32 nCount);
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void main(void)
+int main(void)
 {
 #ifdef DEBUG
     debug();
 #endif
-u16 RcvData=0;
+//    u16 RcvData=0;
     /* Configure the system clocks */
     RCC_Configuration();
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 
     /* NVIC Configuration */
     NVIC_Configuration();
 
     /* GPIO INIT */
     GPIOInit();
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 
 	/* SERIAL INIT */
     SerialInit();
 
 	/* IT INIt */
     ITInit();
-
 
     /* Send START message over USART bus */
     USART_SendData(USART2, 'S');
@@ -76,18 +100,58 @@ u16 RcvData=0;
     Delay(0xAFFFF);
 
 
+    /* Teleinfo initialization */
+    teleinfo_Init();
+    USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+
+    /* LCD Initialization */
+    LcdInit();
+    LcdClear();
+
     while (1)
     {
+    	/* Update LCD informations */
+    	LcdGotoXYFont(0,0);
+		LcdStr(FONT_1X, (unsigned char *)"ADCO:");
+
+		LcdGotoXYFont(0,1);
+		LcdStr(FONT_1X, (unsigned char *)"PTEC:");
+
+		LcdGotoXYFont(6,1);
+		LcdStr(FONT_1X, (unsigned char *) &(TIC_info.PTEC[0]) );
+
+		LcdGotoXYFont(0,2);
+		LcdStr(FONT_1X, (unsigned char *)"HCHC:");
+
+		LcdGotoXYFont(5,2);
+		LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHC[0]) );
+
+		LcdGotoXYFont(0,3);
+		LcdStr(FONT_1X, (unsigned char *)"HCHP:");
+
+		LcdGotoXYFont(5,3);
+		LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHP[0]) );
+
+		LcdGotoXYFont(0,4);
+		LcdStr(FONT_1X, (unsigned char *)"IINST:");
+
+		LcdGotoXYFont(7,4);
+		LcdStr(FONT_1X, (unsigned char *) &(TIC_info.IINST[0]) );
+
+		LcdUpdate();
+
+
+
         /* Turn on led connected to PC.4 pin */
         GPIO_SetBits(GPIOC, GPIO_Pin_13);
         /* Insert delay */
         Delay(0xAFFFF);
+//        Delay(0xAFFFF);
 
         /* Turn off led connected to PC.4 pin */
         GPIO_ResetBits(GPIOC, GPIO_Pin_13);
         /* Insert delay */
         Delay(0xAFFFF);
-
     }
 }
 
@@ -113,18 +177,65 @@ void GPIOInit(void)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 
+
+    /* USART1 TX */
+    /* Configure PB.6 as Alternate Function Push-Pull Output - Serial TX */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    /* USART1 RX */
+    /* Configure PB.7 as Alternate Function Floating Input - Serial RX */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+
+    /* USART2 TX */
     /* Configure PA.2 as Alternate Function Push-Pull Output - Serial TX */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
+    /* USART2 RX */
     /* Configure PA.3 as Alternate Function Floating Input - Serial RX */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; // or GPIO_Mode_IN_FLOATING
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	/* USART3 TX */
+    /* Configure PB.10 as Alternate Function Push-Pull Output - Serial TX */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    /* USART3 RX */
+    /* Configure PB.11 as Alternate Function Floating Input - Serial RX */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    /* CAN1 TX */
+	/* TO BE DONE */
+    /* Configure PB.9 as Alternate Function Push-Pull Output - Serial TX */
+//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+//    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+//    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+//    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    /* CAN RX */
+    /* TO BE DNE */
+    /* Configure PB.8 as Alternate Function Floating Input - Serial RX */
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+//	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 }
 
@@ -137,18 +248,164 @@ void GPIOInit(void)
  *******************************************************************************/
 void SerialInit(void)
 {
+	USART_InitTypeDef USART_InitStruct;
+
+	/* *** USART1 *** */
+	/* Enable USART1 clock */
+	RCC_APB1PeriphClockCmd(RCC_APB2Periph_USART1, DISABLE);
+
+	/* Enable USART  */
+	USART_StructInit(&USART_InitStruct);
+	USART_Cmd(USART1, DISABLE);
+	USART_Init(USART1, &USART_InitStruct);
+
+	/* Enable IT on USART handler */
+	USART_ITConfig(USART1, USART_IT_RXNE, DISABLE);
+	USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
+	USART_ITConfig(USART1, USART_IT_TC, DISABLE);
+
+
+	/* *** USART2 *** */
 	/* Enable USART2 clock */
-	    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 
-		/* Enable USART  */
-		USART_StructInit(&USART_InitStruct);
-		USART_Cmd(USART2, ENABLE);
-		USART_Init(USART2, &USART_InitStruct);
+	/* Enable USART  */
+	USART_StructInit(&USART_InitStruct);
+	USART_Cmd(USART2, ENABLE);
+	USART_Init(USART2, &USART_InitStruct);
 
-		/* Enable IT on USART handler */
-		USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-	//	USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
+	/* Enable IT on USART handler */
+	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+	USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
+	USART_ITConfig(USART2, USART_IT_TC, DISABLE);
+
+
+	/* *** USART3 *** */
+	/* Enable USART3 clock */
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+
+	/* Enable USART  */
+	/* Teleinfo EDF */
+	USART_InitStruct.USART_BaudRate 	= 0x04B0; /* 1200 Baud */
+	USART_InitStruct.USART_WordLength 	= USART_WordLength_8b;
+	USART_InitStruct.USART_StopBits 	= USART_StopBits_1;
+	USART_InitStruct.USART_Parity 		= USART_Parity_Even;
+	USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	USART_InitStruct.USART_Mode			= USART_Mode_Rx; 	/* Only Rx pin is configured */
+	USART_InitStruct.USART_Clock 		= USART_Clock_Disable;
+	USART_InitStruct.USART_CPOL 		= USART_CPOL_Low;
+	USART_InitStruct.USART_CPHA 		= USART_CPHA_1Edge;
+	USART_InitStruct.USART_LastBit 		= USART_LastBit_Disable;
+
+	USART_Cmd(USART3, ENABLE);
+	USART_Init(USART3, &USART_InitStruct);
+
+	/* Enable IT on USART handler */
+	USART_ITConfig(USART3, USART_IT_RXNE, DISABLE);
+	USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
+	USART_ITConfig(USART3, USART_IT_TC, DISABLE);
 }
+
+/*******************************************************************************
+ * Function Name  : CanInit
+ * Description    : Initializes the CAN controller module.
+ * Input          : None
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
+void CanInit(void)
+{
+//	CAN_InitTypeDef CAN_InitStruct;
+//
+//	/* Enable CAN clock */
+//	RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN, ENABLE);
+//
+//	/* Enable USART  */
+//	CAN_StructInit(&CAN_InitStruct);
+////	CAN_Cmd(CAN, ENABLE);
+//	CAN_Init(&CAN_InitStruct);
+//
+//	/* Enable IT on USART handler */
+//	USART_ITConfig(CAN, CAN_IT_RQCP0, ENABLE);
+}
+//void CAN_Config(void)
+//{
+//  GPIO_InitTypeDef  GPIO_InitStructure;
+//
+//  /* GPIO clock enable */
+//  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+//  RCC_APB2PeriphClockCmd(RCC_APB1Periph_CAN);
+////#ifdef  __CAN1_USED__
+////  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIO_CAN1, ENABLE);
+////#else /*__CAN2_USED__*/
+////  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIO_CAN, ENABLE);
+////#endif  /* __CAN1_USED__ */
+//  /* Configure CAN pin: RX */
+//  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_CAN_RX;
+//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+//  GPIO_Init(GPIO_CAN, &GPIO_InitStructure);
+//
+//  /* Configure CAN pin: TX */
+//  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_CAN_TX;
+//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+//  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+//  GPIO_Init(GPIO_CAN, &GPIO_InitStructure);
+//
+// GPIO_PinRemapConfig(GPIO_Remapping_CAN , DISABLE);
+//
+//  /* CANx Periph clock enable */
+//#ifdef  __CAN1_USED__
+//  RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE);
+//#else /*__CAN2_USED__*/
+//  RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE);
+//  RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN2, ENABLE);
+//#endif  /* __CAN1_USED__ */
+//
+//
+//  /* CAN register init */
+//  CAN_DeInit(CANx);
+//  CAN_StructInit(&CAN_InitStructure);
+//
+//  /* CAN cell init */
+//  CAN_InitStructure.CAN_TTCM = DISABLE;
+//  CAN_InitStructure.CAN_ABOM = DISABLE;
+//  CAN_InitStructure.CAN_AWUM = DISABLE;
+//  CAN_InitStructure.CAN_NART = DISABLE;
+//  CAN_InitStructure.CAN_RFLM = DISABLE;
+//  CAN_InitStructure.CAN_TXFP = DISABLE;
+//  CAN_InitStructure.CAN_Mode = CAN_Mode_Normal;
+//
+//  /* CAN Baudrate = 1MBps*/
+//  CAN_InitStructure.CAN_SJW = CAN_SJW_1tq;
+//  CAN_InitStructure.CAN_BS1 = CAN_BS1_3tq;
+//  CAN_InitStructure.CAN_BS2 = CAN_BS2_5tq;
+//  CAN_InitStructure.CAN_Prescaler = 4;
+//  CAN_Init(CAN, &CAN_InitStructure);
+//
+//  /* CAN filter init */
+//#ifdef  __CAN1_USED__
+//  CAN_FilterInitStructure.CAN_FilterNumber = 0;
+//#else /*__CAN2_USED__*/
+//  CAN_FilterInitStructure.CAN_FilterNumber = 14;
+//#endif  /* __CAN1_USED__ */
+//  CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;
+//  CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
+//  CAN_FilterInitStructure.CAN_FilterIdHigh = 0x0000;
+//  CAN_FilterInitStructure.CAN_FilterIdLow = 0x0000;
+//  CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0x0000;
+//  CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0x0000;
+//  CAN_FilterInitStructure.CAN_FilterFIFOAssignment = 0;
+//  CAN_FilterInitStructure.CAN_FilterActivation = ENABLE;
+//  CAN_FilterInit(&CAN_FilterInitStructure);
+//
+//  /* Transmit */
+//  CanTxMessage.StdId = 0x321;
+//  CanTxMessage.ExtId = 0x01;
+//  CanTxMessage.RTR = CAN_RTR_DATA;
+//  CanTxMessage.IDE = CAN_ID_STD;
+//  CanTxMessage.DLC = 1;
+//}
+
 
 /*******************************************************************************
  * Function Name  : ITInit
@@ -161,17 +418,28 @@ void ITInit(void)
 {
 	NVIC_InitTypeDef NVIC_InitStruct;
 
+	/* USART2 */
 	NVIC_InitStruct.NVIC_IRQChannel = USART2_IRQChannel;
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
 	NVIC_Init(&NVIC_InitStruct);
 
-	NVIC_InitStruct.NVIC_IRQChannel = USART2_IRQChannel;
+	/* USART3 */
+	NVIC_InitStruct.NVIC_IRQChannel = USART3_IRQChannel;
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
 	NVIC_Init(&NVIC_InitStruct);
+
+	/* CAN */
+	NVIC_InitStruct.NVIC_IRQChannel = CAN_RX1_IRQChannel;
+	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_Init(&NVIC_InitStruct);
+
+
 }
 
 /*******************************************************************************
@@ -279,5 +547,6 @@ void assert_failed(u8* file, u32 line)
     }
 }
 #endif
+
 
 /******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/

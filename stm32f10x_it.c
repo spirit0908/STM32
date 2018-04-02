@@ -21,6 +21,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
+//#include "teleinfo.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -564,10 +565,29 @@ void SPI2_IRQHandler(void)
 *******************************************************************************/
 void USART1_IRQHandler(void)
 {
-	int i;
-	for(i=0; i<20000; i++)
+	u16 usart1_Rdvdata;
+
+	/* Tx data register empty */
+	if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET)
 	{
-		;
+
+		USART_ClearITPendingBit(USART1, USART_IT_TXE);
+	}
+
+	/* Tx complete */
+	if(USART_GetITStatus(USART1, USART_IT_TC) != RESET)
+	{
+		USART_ClearITPendingBit(USART1, USART_IT_TC);
+	}
+
+	/* Rx data not empty */
+	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
+	{
+		//Read data
+		usart1_Rdvdata = USART_ReceiveData(USART1);
+
+		/* Clear IT flag */
+		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
 	}
 }
 
@@ -582,12 +602,20 @@ void USART2_IRQHandler(void)
 {
 	u16 usart2_Rdvdata;
 
+	/* Tx data register empty */
 	if(USART_GetITStatus(USART2, USART_IT_TXE) != RESET)
 	{
 
 		USART_ClearITPendingBit(USART2, USART_IT_TXE);
 	}
 
+	/* Tx complete */
+	if(USART_GetITStatus(USART2, USART_IT_TC) != RESET)
+	{
+		USART_ClearITPendingBit(USART2, USART_IT_TC);
+	}
+
+	/* Rx data not empty */
 	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
 	{
 		//Read data
@@ -611,6 +639,82 @@ void USART2_IRQHandler(void)
 *******************************************************************************/
 void USART3_IRQHandler(void)
 {
+	u16 usart3_Rdvdata;
+
+	/* Tx data register empty */
+	if(USART_GetITStatus(USART3, USART_IT_TXE) != RESET)
+	{
+		USART_ClearITPendingBit(USART3, USART_IT_TXE);
+	}
+
+	/* Tx complete */
+	if(USART_GetITStatus(USART3, USART_IT_TC) != RESET)
+	{
+		USART_ClearITPendingBit(USART3, USART_IT_TC);
+	}
+
+	/* Rx data not empty */
+	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
+	{
+		//Read data
+		usart3_Rdvdata = USART_ReceiveData(USART3);
+
+		USART_SendData(USART2, (usart3_Rdvdata&0x7F) );
+
+		teleinfo_rawData_receive((usart3_Rdvdata&0x7F));
+
+
+		/* Clear IT flag */
+		USART_ClearITPendingBit(USART3, USART_IT_RXNE);
+
+	}
+
+	if (USART_GetITStatus(USART3, USART_IT_ORE) != RESET)
+	{
+		/* To clear ORE bit, perform a read to DR register then  */
+		usart3_Rdvdata = USART_ReceiveData(USART3);
+
+		/* Clear IT flag */
+//		USART_ClearITPendingBit(USART3, USART_IT_ORE); // not needed
+	}
+
+	if (USART_GetITStatus(USART3, USART_IT_IDLE) != RESET)
+	{
+		/* To clear ORE bit, perform a read to DR register then  */
+		usart3_Rdvdata = USART_ReceiveData(USART3);
+	}
+
+
+	//
+	if (USART_GetITStatus(USART3, USART_IT_CTS) != RESET)
+	{
+		/* To clear ORE bit, perform a read to DR register then  */
+		usart3_Rdvdata = USART_ReceiveData(USART3);
+	}
+
+	if (USART_GetITStatus(USART3, USART_IT_LBD) != RESET)
+	{
+		/* To clear ORE bit, perform a read to DR register then  */
+		usart3_Rdvdata = USART_ReceiveData(USART3);
+	}
+
+	if (USART_GetITStatus(USART3, USART_IT_NE) != RESET)
+	{
+		/* To clear ORE bit, perform a read to DR register then  */
+		usart3_Rdvdata = USART_ReceiveData(USART3);
+	}
+
+	if (USART_GetITStatus(USART3, USART_IT_FE) != RESET)
+	{
+		/* To clear ORE bit, perform a read to DR register then  */
+		usart3_Rdvdata = USART_ReceiveData(USART3);
+	}
+	if (USART_GetITStatus(USART3, USART_IT_PE) != RESET)
+	{
+		/* To clear ORE bit, perform a read to DR register then  */
+		usart3_Rdvdata = USART_ReceiveData(USART3);
+	}
+
 }
 
 /*******************************************************************************

@@ -34,16 +34,32 @@ MAIN_OUT_BIN = $(OUT_PATH)/$(MAIN_OUT).bin
 all: $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
 
 # main
+SRC_FILES = \
+  modules/main/main.c \
+  modules/nokia/n3310.c \
+  modules/Teleinfo/teleinfo.c \
+  modules/Fifo/Fifo.c \
+  modules/Fifo/Fifo_Cfg.c
 
-$(MAIN_OUT_ELF): $(OBJ_PATH)/main.o $(OBJ_PATH)/LCD.o $(OBJ_PATH)/stm32f10x_it.o lib/libstm32.a
-	$(LD) $(LDFLAGS) $(OBJ_PATH)/main.o $(OBJ_PATH)/LCD.o $(OBJ_PATH)/stm32f10x_it.o lib/libstm32.a --output $@
+INC_FILES = \
+  Std_Types.h \
+  modules/Teleinfo/teleinfo.h \
+  modules/Fifo/Fifo.h
+
+$(MAIN_OUT_ELF): updateIncFiles $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a
+	$(LD) $(LDFLAGS) $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a --output $@
 
 $(MAIN_OUT_BIN): $(MAIN_OUT_ELF)
 	$(OBJCP) $(OBJCPFLAGS) $< $@
 
-$(OBJ_PATH)/%.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+%.o: %.c
+	$(CC) -o $@ -c $< $(CFLAGS) -I build/inc
 
+updateIncFiles:
+	mkdir -p build/src
+	mkdir -p build/inc
+#	cp $(SRC_FILES) build/src
+	cp $(INC_FILES) build/inc
 
 # flash
 
@@ -90,4 +106,11 @@ $(LIBSTM32_OBJS): stm32f10x_conf.h
 
 
 clean:
-	-rm lib/src/*.o obj/*.o out/*.map $(LIBSTM32_OUT) $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
+#	-rm lib/src/*.o obj/*.o out/*.map $(LIBSTM32_OUT) $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
+	rm build/src/*.c
+	rm build/inc/*.h
+	find . -type f -name '*.o' -delete
+	rm out/main.bin
+	rm out/main.elf
+	rm out/main.map
+
