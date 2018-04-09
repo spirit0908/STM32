@@ -108,17 +108,17 @@ typedef struct
                                    (LASTBIT == USART_LastBit_Enable))
 
 /* USART Interrupt definition ------------------------------------------------*/
-#define USART_IT_PE                          ((u16)0x0028)
-#define USART_IT_TXE                         ((u16)0x0727)
-#define USART_IT_TC                          ((u16)0x0626)
-#define USART_IT_RXNE                        ((u16)0x0525)
-#define USART_IT_IDLE                        ((u16)0x0424)
-#define USART_IT_LBD                         ((u16)0x0846)
-#define USART_IT_CTS                         ((u16)0x096A)
+#define USART_IT_PE                          ((u16)0x0028)  /* Parity error */
+#define USART_IT_TXE                         ((u16)0x0727)  /* Transmit data register empty */
+#define USART_IT_TC                          ((u16)0x0626)  /* Transmission Complete */
+#define USART_IT_RXNE                        ((u16)0x0525)  /* Read data register not empty */
+#define USART_IT_IDLE                        ((u16)0x0424)  /* IDLE line detected */
+#define USART_IT_LBD                         ((u16)0x0846)  /* LIN break detection flag */
+#define USART_IT_CTS                         ((u16)0x096A)  /* CTS flag */
 #define USART_IT_ERR                         ((u16)0x0060)
-#define USART_IT_ORE                         ((u16)0x0360)
-#define USART_IT_NE                          ((u16)0x0260)
-#define USART_IT_FE                          ((u16)0x0160)
+#define USART_IT_ORE                         ((u16)0x0360)  /* Overrrun Error */
+#define USART_IT_NE                          ((u16)0x0260)  /* Noise error flag */
+#define USART_IT_FE                          ((u16)0x0160)  /* Framing error */
 
 #define IS_USART_CONFIG_IT(IT) ((IT == USART_IT_PE) || (IT == USART_IT_TXE) || \
                                (IT == USART_IT_TC) || (IT == USART_IT_RXNE) || \

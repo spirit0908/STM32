@@ -25,12 +25,12 @@
 /* CAN init structure definition */
 typedef struct
 {
-  FunctionalState CAN_TTCM;
-  FunctionalState CAN_ABOM;
-  FunctionalState CAN_AWUM;
-  FunctionalState CAN_NART;
-  FunctionalState CAN_RFLM;
-  FunctionalState CAN_TXFP;
+  FunctionalState CAN_TTCM;		/* Time triggered communication mode */
+  FunctionalState CAN_ABOM;		/* Automatic bus-off management */
+  FunctionalState CAN_AWUM;		/* Automatic wakeup mode */
+  FunctionalState CAN_NART;		/* No automatic retransmission */
+  FunctionalState CAN_RFLM;		/* Receive FIFO locked mode */
+  FunctionalState CAN_TXFP;		/* Transmit FIFO priority */
   u8 CAN_Mode;
   u8 CAN_SJW;
   u8 CAN_BS1;
@@ -57,8 +57,8 @@ typedef struct
 {
   u32 StdId;
   u32 ExtId;
-  u8 IDE;
-  u8 RTR;
+  u8 IDE;	/* Identifier extension (0:Std - 1:Ext) */
+  u8 RTR;	/* Remote transmission request */
   u8 DLC;
   u8 Data[8];
 } CanTxMsg;

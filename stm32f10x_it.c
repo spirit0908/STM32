@@ -21,12 +21,15 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-//#include "teleinfo.h"
+#include "stm32f10x_can.h"
+#include "teleinfo.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+CanRxMsg RxMessage;
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -364,6 +367,22 @@ void ADC_IRQHandler(void)
 *******************************************************************************/
 void USB_HP_CAN_TX_IRQHandler(void)
 {
+	if(CAN_GetITStatus(CAN_IT_RQCP0) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_RQCP0);
+	}
+	if(CAN_GetITStatus(CAN_IT_RQCP1) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_RQCP1);
+	}
+	if(CAN_GetITStatus(CAN_IT_RQCP2) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_RQCP2);
+	}
+	if(CAN_GetITStatus(CAN_IT_TME) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_TME);
+	}
 }
 
 /*******************************************************************************
@@ -376,6 +395,60 @@ void USB_HP_CAN_TX_IRQHandler(void)
 *******************************************************************************/
 void USB_LP_CAN_RX0_IRQHandler(void)
 {
+	if(CAN_GetITStatus(CAN_IT_FMP0) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_FMP0);
+	}
+	if(CAN_GetITStatus(CAN_IT_FF0) != RESET)
+	{
+		CAN_Receive(CAN_FIFO0, &RxMessage);
+		CAN_ClearITPendingBit(CAN_IT_FF0);
+	}
+	if(CAN_GetITStatus(CAN_IT_FOV0) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_FOV0);
+	}
+	if(CAN_GetITStatus(CAN_IT_FMP1) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_FMP1);
+	}
+	if(CAN_GetITStatus(CAN_IT_FF1) != RESET)
+	{
+		CAN_Receive(CAN_FIFO1, &RxMessage);
+		CAN_ClearITPendingBit(CAN_IT_FF1);
+	}
+	if(CAN_GetITStatus(CAN_IT_FOV1) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_FOV1);
+	}
+	if(CAN_GetITStatus(CAN_IT_EWG) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_EWG);
+	}
+	if(CAN_GetITStatus(CAN_IT_EPV) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_EPV);
+	}
+	if(CAN_GetITStatus(CAN_IT_BOF) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_BOF);
+	}
+	if(CAN_GetITStatus(CAN_IT_LEC) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_LEC);
+	}
+	if(CAN_GetITStatus(CAN_IT_ERR) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_ERR);
+	}
+	if(CAN_GetITStatus(CAN_IT_WKU) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_WKU);
+	}
+	if(CAN_GetITStatus(CAN_IT_SLK) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_SLK);
+	}
 }
 
 /*******************************************************************************

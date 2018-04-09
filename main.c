@@ -31,12 +31,28 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define CAN_RX_PIN 		GPIO_Pin_8
+#define CAN_TX_PIN  	GPIO_Pin_9
+#define CAN_RS_PIN		GPIO_Pin_5
+#define CAN_GPIO_PORT 	GPIOB
+
+
+#define CAN_BAUDRATE_10KBPS		10
+#define CAN_BAUDRATE_20KBPS		20
+#define CAN_BAUDRATE_50KBPS		50
+#define CAN_BAUDRATE_100KBPS	100
+#define CAN_BAUDRATE_125KBPS	125
+#define CAN_BAUDRATE_250KBPS	250
+#define CAN_BAUDRATE_500KBPS	500
+#define CAN_BAUDRATE_1MPBS 		1000
+
+#define CAN_BAUDRATE CAN_BAUDRATE_125KBPS
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 GPIO_InitTypeDef GPIO_InitStructure;
 ErrorStatus HSEStartUpStatus;
 
-CAN_InitTypeDef CAN_InitStructure;
+//CAN_InitTypeDef CAN_InitStructure;
 CAN_FilterInitTypeDef CAN_FilterInitStructure;
 
 //unsigned char UsartQueue[5]={'S', 'T', 'A', 'R', 'T'};
@@ -69,7 +85,10 @@ int main(void)
 #ifdef DEBUG
     debug();
 #endif
-//    u16 RcvData=0;
+//    u16 R.cvData=0;
+    CanTxMsg TxMessage;
+
+    /* SYSTEM DRIVER INIT */
     /* Configure the system clocks */
     RCC_Configuration();
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
@@ -77,15 +96,33 @@ int main(void)
     /* NVIC Configuration */
     NVIC_Configuration();
 
-    /* GPIO INIT */
+    /* Gpio */
     GPIOInit();
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 
-	/* SERIAL INIT */
+    /* COM DRIVER INIT */
+	/* Serial Port */
     SerialInit();
 
-	/* IT INIt */
+    /* CAN Bus */
+    CanInit();
+
+	/* Interrupt */
     ITInit();
+
+    GPIO_ResetBits(GPIOB, CAN_RS_PIN);
+
+    TxMessage.StdId = 0x444;
+    TxMessage.IDE = CAN_ID_STD;
+    TxMessage.RTR = CAN_RTR_DATA;
+    TxMessage.DLC = 1;
+    TxMessage.Data[0] = 0xAA;
+    CAN_Transmit(&TxMessage);
+
+
+    /* CONFIG INIT */
+
+    /* */
 
     /* Send START message over USART bus */
     USART_SendData(USART2, 'S');
@@ -138,6 +175,9 @@ int main(void)
 		LcdGotoXYFont(7,4);
 		LcdStr(FONT_1X, (unsigned char *) &(TIC_info.IINST[0]) );
 
+//		LcdGotoXYFont(11,4);
+//		LcdStr(FONT_1X, (unsigned char *)  );
+
 		LcdUpdate();
 
 
@@ -169,6 +209,7 @@ void GPIOInit(void)
 
     /* Enable GPIOC clock */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 
 
     /* Configure PC.4 as Output push-pull */
@@ -222,21 +263,25 @@ void GPIOInit(void)
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     /* CAN1 TX */
-	/* TO BE DONE */
-    /* Configure PB.9 as Alternate Function Push-Pull Output - Serial TX */
-//    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
-//    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-//    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-//    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    /* Configure PA.12 as Alternate Function Push-Pull Output - Serial TX */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;	//CAN_TX_PIN
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; //GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* CAN RX */
-    /* TO BE DNE */
-    /* Configure PB.8 as Alternate Function Floating Input - Serial RX */
-//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
-//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//	GPIO_Init(GPIOB, &GPIO_InitStructure);
+    /* Configure PA.11 as Alternate Function Floating Input - Serial RX */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;	//CAN_RX_PIN
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //GPIO_Mode_IPU; //GPIO_Mode_IN_FLOATING;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
+	/* CAN RX */
+	/* Configure PB.5 as Alternate Function Floating Input - Serial RX */
+	GPIO_InitStructure.GPIO_Pin = CAN_RS_PIN; //		GPIO_Pin_5
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
 
 /*******************************************************************************
@@ -315,18 +360,137 @@ void SerialInit(void)
  *******************************************************************************/
 void CanInit(void)
 {
-//	CAN_InitTypeDef CAN_InitStruct;
+	CAN_InitTypeDef CAN_InitStruct;
+
+	/* Enable CAN clock */
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN, ENABLE);
+	GPIO_PinRemapConfig(GPIO_Remap1_CAN, DISABLE);
+	GPIO_PinRemapConfig(GPIO_Remap2_CAN, DISABLE);
+
+	/* Enable USART  */
+	CAN_StructInit(&CAN_InitStruct);
+//	CAN_Cmd(CAN, ENABLE);
+	CAN_Init(&CAN_InitStruct);
+
+	//Configure CAN
+	CAN_StructInit(&CAN_InitStruct);
+
+	/* CAN cell init */
+	CAN_InitStruct.CAN_TTCM = DISABLE;
+	CAN_InitStruct.CAN_ABOM = DISABLE;
+	CAN_InitStruct.CAN_AWUM = DISABLE;
+	CAN_InitStruct.CAN_NART = DISABLE;
+	CAN_InitStruct.CAN_RFLM = DISABLE;
+	CAN_InitStruct.CAN_TXFP = DISABLE;
+	CAN_InitStruct.CAN_Mode = CAN_Mode_Normal;
+
+//	/* CAN Baudrate = 250kbps */
+//	/* not working */
+//	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+//	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+//	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+//	CAN_InitStruct.CAN_Prescaler = 4;
 //
-//	/* Enable CAN clock */
-//	RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN, ENABLE);
-//
-//	/* Enable USART  */
-//	CAN_StructInit(&CAN_InitStruct);
-////	CAN_Cmd(CAN, ENABLE);
+//	/* CAN Baudrate = 500kbps */
+	/* not working */
+//	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+//	CAN_InitStruct.CAN_BS1 = CAN_BS1_5tq;
+//	CAN_InitStruct.CAN_BS2 = CAN_BS2_2tq;
+//	CAN_InitStruct.CAN_Prescaler = 1;
+
+
+#if (CAN_BAUDRATE == CAN_BAUDRATE_10KBPS)
+	/* Not tested */
+	//	/* CAN Baudrate = 10kbps */
+	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+	CAN_InitStruct.CAN_Prescaler = 400;
+#elif CAN_BAUDRATE == CAN_BAUDRATE_20KBPS
+	//	/* CAN Baudrate = 20kbps */
+	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+	CAN_InitStruct.CAN_Prescaler = 200;
+#elif CAN_BAUDRATE == CAN_BAUDRATE_50KBPS
+	//	/* CAN Baudrate = 50kbps */
+	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+	CAN_InitStruct.CAN_Prescaler = 80;
+#elif CAN_BAUDRATE == CAN_BAUDRATE_100KBPS
+	//	/* CAN Baudrate = 100kbps */
+	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+	CAN_InitStruct.CAN_Prescaler = 40;
+#elif CAN_BAUDRATE == 125
+	//	/* CAN Baudrate = 125kbps */
+	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+	CAN_InitStruct.CAN_Prescaler = 32;
+#elif CAN_BAUDRATE == CAN_BAUDRATE_250KBPS
+	//	/* CAN Baudrate = 250kbps */
+	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+	CAN_InitStruct.CAN_Prescaler = 16;
+#elif CAN_BAUDRATE == CAN_BAUDRATE_500KBPS
+	//	/* CAN Baudrate = 500kbps */
+//	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+//	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+//	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+//	CAN_InitStruct.CAN_Prescaler = 8;
+
+	/* CAN Baudrate = 500kbps */
+	/* or: system clock = 72MHz (PCLK1 = 36 MHz) */
+	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+	CAN_InitStruct.CAN_BS1 = CAN_BS1_8tq;
+	CAN_InitStruct.CAN_BS2 = CAN_BS2_3tq;
+	CAN_InitStruct.CAN_Prescaler = 6;
+#elif CAN_BAUDRATE == CAN_BAUDRATE_1MPBS
+	/* CAN Baudrate = 1MBps */
+	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+	CAN_InitStruct.CAN_Prescaler = 4;
+#endif
+
+	CAN_Init(&CAN_InitStruct);
+
+	  /* CAN filter init */
+//	#ifdef  __CAN1_USED__
+	  CAN_FilterInitStructure.CAN_FilterNumber = 0;
+//	#else /*__CAN2_USED__*/
+//	  CAN_FilterInitStructure.CAN_FilterNumber = 14;
+//	#endif  /* __CAN1_USED__ */
+	  CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;
+	  CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
+	  CAN_FilterInitStructure.CAN_FilterIdHigh = 0x0100 << 5;
+	  CAN_FilterInitStructure.CAN_FilterIdLow = 0x0000;
+	  CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0x0700 << 5;
+	  CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0x0000;
+	  CAN_FilterInitStructure.CAN_FilterFIFOAssignment = 0;
+	  CAN_FilterInitStructure.CAN_FilterActivation = ENABLE;
+	  CAN_FilterInit(&CAN_FilterInitStructure);
+
 //	CAN_Init(&CAN_InitStruct);
-//
-//	/* Enable IT on USART handler */
-//	USART_ITConfig(CAN, CAN_IT_RQCP0, ENABLE);
+
+	/* Enable IT on USART handler */
+	CAN_ITConfig(CAN_IT_RQCP0, ENABLE);
+	CAN_ITConfig(CAN_IT_FMP0, ENABLE);
+
+
+	CAN_ITConfig(CAN_IT_RQCP1, ENABLE);	/* Request completed mailbox 1 */
+	CAN_ITConfig(CAN_IT_RQCP2, ENABLE);	/* Request completed mailbox 2 */
+	CAN_ITConfig(CAN_IT_TME, ENABLE);	/* Transmit mailbox empty */
+	CAN_ITConfig(CAN_IT_FMP0, ENABLE);	/* FIFO 0 message pending */
+	CAN_ITConfig(CAN_IT_FF0, ENABLE);	/* FIFO 0 full */
+	CAN_ITConfig(CAN_IT_FOV0, ENABLE);	/* FIFO 0 overrun */
+	CAN_ITConfig(CAN_IT_FMP1, ENABLE);	/* FIFO 1 message pending */
+	CAN_ITConfig(CAN_IT_FF1, ENABLE);	/* FIFO 1 full */
+	CAN_ITConfig(CAN_IT_FOV1, ENABLE);	/* FIFO 1 overrun */
 }
 //void CAN_Config(void)
 //{
@@ -418,6 +582,13 @@ void ITInit(void)
 {
 	NVIC_InitTypeDef NVIC_InitStruct;
 
+	/* USART1 */
+	NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQChannel;
+	NVIC_InitStruct.NVIC_IRQChannelCmd = DISABLE;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_Init(&NVIC_InitStruct);
+
 	/* USART2 */
 	NVIC_InitStruct.NVIC_IRQChannel = USART2_IRQChannel;
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
@@ -439,7 +610,18 @@ void ITInit(void)
 	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
 	NVIC_Init(&NVIC_InitStruct);
 
+	NVIC_InitStruct.NVIC_IRQChannel = USB_LP_CAN_RX0_IRQChannel;
+	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_Init(&NVIC_InitStruct);
 
+
+	NVIC_InitStruct.NVIC_IRQChannel = USB_HP_CAN_TX_IRQChannel;
+	NVIC_InitStruct.NVIC_IRQChannelCmd = DISABLE;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_Init(&NVIC_InitStruct);
 }
 
 /*******************************************************************************
@@ -449,7 +631,7 @@ void ITInit(void)
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void RCC_Configuration(void) 
+void RCC_Configuration(void)
 {
     /* RCC system reset(for debug purpose) */
     RCC_DeInit();

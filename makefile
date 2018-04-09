@@ -35,7 +35,7 @@ all: $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
 
 # main
 SRC_FILES = \
-  modules/main/main.c \
+  main.c \
   modules/nokia/n3310.c \
   modules/Teleinfo/teleinfo.c \
   modules/Fifo/Fifo.c \
@@ -68,7 +68,7 @@ updateIncFiles:
 #	@cd jtag; openocd -f flash.cfg
 #	@rm jtag/flash
 
-flash: $(MAIN_OUT)
+flash: $(MAIN_OUT_BIN)
 	st-flash write $(MAIN_OUT_BIN) 0x8000000
 
 # libstm32.a
@@ -107,7 +107,7 @@ $(LIBSTM32_OBJS): stm32f10x_conf.h
 
 clean:
 #	-rm lib/src/*.o obj/*.o out/*.map $(LIBSTM32_OUT) $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
-	rm build/src/*.c
+#	rm build/src/*.c
 	rm build/inc/*.h
 	find . -type f -name '*.o' -delete
 	rm out/main.bin
