@@ -28,13 +28,15 @@
 #include "stm32f10x_type.h"
 
 #include "teleinfo.h"
+#include "Task.h"
+#include "Task_cfg.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define CAN_RX_PIN 		GPIO_Pin_8
-#define CAN_TX_PIN  	GPIO_Pin_9
+#define CAN_RX_PIN 		GPIO_Pin_11
+#define CAN_TX_PIN  	GPIO_Pin_12
 #define CAN_RS_PIN		GPIO_Pin_5
-#define CAN_GPIO_PORT 	GPIOB
+//#define CAN_GPIO_PORT 	GPIOB
 
 
 #define CAN_BAUDRATE_10KBPS		10
@@ -52,10 +54,7 @@
 GPIO_InitTypeDef GPIO_InitStructure;
 ErrorStatus HSEStartUpStatus;
 
-//CAN_InitTypeDef CAN_InitStructure;
 CAN_FilterInitTypeDef CAN_FilterInitStructure;
-
-//unsigned char UsartQueue[5]={'S', 'T', 'A', 'R', 'T'};
 
 /* Private function prototypes -----------------------------------------------*/
 void RCC_Configuration(void);
@@ -107,22 +106,15 @@ int main(void)
     /* CAN Bus */
     CanInit();
 
+    /* Timer */
+    TimerInit();
+
 	/* Interrupt */
     ITInit();
 
-    GPIO_ResetBits(GPIOB, CAN_RS_PIN);
-
-    TxMessage.StdId = 0x444;
-    TxMessage.IDE = CAN_ID_STD;
-    TxMessage.RTR = CAN_RTR_DATA;
-    TxMessage.DLC = 1;
-    TxMessage.Data[0] = 0xAA;
-    CAN_Transmit(&TxMessage);
 
 
     /* CONFIG INIT */
-
-    /* */
 
     /* Send START message over USART bus */
     USART_SendData(USART2, 'S');
@@ -137,6 +129,19 @@ int main(void)
     Delay(0xAFFFF);
 
 
+
+    GPIO_ResetBits(GPIOB, CAN_RS_PIN);
+
+    TxMessage.StdId = 0x444;
+    TxMessage.IDE = CAN_ID_STD;
+    TxMessage.RTR = CAN_RTR_DATA;
+    TxMessage.DLC = 1;
+    TxMessage.Data[0] = 0xAA;
+    CAN_Transmit(&TxMessage);
+
+
+    /* MODULE INIT */
+
     /* Teleinfo initialization */
     teleinfo_Init();
     USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
@@ -144,6 +149,13 @@ int main(void)
     /* LCD Initialization */
     LcdInit();
     LcdClear();
+
+
+    while(1)
+    {
+    	TaskManager();
+    }
+
 
     while (1)
     {
@@ -183,17 +195,18 @@ int main(void)
 
 
         /* Turn on led connected to PC.4 pin */
-        GPIO_SetBits(GPIOC, GPIO_Pin_13);
+//        GPIO_SetBits(GPIOC, GPIO_Pin_13);
         /* Insert delay */
         Delay(0xAFFFF);
 //        Delay(0xAFFFF);
 
         /* Turn off led connected to PC.4 pin */
-        GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+//        GPIO_ResetBits(GPIOC, GPIO_Pin_13);
         /* Insert delay */
         Delay(0xAFFFF);
     }
 }
+
 
 /*******************************************************************************
  * Function Name  : GPIOInit
@@ -202,6 +215,24 @@ int main(void)
  * Output         : None
  * Return         : None
  *******************************************************************************/
+void TimerInit(void)
+{
+	TIM_TimeBaseInitTypeDef TIMER_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
+
+    /* Timer 4 */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE); // Enable clock peripheral TIM4
+
+    TIM_TimeBaseStructInit(&TIMER_InitStructure);
+	TIMER_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIMER_InitStructure.TIM_Prescaler = 7200;
+	TIMER_InitStructure.TIM_Period = 50;       //5ms delay / 1sec delay: F=72000000/7200/10000 = 1sec
+	TIM_TimeBaseInit(TIM4, &TIMER_InitStructure);
+	TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
+	TIM_Cmd(TIM4, ENABLE);
+}
+
+
 void GPIOInit(void)
 {
     /* Enable GPIOC clock */
@@ -263,25 +294,28 @@ void GPIOInit(void)
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     /* CAN1 TX */
-    /* Configure PA.12 as Alternate Function Push-Pull Output - Serial TX */
+    /* Configure PA.12 as Alternate Function Push-Pull Output - CAN TX */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;	//CAN_TX_PIN
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; //GPIO_Speed_10MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* CAN RX */
-    /* Configure PA.11 as Alternate Function Floating Input - Serial RX */
+    /* Configure PA.11 as Alternate Function Floating Input - CAN RX */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;	//CAN_RX_PIN
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //GPIO_Mode_IPU; //GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	/* CAN RX */
-	/* Configure PB.5 as Alternate Function Floating Input - Serial RX */
-	GPIO_InitStructure.GPIO_Pin = CAN_RS_PIN; //		GPIO_Pin_5
+	/* CAN RS */
+	/* Configure PA.8 as Push-Pull Output  - Relay1 */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	/* IO */
+	/* Configure  */
 }
 
 /*******************************************************************************
@@ -616,12 +650,19 @@ void ITInit(void)
 	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
 	NVIC_Init(&NVIC_InitStruct);
 
-
 	NVIC_InitStruct.NVIC_IRQChannel = USB_HP_CAN_TX_IRQChannel;
 	NVIC_InitStruct.NVIC_IRQChannelCmd = DISABLE;
 	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
 	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
 	NVIC_Init(&NVIC_InitStruct);
+
+	/* TIMER4 */
+	NVIC_InitStruct.NVIC_IRQChannel = TIM4_IRQChannel;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStruct);
+
 }
 
 /*******************************************************************************

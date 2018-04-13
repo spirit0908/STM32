@@ -39,12 +39,20 @@ SRC_FILES = \
   modules/nokia/n3310.c \
   modules/Teleinfo/teleinfo.c \
   modules/Fifo/Fifo.c \
-  modules/Fifo/Fifo_Cfg.c
+  modules/Fifo/Fifo_Cfg.c \
+  modules/TaskMan/Task.c \
+  modules/TaskMan/Task_cfg.c
 
 INC_FILES = \
   Std_Types.h \
+  modules/nokia/n3310.h \
+  modules/nokia/picture.h \
   modules/Teleinfo/teleinfo.h \
-  modules/Fifo/Fifo.h
+  modules/Fifo/Fifo.h \
+  modules/Fifo/Fifo_Cfg.h \
+  modules/TaskMan/Task.h \
+  modules/TaskMan/Task_cfg.h
+
 
 $(MAIN_OUT_ELF): updateIncFiles $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a
 	$(LD) $(LDFLAGS) $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a --output $@

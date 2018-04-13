@@ -29,6 +29,8 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 CanRxMsg RxMessage;
+u16 Timer4=0;
+u8 sens=0;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -561,6 +563,33 @@ void TIM3_IRQHandler(void)
 *******************************************************************************/
 void TIM4_IRQHandler(void)
 {
+	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET)
+	{
+		Task_Manager_IT();
+
+
+		Timer4++;
+		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+
+
+
+//		if( Timer4 >= 200 )
+//		{
+//			Timer4 = 0;
+//
+//			if(sens == 0)
+//			{
+//				sens = 1;
+//				GPIO_SetBits(GPIOC, GPIO_Pin_13);
+//			}
+//			else
+//			{
+//				sens = 0;
+//				GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+//			}
+//		}
+
+	}
 }
 
 /*******************************************************************************
