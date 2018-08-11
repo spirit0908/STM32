@@ -363,8 +363,7 @@ void SerialInit(void)
 	/* Enable USART3 clock */
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 
-	/* Enable USART  */
-	/* Teleinfo EDF */
+	/* Configure UART for EDF Teleinfo */
 	USART_InitStruct.USART_BaudRate 	= 0x04B0; /* 1200 Baud */
 	USART_InitStruct.USART_WordLength 	= USART_WordLength_8b;
 	USART_InitStruct.USART_StopBits 	= USART_StopBits_1;
@@ -376,6 +375,7 @@ void SerialInit(void)
 	USART_InitStruct.USART_CPHA 		= USART_CPHA_1Edge;
 	USART_InitStruct.USART_LastBit 		= USART_LastBit_Disable;
 
+	/* Enable USART  */
 	USART_Cmd(USART3, ENABLE);
 	USART_Init(USART3, &USART_InitStruct);
 

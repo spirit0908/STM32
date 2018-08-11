@@ -79,6 +79,14 @@ updateIncFiles:
 flash: $(MAIN_OUT_BIN)
 	st-flash write $(MAIN_OUT_BIN) 0x8000000
 
+#Debug
+debug: $(MAIN_OUT_BIN)
+	#Launch st-util in a new terminal
+	gnome-terminal -e st-util
+	#Then launch gdb
+	arm-none-eabi-gdb out/main.elf -x "target extended-remote localhost:4242"
+
+
 # libstm32.a
 
 LIBSTM32_OUT = lib/libstm32.a
