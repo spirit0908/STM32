@@ -252,16 +252,16 @@ F 3 "~" H 2550 4550 50  0001 C CNN
 	1    2550 4550
 	1    0    0    -1  
 $EndComp
-Text Label 2150 4250 0    50   ~ 0
-RST
-Text Label 2150 4350 0    50   ~ 0
-CE
-Text Label 2150 4450 0    50   ~ 0
-DC
-Text Label 2150 4550 0    50   ~ 0
-DIN
-Text Label 2150 4650 0    50   ~ 0
-CLK
+Text Label 2050 4250 0    50   ~ 0
+LCD_RST
+Text Label 2050 4350 0    50   ~ 0
+LCD_CE
+Text Label 2050 4450 0    50   ~ 0
+LCD_DC
+Text Label 2050 4550 0    50   ~ 0
+LCD_DIN
+Text Label 2050 4650 0    50   ~ 0
+LCD_CLK
 Text Label 2150 4750 0    50   ~ 0
 VCC
 Text Label 2100 4850 0    50   ~ 0
@@ -653,7 +653,7 @@ Wire Wire Line
 Wire Wire Line
 	8300 5500 8350 5500
 Text GLabel 8600 5650 0    50   Input ~ 0
-Teleinfo_RX
+USART3_RX
 Wire Wire Line
 	8650 5500 8750 5500
 Wire Wire Line
@@ -717,13 +717,9 @@ Wire Notes Line
 Wire Notes Line
 	4300 7500 800  7500
 Wire Notes Line
-	2100 4100 2100 5100
-Wire Notes Line
-	2100 5100 3350 5100
+	2000 4100 2000 5100
 Wire Notes Line
 	3350 5100 3350 4100
-Wire Notes Line
-	3350 4100 2100 4100
 Text Notes 2850 5000 0    50   ~ 0
 LCD shield
 Connection ~ 1850 2800
@@ -758,10 +754,6 @@ Text Label 4300 4350 0    50   ~ 0
 LCD_CLK
 Wire Wire Line
 	4150 4350 4700 4350
-Text Label 4300 4550 0    50   ~ 0
-CAN_EN
-Wire Wire Line
-	4150 4550 4700 4550
 Entry Wire Line
 	4050 3450 4150 3350
 Entry Wire Line
@@ -770,8 +762,6 @@ Entry Wire Line
 	4050 3750 4150 3650
 Entry Wire Line
 	4050 3650 4150 3550
-Entry Wire Line
-	4050 4650 4150 4550
 Entry Wire Line
 	4050 4450 4150 4350
 Text GLabel 6450 4550 2    50   Input ~ 0
@@ -800,8 +790,20 @@ Wire Wire Line
 	6550 3550 6550 3400
 Wire Wire Line
 	6350 3550 6550 3550
-Wire Bus Line
-	900  4350 900  5500
+Text GLabel 6450 3750 2    50   Input ~ 0
+USART3_RX
+Wire Wire Line
+	6350 3750 6450 3750
+Text GLabel 4550 4550 0    50   Input ~ 0
+CAN_EN
+Wire Wire Line
+	4700 4550 4550 4550
+Wire Notes Line
+	3350 4100 2000 4100
+Wire Notes Line
+	2000 5100 3350 5100
 Wire Bus Line
 	4050 3450 4050 5500
+Wire Bus Line
+	900  4350 900  5500
 $EndSCHEMATC

@@ -119,20 +119,28 @@ unsigned char CAN_FIFO_add ( T_CAN_FIFO *pFIFO, unsigned int CAN_Id, unsigned ch
  * return: OK if element is read, NOK if FIFO is empty                  *
  * description: Add a CAN message in FIFO                               *
  ************************************************************************/
-unsigned char CAN_FIFO_read(T_CAN_FIFO *pFIFO, unsigned int *CAN_Id, unsigned char *msg_len, unsigned char *msg_data )
+unsigned char CAN_FIFO_read(T_CAN_FIFO *pFIFO, unsigned int *CAN_Id, unsigned char *msg_len, unsigned char msg_data[8] )
 {
 	unsigned char i;
+	T_CAN_MESSAGE pCanMsg;
+
+	u8 tmpCanId, tmpMsgLen;
 	
 	if( pFIFO->NumElem > 0 )
 	{
+		pCanMsg = pFIFO->msgBuff[pFIFO->ReadIdx];
+
         // Get CAN_Id and message length
-		*CAN_Id = pFIFO->msgBuff[pFIFO->ReadIdx].addr ;
-		*msg_len = pFIFO->msgBuff[pFIFO->ReadIdx].length;
+		tmpCanId = pCanMsg.addr ;
+		tmpMsgLen = pCanMsg.length;
         
         // Get on data
-		for( i=0; i<*msg_len; i++ )
+		for( i=0; i<tmpMsgLen; i++ )
 			msg_data[i] = pFIFO->msgBuff[pFIFO->ReadIdx].data[i];
 		
+		*CAN_Id = tmpCanId ;
+		*msg_len = tmpMsgLen;
+
         // Remove read element
 		pFIFO->NumElem --;
         
@@ -149,6 +157,19 @@ unsigned char CAN_FIFO_read(T_CAN_FIFO *pFIFO, unsigned int *CAN_Id, unsigned ch
 		return ret_NOK;
 	}
 }
+
+/************************************************************************
+ * Function:                                              				*
+ * input: FIFO: FIFO name to read                                       *
+ * output:																*
+ * return: OK if element is read, NOK if FIFO is empty                  *
+ * description: Add a CAN message in FIFO                               *
+ ************************************************************************/
+unsigned char CAN_FIFO_GetNumOfElem(T_CAN_FIFO *pFIFO)
+{
+	return pFIFO->NumElem;
+}
+
 
 
 /*******************************************************************************

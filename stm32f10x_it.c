@@ -23,6 +23,10 @@
 #include "stm32f10x_it.h"
 #include "stm32f10x_can.h"
 #include "teleinfo.h"
+#include "Fifo.h"
+#include "Task.h"
+#include "Task_cfg.h"
+#include "stm32f10x_map.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -397,13 +401,26 @@ void USB_HP_CAN_TX_IRQHandler(void)
 *******************************************************************************/
 void USB_LP_CAN_RX0_IRQHandler(void)
 {
+	if( CAN->RF0R & 0x03 /*FMP0[1:0]*/ )
+	{
+		CAN_Receive(CAN_FIFO0, &RxMessage);
+		CAN_FIFO_add ( &CAN_RX_FIFO, RxMessage.StdId, RxMessage.DLC, RxMessage.Data );
+		TaskAdd_unique(Task_CanMsgProcess_ID);
+	}
+
+	if( CAN->RF1R & 0x03 /*FMP0[1:0]*/ )
+	{
+		CAN_Receive(CAN_FIFO0, &RxMessage);
+		CAN_FIFO_add ( &CAN_RX_FIFO, RxMessage.StdId, RxMessage.DLC, RxMessage.Data );
+		TaskAdd_unique(Task_CanMsgProcess_ID);
+	}
+
 	if(CAN_GetITStatus(CAN_IT_FMP0) != RESET)
 	{
 		CAN_ClearITPendingBit(CAN_IT_FMP0);
 	}
 	if(CAN_GetITStatus(CAN_IT_FF0) != RESET)
 	{
-		CAN_Receive(CAN_FIFO0, &RxMessage);
 		CAN_ClearITPendingBit(CAN_IT_FF0);
 	}
 	if(CAN_GetITStatus(CAN_IT_FOV0) != RESET)
@@ -416,7 +433,6 @@ void USB_LP_CAN_RX0_IRQHandler(void)
 	}
 	if(CAN_GetITStatus(CAN_IT_FF1) != RESET)
 	{
-		CAN_Receive(CAN_FIFO1, &RxMessage);
 		CAN_ClearITPendingBit(CAN_IT_FF1);
 	}
 	if(CAN_GetITStatus(CAN_IT_FOV1) != RESET)
@@ -451,6 +467,26 @@ void USB_LP_CAN_RX0_IRQHandler(void)
 	{
 		CAN_ClearITPendingBit(CAN_IT_SLK);
 	}
+
+
+	if(CAN_GetITStatus(CAN_IT_RQCP0) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_RQCP0);
+	}
+	if(CAN_GetITStatus(CAN_IT_RQCP1) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_RQCP1);
+	}
+	if(CAN_GetITStatus(CAN_IT_RQCP2) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_RQCP2);
+	}
+	if(CAN_GetITStatus(CAN_IT_TME) != RESET)
+	{
+		CAN_ClearITPendingBit(CAN_IT_TME);
+	}
+
+
 }
 
 /*******************************************************************************

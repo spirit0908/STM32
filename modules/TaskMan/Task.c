@@ -1,6 +1,4 @@
 
-//#include "hard.h"
-
 #include "Task.h"
 //#include "def.h"
 //#include "FIFO.h"
@@ -60,6 +58,12 @@ void TaskAdd(unsigned char TaskId )
         else
         {
             TaskSchedule.pLast=0;
+        }
+
+        /* Debug: */
+        if( TaskSchedule.nbElem > TaskSchedule.maxNumElem )
+        {
+        	TaskSchedule.maxNumElem = TaskSchedule.nbElem;
         }
     }
     else

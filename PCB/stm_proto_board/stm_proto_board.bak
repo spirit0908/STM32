@@ -653,7 +653,7 @@ Wire Wire Line
 Wire Wire Line
 	8300 5500 8350 5500
 Text GLabel 8600 5650 0    50   Input ~ 0
-Teleinfo_RX
+USART3_RX
 Wire Wire Line
 	8650 5500 8750 5500
 Wire Wire Line
@@ -800,6 +800,10 @@ Wire Wire Line
 	6550 3550 6550 3400
 Wire Wire Line
 	6350 3550 6550 3550
+Text GLabel 6450 3750 2    50   Input ~ 0
+USART3_RX
+Wire Wire Line
+	6350 3750 6450 3750
 Wire Bus Line
 	900  4350 900  5500
 Wire Bus Line

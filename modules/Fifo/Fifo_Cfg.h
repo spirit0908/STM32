@@ -1,7 +1,7 @@
 
 
-#ifndef TASK_CFG_H
-#define	TASK_CFG_H
+#ifndef FIFO_CFG_H
+#define	FIFO_CFG_H
 
 #include "Fifo.h"
 

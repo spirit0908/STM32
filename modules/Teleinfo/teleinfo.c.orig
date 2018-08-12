@@ -40,7 +40,7 @@ T_TIC_FIFO TIC_Fifo;
 #define TIC_FIFO_LENGTH     55
 unsigned char TIC_FIFO_Buff[TIC_FIFO_LENGTH][30];
 
-unsigned char IinstMax=0;
+
 
 /* Private define ------------------------------------------------------------*/
 #define MODE1 1
@@ -174,12 +174,15 @@ void Teleinfo_Mgt()
 		{
 			TIC_Fifo.ReadIdx=0;
 		}
+
 	}
+
+
 }
 
 unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, unsigned long int *valueCode)
 {
-	unsigned char strLen=0, i, tmp;
+	unsigned char strLen=0, i;
 	unsigned char labelStr[10], valueStr[12], CRC;
 	unsigned char labelLen=0, valueLen=0;
 
@@ -218,7 +221,7 @@ unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, u
 		while(str[strLen] != ASCII_CR); //CR
 
 		//all informations are get, now compute CRC
-		if( TIC_CRC(str) == CRC )
+		if( TIC_CRC(str) == CRC)
 		{
 			//Valid CRC
 			IsValid = TRUE;
@@ -242,13 +245,6 @@ unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, u
 						for(i=0; i<valueLen; i++)
 							TIC_info.IINST[i]=valueStr[i];
 						TIC_info.IINST[i]='\0';
-
-						/* Update I inst max */
-						tmp=Ascii2Int(valueStr, valueLen);
-						if( tmp > IinstMax )
-						{
-							IinstMax=tmp;
-						}
 					}
 					else if(labelStr[1] == 'M')
 					{

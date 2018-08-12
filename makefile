@@ -40,8 +40,10 @@ SRC_FILES = \
   modules/Teleinfo/teleinfo.c \
   modules/Fifo/Fifo.c \
   modules/Fifo/Fifo_Cfg.c \
+  modules/TaskMan/Task_cfg.c \
   modules/TaskMan/Task.c \
-  modules/TaskMan/Task_cfg.c
+  modules/OrderMgt/Order_mgt.c \
+  modules/Light/Light.c 
 
 INC_FILES = \
   Std_Types.h \
@@ -51,8 +53,9 @@ INC_FILES = \
   modules/Fifo/Fifo.h \
   modules/Fifo/Fifo_Cfg.h \
   modules/TaskMan/Task.h \
-  modules/TaskMan/Task_cfg.h
-
+  modules/TaskMan/Task_cfg.h \
+  modules/OrderMgt/Order_mgt.h \
+  modules/Light/Light.h
 
 $(MAIN_OUT_ELF): updateIncFiles $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a
 	$(LD) $(LDFLAGS) $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a --output $@
@@ -84,7 +87,7 @@ debug: $(MAIN_OUT_BIN)
 	#Launch st-util in a new terminal
 	gnome-terminal -e st-util
 	#Then launch gdb
-	arm-none-eabi-gdb out/main.elf -x "target extended-remote localhost:4242"
+	arm-none-eabi-gdb -tui out/main.elf -x "target extended-remote localhost:4242"
 
 
 # libstm32.a
