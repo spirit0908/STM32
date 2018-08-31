@@ -58,6 +58,11 @@ void LcdClear(void)
 {
 	// Clear cache
 //    memset(LcdCache, 0x00, LCD_CACHE_SIZE);
+	unsigned int i;
+	for(i=0; i<LCD_CACHE_SIZE; i++)
+	{
+		LcdCache[i]=0;
+	}
     
     // Reset Cache marks
     BottomCacheMark = 0;

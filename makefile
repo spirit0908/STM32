@@ -43,7 +43,8 @@ SRC_FILES = \
   modules/TaskMan/Task_cfg.c \
   modules/TaskMan/Task.c \
   modules/OrderMgt/Order_mgt.c \
-  modules/Light/Light.c 
+  modules/Light/Light.c \
+  modules/LcdMenu/LcdMenu.c
 
 INC_FILES = \
   Std_Types.h \
@@ -55,7 +56,8 @@ INC_FILES = \
   modules/TaskMan/Task.h \
   modules/TaskMan/Task_cfg.h \
   modules/OrderMgt/Order_mgt.h \
-  modules/Light/Light.h
+  modules/Light/Light.h \
+  modules/LcdMenu/LcdMenu.h
 
 $(MAIN_OUT_ELF): updateIncFiles $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a
 	$(LD) $(LDFLAGS) $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a --output $@
