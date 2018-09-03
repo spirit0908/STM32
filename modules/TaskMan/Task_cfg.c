@@ -1,7 +1,8 @@
 
+#include "stm32f10x_lib.h"
 #include "stm32f10x_map.h"
 #include "stm32f10x_gpio.h"
-
+#include "teleinfo.h"
 
 
 #include "Task.h"
@@ -35,8 +36,13 @@ T_TASK Task_List[] =
     { Task_CanMsgProcess, TASK_STOPPED, 0, ASYNC_TASK, 0/*ms*/,0}
 };
 #define TASK_TOTAL_NUM (sizeof(Task_List)/sizeof(T_TASK))
+#define PERIOD 1000
 
 extern unsigned char dim_idx;
+
+extern int TIM_Pulse_R;
+extern int TIM_Pulse_G;
+extern int TIM_Pulse_B;
 
 //*********************************
 // Synchronous tasks implementation
@@ -66,7 +72,6 @@ unsigned char Task_100ms(void)
         // every 1sec
 //        LED9 = !LED9;
 
-
     }
     
     return 0;
@@ -86,6 +91,25 @@ unsigned char Task_1s(void)
 		sens = 0;
 		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
 	}
+
+
+	TIM_Pulse_R++;
+	if (TIM_Pulse_R > PERIOD)
+		TIM_Pulse_R = 0;
+
+	TIM_Pulse_G +=2;
+	if (TIM_Pulse_G > PERIOD)
+		TIM_Pulse_G = 0;
+
+	TIM_Pulse_B +=4;
+	if (TIM_Pulse_B > PERIOD)
+		TIM_Pulse_B = 0;
+
+	TIM3->CCR1 = TIM_Pulse_R;
+	TIM3->CCR2 = TIM_Pulse_G;
+	TIM3->CCR3 = TIM_Pulse_B;
+
+
 
     return 0;
 }

@@ -20,12 +20,13 @@
 #include "n3310.h"
 #include "stm32f10x_can.h"
 
+#include "stm32f10x_rcc.h"
 #include "stm32f10x_flash.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_map.h"
 #include "stm32f10x_nvic.h"
-#include "stm32f10x_rcc.h"
 #include "stm32f10x_type.h"
+#include "stm32f10x_tim.h"
 
 #include "teleinfo.h"
 #include "Task.h"
@@ -49,12 +50,18 @@
 #define CAN_BAUDRATE_1MPBS 		1000
 
 #define CAN_BAUDRATE CAN_BAUDRATE_125KBPS
+
+#define PERIOD 1000
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 GPIO_InitTypeDef GPIO_InitStructure;
 ErrorStatus HSEStartUpStatus;
 
 CAN_FilterInitTypeDef CAN_FilterInitStructure;
+
+int TIM_Pulse_R = 0;
+int TIM_Pulse_G = 0;
+int TIM_Pulse_B = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 void RCC_Configuration(void);
@@ -87,6 +94,8 @@ int main(void)
 //    u16 R.cvData=0;
     CanTxMsg TxMessage;
 
+    unsigned int i;
+
     /* SYSTEM DRIVER INIT */
     /* Configure the system clocks */
     RCC_Configuration();
@@ -112,7 +121,32 @@ int main(void)
 	/* Interrupt */
     ITInit();
 
+    /* PWM */
+    PWMInit();
 
+
+
+//    while(1)
+//	{
+//		TIM_Pulse_R++;
+//		if (TIM_Pulse_R > PERIOD)
+//			TIM_Pulse_R = 0;
+//
+//		TIM_Pulse_G +=2;
+//		if (TIM_Pulse_G > PERIOD)
+//			TIM_Pulse_G = 0;
+//
+//		TIM_Pulse_B +=4;
+//		if (TIM_Pulse_B > PERIOD)
+//			TIM_Pulse_B = 0;
+//
+//		TIM3->CCR1 = TIM_Pulse_R;
+//		TIM3->CCR2 = TIM_Pulse_G;
+//		TIM3->CCR3 = TIM_Pulse_B;
+//
+//		/* delay */
+//		for(i=0;i<0x1000;i++);
+//	}
 
     /* CONFIG INIT */
 
@@ -150,6 +184,8 @@ int main(void)
     LcdInit();
     LcdClear();
 
+    LcdMenu_Init();
+    LcdMenu_Display();
 
     while(1)
     {
@@ -157,54 +193,6 @@ int main(void)
     }
 
 
-    while (1)
-    {
-    	/* Update LCD informations */
-    	LcdGotoXYFont(0,0);
-		LcdStr(FONT_1X, (unsigned char *)"ADCO:");
-
-		LcdGotoXYFont(0,1);
-		LcdStr(FONT_1X, (unsigned char *)"PTEC:");
-
-		LcdGotoXYFont(6,1);
-		LcdStr(FONT_1X, (unsigned char *) &(TIC_info.PTEC[0]) );
-
-		LcdGotoXYFont(0,2);
-		LcdStr(FONT_1X, (unsigned char *)"HCHC:");
-
-		LcdGotoXYFont(5,2);
-		LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHC[0]) );
-
-		LcdGotoXYFont(0,3);
-		LcdStr(FONT_1X, (unsigned char *)"HCHP:");
-
-		LcdGotoXYFont(5,3);
-		LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHP[0]) );
-
-		LcdGotoXYFont(0,4);
-		LcdStr(FONT_1X, (unsigned char *)"IINST:");
-
-		LcdGotoXYFont(7,4);
-		LcdStr(FONT_1X, (unsigned char *) &(TIC_info.IINST[0]) );
-
-//		LcdGotoXYFont(11,4);
-//		LcdStr(FONT_1X, (unsigned char *)  );
-
-		LcdUpdate();
-
-
-
-        /* Turn on led connected to PC.4 pin */
-//        GPIO_SetBits(GPIOC, GPIO_Pin_13);
-        /* Insert delay */
-        Delay(0xAFFFF);
-//        Delay(0xAFFFF);
-
-        /* Turn off led connected to PC.4 pin */
-//        GPIO_ResetBits(GPIOC, GPIO_Pin_13);
-        /* Insert delay */
-        Delay(0xAFFFF);
-    }
 }
 
 
@@ -236,16 +224,32 @@ void TimerInit(void)
 void GPIOInit(void)
 {
     /* Enable GPIOC clock */
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-
-    /* Enable GPIOC clock */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 
 
-    /* Configure PC.4 as Output push-pull */
+    /* Configure PB.0 as Alternate Function push-pull - TIM3_CH3*/
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    /* Configure PA.6 as Alternate Function push-pull - TIM3_CH1*/
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+    /* Configure PA.7 as Alternate Function push-pull -  TIM3_CH2*/
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+    /* Configure PC.13 as Output push-pull */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
 
@@ -666,6 +670,104 @@ void ITInit(void)
 }
 
 /*******************************************************************************
+ * Function Name  : Teleinfo_LcdDisplay
+ * Description    : Display Teleinformation values.
+ * Input          : None
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
+Teleinfo_LcdDisplay(void)
+{
+	/* Update LCD informations */
+	LcdGotoXYFont(0,0);
+	LcdStr(FONT_1X, (unsigned char *)"ADCO:");
+
+	LcdGotoXYFont(0,1);
+	LcdStr(FONT_1X, (unsigned char *)"PTEC:");
+
+	LcdGotoXYFont(6,1);
+	LcdStr(FONT_1X, (unsigned char *) &(TIC_info.PTEC[0]) );
+
+	LcdGotoXYFont(0,2);
+	LcdStr(FONT_1X, (unsigned char *)"HCHC:");
+
+	LcdGotoXYFont(5,2);
+	LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHC[0]) );
+
+	LcdGotoXYFont(0,3);
+	LcdStr(FONT_1X, (unsigned char *)"HCHP:");
+
+	LcdGotoXYFont(5,3);
+	LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHP[0]) );
+
+	LcdGotoXYFont(0,4);
+	LcdStr(FONT_1X, (unsigned char *)"IINST:");
+
+	LcdGotoXYFont(7,4);
+	LcdStr(FONT_1X, (unsigned char *) &(TIC_info.IINST[0]) );
+
+	LcdUpdate();
+}
+
+/*******************************************************************************
+ * Function Name  : PWMInit
+ * Description    : Initializes the PWM.
+ * Input          : None
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
+void PWMInit(void)
+{
+	TIM_TimeBaseInitTypeDef timer;
+	TIM_OCInitTypeDef timerPWM1, timerPWM2, timerPWM3;
+
+	/* Enable peripheral clock for TIMER 3 */
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+
+	/* Initialize TIMER 3 */
+	TIM_TimeBaseStructInit(&timer);
+	timer.TIM_Prescaler = 720;
+	timer.TIM_Period = PERIOD;
+	timer.TIM_ClockDivision = 0;
+	timer.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseInit(TIM3, &timer);
+
+	/* Configure TIM3 - Ch1 */
+	TIM_OCStructInit(&timerPWM1);
+	timerPWM1.TIM_OCMode = TIM_OCMode_PWM1;
+	timerPWM1.TIM_Channel = TIM_Channel_1;
+	timerPWM1.TIM_Pulse = 1000; //0;
+	timerPWM1.TIM_OCPolarity = TIM_OCPolarity_High;
+
+	/* Configure TIM3 - Ch2 */
+	TIM_OCStructInit(&timerPWM2);
+	timerPWM2.TIM_OCMode = TIM_OCMode_PWM1;
+	timerPWM2.TIM_Channel = TIM_Channel_2;
+	timerPWM2.TIM_Pulse = 1000;
+	timerPWM2.TIM_OCPolarity = TIM_OCPolarity_High;
+
+	/* Configure TIM3 - Ch3 */
+	TIM_OCStructInit(&timerPWM3);
+	timerPWM3.TIM_OCMode = TIM_OCMode_PWM1;
+	timerPWM3.TIM_Channel = TIM_Channel_3;
+	timerPWM3.TIM_Pulse = 1000;
+	timerPWM3.TIM_OCPolarity = TIM_OCPolarity_High;
+
+	/* Init timer */
+	TIM_OCInit(TIM3, &timerPWM1);
+	TIM_OCInit(TIM3, &timerPWM2);
+	TIM_OCInit(TIM3, &timerPWM3);
+
+	/* Reinitialize timer values */
+	TIM3->CCR1 = 0; //Pulse Red
+	TIM3->CCR2 = 0; //Pulse Green
+	TIM3->CCR3 = 0; //Pulse Blue
+
+	/* Enable TIM3 */
+	TIM_Cmd(TIM3, ENABLE);
+}
+
+/*******************************************************************************
  * Function Name  : RCC_Configuration
  * Description    : Configures the different system clocks.
  * Input          : None
@@ -770,6 +872,7 @@ void assert_failed(u8* file, u32 line)
     }
 }
 #endif
+
 
 
 /******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
