@@ -6,9 +6,9 @@
  */
 
 #ifndef LCDMENU_H
-#define	LCDMENU_H
+#define LCDMENU_H
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 extern "C" {
 #endif
 
@@ -16,16 +16,16 @@ extern "C" {
 
 typedef struct
 {
-	unsigned char ItemLevel;
-	unsigned char ItemName[12];
-	unsigned char (*pf)();  // pointer to task
+    unsigned char ItemLevel;
+    unsigned char ItemName[12];
+    unsigned char (*pf)();  // pointer to task
 } T_MenuList;
 
 typedef struct
 {
-	unsigned char ItemId;
-	unsigned char firstItemId; //First item to display in the menu
-	unsigned char cursorPos;	// Position of the cursor (from 0 to LASTLINE)
+    unsigned char ItemId;
+    unsigned char firstItemId; //First item to display in the menu
+    unsigned char cursorPos;    // Position of the cursor (from 0 to LASTLINE)
 } T_DisplayItemInfo;
 
 void LcdMenu_Init();
@@ -38,9 +38,9 @@ void LcdMenu_MenuRight(void);
 void LcdMenu_MenuLeft(void);
 
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 }
 #endif
 
-#endif	/* TASK_H */
+#endif  /* TASK_H */
 

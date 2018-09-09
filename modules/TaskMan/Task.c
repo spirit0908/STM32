@@ -24,6 +24,7 @@ void TaskManager_Init()
     for(i=0; i<TASK_TOTAL_NUM; i++)
     {
         Task_List[i].cpt = (Task_List[i].periodicity - Task_List[i].offset);
+        Task_List[i].state = TASK_WAITING;
     }
 }
 
@@ -63,7 +64,7 @@ void TaskAdd(unsigned char TaskId )
         /* Debug: */
         if( TaskSchedule.nbElem > TaskSchedule.maxNumElem )
         {
-        	TaskSchedule.maxNumElem = TaskSchedule.nbElem;
+            TaskSchedule.maxNumElem = TaskSchedule.nbElem;
         }
     }
     else

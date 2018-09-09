@@ -6,9 +6,9 @@
  */
 
 #ifndef TASK_CFG_H
-#define	TASK_CFG_H
+#define TASK_CFG_H
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 extern "C" {
 #endif
 
@@ -59,6 +59,14 @@ typedef enum
     TASK_TOTAL_NUM
 }T_TASK_ID;
 
+typedef enum
+{
+    PB_DISABLED,
+    PB_IDLE,
+    PB_PUSHED,
+    PB_WAITING_RELEASED
+}T_PushButton;
+
 unsigned char Task_20ms(void);
 unsigned char Task_50ms(void);
 unsigned char Task_100ms(void);
@@ -66,9 +74,9 @@ unsigned char Task_1s(void);
 unsigned char Task_CanMsgProcess(void);
 
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 }
 #endif
 
-#endif	/* TASK_CFG_H */
+#endif  /* TASK_CFG_H */
 

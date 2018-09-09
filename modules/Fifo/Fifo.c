@@ -41,12 +41,12 @@ void FIFO_Init(FIFO_TAB_T *pFifoTab)
     while(pFifoTab->pFIFO != 0) // #TBD: Whille loop to be tested
     {
         // Initialize Fifo
-        (pFifoTab->pFIFO)->msgBuff 		= pFifoTab->pFIFO_Buff; //  FIFO1.msgBuff = FIFO1_Buff;
-        (pFifoTab->pFIFO)->size 		= pFifoTab->size;
-        (pFifoTab->pFIFO)->WriteIdx 	= 0;
-        (pFifoTab->pFIFO)->ReadIdx 		= 0;
-        (pFifoTab->pFIFO)->NumElem 		= 0;
-        (pFifoTab->pFIFO)->NumMaxElem 	= 0;
+        (pFifoTab->pFIFO)->msgBuff      = pFifoTab->pFIFO_Buff; //  FIFO1.msgBuff = FIFO1_Buff;
+        (pFifoTab->pFIFO)->size         = pFifoTab->size;
+        (pFifoTab->pFIFO)->WriteIdx     = 0;
+        (pFifoTab->pFIFO)->ReadIdx      = 0;
+        (pFifoTab->pFIFO)->NumElem      = 0;
+        (pFifoTab->pFIFO)->NumMaxElem   = 0;
         (pFifoTab->pFIFO)->overrun      = 0;
         
         pFifoTab++;
@@ -66,47 +66,47 @@ void FIFO_Init(FIFO_TAB_T *pFifoTab)
 unsigned char CAN_FIFO_add ( T_CAN_FIFO *pFIFO, unsigned int CAN_Id, unsigned char msg_len, unsigned char *msg_data )
 {
     unsigned char i, status;
-	unsigned char * pWriteIdx;
-	T_CAN_MESSAGE * pMsgBuff;
+    unsigned char * pWriteIdx;
+    T_CAN_MESSAGE * pMsgBuff;
 
-	pWriteIdx = &(pFIFO->WriteIdx);
-	
-	pMsgBuff = &(pFIFO->msgBuff[*pWriteIdx]);
-	
-	status=ret_OK;
+    pWriteIdx = &(pFIFO->WriteIdx);
+    
+    pMsgBuff = &(pFIFO->msgBuff[*pWriteIdx]);
+    
+    status=ret_OK;
     
     if( pFIFO->NumElem < pFIFO->size )
-	{
+    {
         // Store CAN_ID and msg_len
-		pMsgBuff->addr = CAN_Id;
-		pMsgBuff->length = msg_len;
+        pMsgBuff->addr = CAN_Id;
+        pMsgBuff->length = msg_len;
         
         // Store data
         for( i=0; i<msg_len; i++)
-			pMsgBuff->data[i] = msg_data[i];
-		
+            pMsgBuff->data[i] = msg_data[i];
+        
         pFIFO->NumElem++;   // Increment the number of elements
         (*pWriteIdx)++;     // Increment FIFO write index to next position
         
         // Manage overflow:
-		if( (*pWriteIdx) >= pFIFO->size )
-			*pWriteIdx = 0;
+        if( (*pWriteIdx) >= pFIFO->size )
+            *pWriteIdx = 0;
 
         //Used for debug purpose
         if( pFIFO->NumElem > pFIFO->NumMaxElem)
         {
             pFIFO->NumMaxElem = pFIFO->NumElem; // Record how many elements were used in maximum since startup
         }
-	}
-	else
-	{
-		// FIFO overrun
-        if( pFIFO->overrun < 0xFF)
+    }
+    else
+    {
+        // FIFO overrun
+        if( pFIFO->overrun < 0xFF )
         {
             pFIFO->overrun++;
-		}
+        }
         status = ret_NOK;
-	}
+    }
     return status;
 }
 
@@ -121,53 +121,54 @@ unsigned char CAN_FIFO_add ( T_CAN_FIFO *pFIFO, unsigned int CAN_Id, unsigned ch
  ************************************************************************/
 unsigned char CAN_FIFO_read(T_CAN_FIFO *pFIFO, unsigned int *CAN_Id, unsigned char *msg_len, unsigned char msg_data[8] )
 {
-	unsigned char i;
-	T_CAN_MESSAGE pCanMsg;
+    unsigned char i;
+    T_CAN_MESSAGE pCanMsg;
 
-	u8 tmpCanId, tmpMsgLen;
-	
-	if( pFIFO->NumElem > 0 )
-	{
-		pCanMsg = pFIFO->msgBuff[pFIFO->ReadIdx];
+    u16 tmpCanId;
+    u8 tmpMsgLen;
+    
+    if( pFIFO->NumElem > 0 )
+    {
+        pCanMsg = pFIFO->msgBuff[pFIFO->ReadIdx];
 
         // Get CAN_Id and message length
-		tmpCanId = pCanMsg.addr ;
-		tmpMsgLen = pCanMsg.length;
+        tmpCanId = pCanMsg.addr ;
+        tmpMsgLen = pCanMsg.length;
         
         // Get on data
-		for( i=0; i<tmpMsgLen; i++ )
-			msg_data[i] = pFIFO->msgBuff[pFIFO->ReadIdx].data[i];
-		
-		*CAN_Id = tmpCanId ;
-		*msg_len = tmpMsgLen;
+        for( i=0; i<tmpMsgLen; i++ )
+            msg_data[i] = pFIFO->msgBuff[pFIFO->ReadIdx].data[i];
+        
+        *CAN_Id = tmpCanId ;
+        *msg_len = tmpMsgLen;
 
         // Remove read element
-		pFIFO->NumElem --;
+        pFIFO->NumElem --;
         
         // Increment Read index and manage overrun
-		pFIFO->ReadIdx ++;
-		if( pFIFO->ReadIdx >= pFIFO->size )
-			pFIFO->ReadIdx = 0;
-		
-		return ret_OK;
-	}
-	else
+        pFIFO->ReadIdx ++;
+        if( pFIFO->ReadIdx >= pFIFO->size )
+            pFIFO->ReadIdx = 0;
+        
+        return ret_OK;
+    }
+    else
     {
         // No element in this buffer
-		return ret_NOK;
-	}
+        return ret_NOK;
+    }
 }
 
 /************************************************************************
- * Function:                                              				*
+ * Function:                                                            *
  * input: FIFO: FIFO name to read                                       *
- * output:																*
+ * output:                                                              *
  * return: OK if element is read, NOK if FIFO is empty                  *
  * description: Add a CAN message in FIFO                               *
  ************************************************************************/
 unsigned char CAN_FIFO_GetNumOfElem(T_CAN_FIFO *pFIFO)
 {
-	return pFIFO->NumElem;
+    return pFIFO->NumElem;
 }
 
 
@@ -176,49 +177,49 @@ unsigned char CAN_FIFO_GetNumOfElem(T_CAN_FIFO *pFIFO)
  * Function Name  : FIFO_add
  * Description    : Add one element in Fifo
  * Input          : pFIFO -> pointer to Fifo
- * 					data  -> data to write
+ *                  data  -> data to write
  * Output         : None
  * Return         : status -> ret_OK when element is correctly stored, ret_NOK otherwise
  *******************************************************************************/
 unsigned char FIFO_add ( T_FIFO *pFIFO, unsigned char data )
 {
     unsigned char status;
-	unsigned char * pWriteIdx;
-	unsigned char * pDataElem;
+    unsigned char * pWriteIdx;
+    unsigned char * pDataElem;
 
-	pWriteIdx = &(pFIFO->WriteIdx);
+    pWriteIdx = &(pFIFO->WriteIdx);
 
-	pDataElem = &(pFIFO->dataElem[*pWriteIdx]);
+    pDataElem = &(pFIFO->dataElem[*pWriteIdx]);
 
-	status=ret_OK;
+    status=ret_OK;
 
     if( pFIFO->NumElem < pFIFO->size )
-	{
+    {
         // record data
-    	*pDataElem = data;
+        *pDataElem = data;
 
         pFIFO->NumElem++;   // Increment the number of elements
         (*pWriteIdx)++;     // Increment FIFO write index to next position
 
         // Manage overflow:
-		if( (*pWriteIdx) >= pFIFO->size )
-			*pWriteIdx = 0;
+        if( (*pWriteIdx) >= pFIFO->size )
+            *pWriteIdx = 0;
 
         //Used for debug purpose
         if( pFIFO->NumElem > pFIFO->NumMaxElem)
         {
             pFIFO->NumMaxElem = pFIFO->NumElem; // Record how many elements were used in maximum since startup
         }
-	}
-	else
-	{
-		// FIFO overrun
+    }
+    else
+    {
+        // FIFO overrun
         if( pFIFO->overrun < 0xFF)
         {
             pFIFO->overrun++;
-		}
+        }
         status = ret_NOK;
-	}
+    }
     return status;
 }
 
@@ -231,28 +232,28 @@ unsigned char FIFO_add ( T_FIFO *pFIFO, unsigned char data )
  *******************************************************************************/
 unsigned char FIFO_read(T_FIFO *pFIFO, unsigned char *data )
 {
-	unsigned char i;
+    unsigned char i;
 
-	if( pFIFO->NumElem > 0 )
-	{
+    if( pFIFO->NumElem > 0 )
+    {
         // Get data
-		*data = pFIFO->dataElem[pFIFO->ReadIdx];
+        *data = pFIFO->dataElem[pFIFO->ReadIdx];
 
-		// Remove read element
-		pFIFO->NumElem --;
+        // Remove read element
+        pFIFO->NumElem --;
 
         // Increment Read index and manage overrun
-		pFIFO->ReadIdx ++;
-		if( pFIFO->ReadIdx >= pFIFO->size )
-			pFIFO->ReadIdx = 0;
+        pFIFO->ReadIdx ++;
+        if( pFIFO->ReadIdx >= pFIFO->size )
+            pFIFO->ReadIdx = 0;
 
-		return ret_OK;
-	}
-	else
+        return ret_OK;
+    }
+    else
     {
         // No element in this buffer
-		return ret_NOK;
-	}
+        return ret_NOK;
+    }
 }
 
 

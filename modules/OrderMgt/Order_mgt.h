@@ -6,19 +6,19 @@
  */
 
 #ifndef ORDER_MGT_H
-#define	ORDER_MGT_H
+#define ORDER_MGT_H
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 extern "C" {
 #endif
 
     
 #define ORDER_BROADCAST 0x00
-#define ORDER_LIGHT		0x10
-#define ORDER_HEATING	0x20
-#define ORDER_SHUTTER	0x30
+#define ORDER_LIGHT     0x10
+#define ORDER_HEATING   0x20
+#define ORDER_SHUTTER   0x30
 
-#define TYPE_LIGHT		0x10
+#define TYPE_LIGHT      0x10
 
 
 typedef struct{
@@ -35,9 +35,9 @@ void updateIndicStatus(unsigned char Idx);
 void CanSendMessage(void);
 
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 }
 #endif
 
-#endif	/* ORDER_MGT_H */
+#endif  /* ORDER_MGT_H */
 

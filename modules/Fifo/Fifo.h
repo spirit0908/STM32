@@ -7,36 +7,36 @@
 /************************************************************************
 * STRUCTURES *
 ************************************************************************/
-typedef struct  	 	// Creation d'une structure CAN pour la FIFOCAN
+typedef struct          // Creation d'une structure CAN pour la FIFOCAN
 {
-	// For each CAN message :
-	unsigned int addr;		// address
-	unsigned char length;	// data length
-	unsigned char data[8];	// data (max 8 bytes)
+    // For each CAN message :
+    unsigned int addr;      // address
+    unsigned char length;   // data length
+    unsigned char data[8];  // data (max 8 bytes)
 } T_CAN_MESSAGE ;
 
 
 typedef struct
 {
     // FIFO struct for CAN messages
-    T_CAN_MESSAGE *msgBuff;		// Message buffer
-    unsigned char size;  		// FIFO length
-    unsigned char WriteIdx; 	// Next position to write an element
-    unsigned char ReadIdx;  	// Next Element to read
-    unsigned char NumElem;  	// Total of elements currently in the FIFO
-    unsigned char NumMaxElem;  	// maximum of Elements saved (used for debug purpose)
+    T_CAN_MESSAGE *msgBuff;     // Message buffer
+    unsigned char size;         // FIFO length
+    unsigned char WriteIdx;     // Next position to write an element
+    unsigned char ReadIdx;      // Next Element to read
+    unsigned char NumElem;      // Total of elements currently in the FIFO
+    unsigned char NumMaxElem;   // maximum of Elements saved (used for debug purpose)
     unsigned char overrun;
 } T_CAN_FIFO;
 
 typedef struct
 {
     // This is a FIFO struct
-    unsigned char *dataElem;		// Data buffer
-    unsigned char size;  		// FIFO length
-    unsigned char WriteIdx; 	// Next position to write an element
-    unsigned char ReadIdx;  	// Next Element to read
-    unsigned char NumElem;  	// Total of elements currently in the FIFO
-    unsigned char NumMaxElem;	// maximum of Elements saved (used for debug purpose)
+    unsigned char *dataElem;        // Data buffer
+    unsigned char size;         // FIFO length
+    unsigned char WriteIdx;     // Next position to write an element
+    unsigned char ReadIdx;      // Next Element to read
+    unsigned char NumElem;      // Total of elements currently in the FIFO
+    unsigned char NumMaxElem;   // maximum of Elements saved (used for debug purpose)
     unsigned char overrun;
 } T_FIFO;
 

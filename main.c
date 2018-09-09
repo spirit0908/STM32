@@ -31,23 +31,24 @@
 #include "teleinfo.h"
 #include "Task.h"
 #include "Task_cfg.h"
+#include "Fifo_Cfg.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define CAN_RX_PIN 		GPIO_Pin_11
-#define CAN_TX_PIN  	GPIO_Pin_12
-#define CAN_RS_PIN		GPIO_Pin_5
-//#define CAN_GPIO_PORT 	GPIOB
+#define CAN_RX_PIN        GPIO_Pin_11
+#define CAN_TX_PIN        GPIO_Pin_12
+#define CAN_RS_PIN        GPIO_Pin_5
+//#define CAN_GPIO_PORT     GPIOB
 
 
-#define CAN_BAUDRATE_10KBPS		10
-#define CAN_BAUDRATE_20KBPS		20
-#define CAN_BAUDRATE_50KBPS		50
-#define CAN_BAUDRATE_100KBPS	100
-#define CAN_BAUDRATE_125KBPS	125
-#define CAN_BAUDRATE_250KBPS	250
-#define CAN_BAUDRATE_500KBPS	500
-#define CAN_BAUDRATE_1MPBS 		1000
+#define CAN_BAUDRATE_10KBPS     10
+#define CAN_BAUDRATE_20KBPS     20
+#define CAN_BAUDRATE_50KBPS     50
+#define CAN_BAUDRATE_100KBPS    100
+#define CAN_BAUDRATE_125KBPS    125
+#define CAN_BAUDRATE_250KBPS    250
+#define CAN_BAUDRATE_500KBPS    500
+#define CAN_BAUDRATE_1MPBS      1000
 
 #define CAN_BAUDRATE CAN_BAUDRATE_125KBPS
 
@@ -109,7 +110,7 @@ int main(void)
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 
     /* COM DRIVER INIT */
-	/* Serial Port */
+    /* Serial Port */
     SerialInit();
 
     /* CAN Bus */
@@ -118,35 +119,11 @@ int main(void)
     /* Timer */
     TimerInit();
 
-	/* Interrupt */
+    /* Interrupt */
     ITInit();
 
     /* PWM */
     PWMInit();
-
-
-
-//    while(1)
-//	{
-//		TIM_Pulse_R++;
-//		if (TIM_Pulse_R > PERIOD)
-//			TIM_Pulse_R = 0;
-//
-//		TIM_Pulse_G +=2;
-//		if (TIM_Pulse_G > PERIOD)
-//			TIM_Pulse_G = 0;
-//
-//		TIM_Pulse_B +=4;
-//		if (TIM_Pulse_B > PERIOD)
-//			TIM_Pulse_B = 0;
-//
-//		TIM3->CCR1 = TIM_Pulse_R;
-//		TIM3->CCR2 = TIM_Pulse_G;
-//		TIM3->CCR3 = TIM_Pulse_B;
-//
-//		/* delay */
-//		for(i=0;i<0x1000;i++);
-//	}
 
     /* CONFIG INIT */
 
@@ -161,7 +138,6 @@ int main(void)
     Delay(0xAFFFF);
     USART_SendData(USART2, 'T');
     Delay(0xAFFFF);
-
 
 
     GPIO_ResetBits(GPIOB, CAN_RS_PIN);
@@ -180,6 +156,9 @@ int main(void)
     teleinfo_Init();
     USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 
+    /* FIFO table initialization */
+    FIFO_Init(&FIFO_table);
+
     /* LCD Initialization */
     LcdInit();
     LcdClear();
@@ -189,12 +168,9 @@ int main(void)
 
     while(1)
     {
-    	TaskManager();
+        TaskManager();
     }
-
-
 }
-
 
 /*******************************************************************************
  * Function Name  : GPIOInit
@@ -205,21 +181,20 @@ int main(void)
  *******************************************************************************/
 void TimerInit(void)
 {
-	TIM_TimeBaseInitTypeDef TIMER_InitStructure;
-	NVIC_InitTypeDef NVIC_InitStructure;
+    TIM_TimeBaseInitTypeDef TIMER_InitStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
 
     /* Timer 4 */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE); // Enable clock peripheral TIM4
 
     TIM_TimeBaseStructInit(&TIMER_InitStructure);
-	TIMER_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIMER_InitStructure.TIM_Prescaler = 7200;
-	TIMER_InitStructure.TIM_Period = 50;       //5ms delay / 1sec delay: F=72000000/7200/10000 = 1sec
-	TIM_TimeBaseInit(TIM4, &TIMER_InitStructure);
-	TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
-	TIM_Cmd(TIM4, ENABLE);
+    TIMER_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIMER_InitStructure.TIM_Prescaler = 7200;
+    TIMER_InitStructure.TIM_Period = 50;       //5ms delay / 1sec delay: F=72000000/7200/10000 = 1sec
+    TIM_TimeBaseInit(TIM4, &TIMER_InitStructure);
+    TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
+    TIM_Cmd(TIM4, ENABLE);
 }
-
 
 void GPIOInit(void)
 {
@@ -230,22 +205,22 @@ void GPIOInit(void)
 
 
     /* Configure PB.0 as Alternate Function push-pull - TIM3_CH3*/
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     /* Configure PA.6 as Alternate Function push-pull - TIM3_CH1*/
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* Configure PA.7 as Alternate Function push-pull -  TIM3_CH2*/
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* Configure PC.13 as Output push-pull */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
@@ -263,11 +238,10 @@ void GPIOInit(void)
 
     /* USART1 RX */
     /* Configure PB.7 as Alternate Function Floating Input - Serial RX */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
-
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     /* USART2 TX */
     /* Configure PA.2 as Alternate Function Push-Pull Output - Serial TX */
@@ -278,12 +252,12 @@ void GPIOInit(void)
 
     /* USART2 RX */
     /* Configure PA.3 as Alternate Function Floating Input - Serial RX */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	/* USART3 TX */
+    /* USART3 TX */
     /* Configure PB.10 as Alternate Function Push-Pull Output - Serial TX */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
@@ -292,35 +266,42 @@ void GPIOInit(void)
 
     /* USART3 RX */
     /* Configure PB.11 as Alternate Function Floating Input - Serial RX */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
 
     /* CAN1 TX */
     /* Configure PA.12 as Alternate Function Push-Pull Output - CAN TX */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;	//CAN_TX_PIN
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;  //CAN_TX_PIN
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; //GPIO_Speed_10MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* CAN RX */
     /* Configure PA.11 as Alternate Function Floating Input - CAN RX */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;	//CAN_RX_PIN
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;  //CAN_RX_PIN
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //GPIO_Mode_IPU; //GPIO_Mode_IN_FLOATING;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+    /* CAN RS */
+    /* Configure PB.5 as Push-Pull Output */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+
+    /* IO */
+
+    /* Configure PA.0 as Input - PushButton UP */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; //GPIO_Mode_IPU; //GPIO_Mode_IN_FLOATING;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-	/* CAN RS */
-	/* Configure PA.8 as Push-Pull Output  - Relay1 */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-	/* IO */
-	/* Configure  */
 }
+
 
 /*******************************************************************************
  * Function Name  : SerialInit
@@ -331,63 +312,102 @@ void GPIOInit(void)
  *******************************************************************************/
 void SerialInit(void)
 {
-	USART_InitTypeDef USART_InitStruct;
+    USART_InitTypeDef USART_InitStruct;
 
-	/* *** USART1 *** */
-	/* Enable USART1 clock */
-	RCC_APB1PeriphClockCmd(RCC_APB2Periph_USART1, DISABLE);
+    /* *** USART1 *** */
+    /* Enable USART1 clock */
+    RCC_APB1PeriphClockCmd(RCC_APB2Periph_USART1, DISABLE);
 
-	/* Enable USART  */
-	USART_StructInit(&USART_InitStruct);
-	USART_Cmd(USART1, DISABLE);
-	USART_Init(USART1, &USART_InitStruct);
+    /* Enable USART  */
+    USART_StructInit(&USART_InitStruct);
+    USART_Cmd(USART1, DISABLE);
+    USART_Init(USART1, &USART_InitStruct);
 
-	/* Enable IT on USART handler */
-	USART_ITConfig(USART1, USART_IT_RXNE, DISABLE);
-	USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
-	USART_ITConfig(USART1, USART_IT_TC, DISABLE);
-
-
-	/* *** USART2 *** */
-	/* Enable USART2 clock */
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-
-	/* Enable USART  */
-	USART_StructInit(&USART_InitStruct);
-	USART_Cmd(USART2, ENABLE);
-	USART_Init(USART2, &USART_InitStruct);
-
-	/* Enable IT on USART handler */
-	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-	USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
-	USART_ITConfig(USART2, USART_IT_TC, DISABLE);
+    /* Enable IT on USART handler */
+    USART_ITConfig(USART1, USART_IT_RXNE, DISABLE);
+    USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
+    USART_ITConfig(USART1, USART_IT_TC, DISABLE);
 
 
-	/* *** USART3 *** */
-	/* Enable USART3 clock */
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+    /* *** USART2 *** */
+    /* Enable USART2 clock */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 
-	/* Configure UART for EDF Teleinfo */
-	USART_InitStruct.USART_BaudRate 	= 0x04B0; /* 1200 Baud */
-	USART_InitStruct.USART_WordLength 	= USART_WordLength_8b;
-	USART_InitStruct.USART_StopBits 	= USART_StopBits_1;
-	USART_InitStruct.USART_Parity 		= USART_Parity_Even;
-	USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-	USART_InitStruct.USART_Mode			= USART_Mode_Rx; 	/* Only Rx pin is configured */
-	USART_InitStruct.USART_Clock 		= USART_Clock_Disable;
-	USART_InitStruct.USART_CPOL 		= USART_CPOL_Low;
-	USART_InitStruct.USART_CPHA 		= USART_CPHA_1Edge;
-	USART_InitStruct.USART_LastBit 		= USART_LastBit_Disable;
+    /* Enable USART  */
+    USART_StructInit(&USART_InitStruct);
+    USART_Cmd(USART2, ENABLE);
+    USART_Init(USART2, &USART_InitStruct);
 
-	/* Enable USART  */
-	USART_Cmd(USART3, ENABLE);
-	USART_Init(USART3, &USART_InitStruct);
+    /* Enable IT on USART handler */
+    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+    USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
+    USART_ITConfig(USART2, USART_IT_TC, DISABLE);
 
-	/* Enable IT on USART handler */
-	USART_ITConfig(USART3, USART_IT_RXNE, DISABLE);
-	USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
-	USART_ITConfig(USART3, USART_IT_TC, DISABLE);
+
+    /* *** USART3 *** */
+    /* Enable USART3 clock */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+
+    /* Configure UART for EDF Teleinfo */
+    USART_InitStruct.USART_BaudRate     = 0x04B0; /* 1200 Baud */
+    USART_InitStruct.USART_WordLength   = USART_WordLength_8b;
+    USART_InitStruct.USART_StopBits     = USART_StopBits_1;
+    USART_InitStruct.USART_Parity       = USART_Parity_Even;
+    USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    USART_InitStruct.USART_Mode         = USART_Mode_Rx;    /* Only Rx pin is configured */
+    USART_InitStruct.USART_Clock        = USART_Clock_Disable;
+    USART_InitStruct.USART_CPOL         = USART_CPOL_Low;
+    USART_InitStruct.USART_CPHA         = USART_CPHA_1Edge;
+    USART_InitStruct.USART_LastBit      = USART_LastBit_Disable;
+
+    /* Enable USART  */
+    USART_Cmd(USART3, ENABLE);
+    USART_Init(USART3, &USART_InitStruct);
+
+    /* Enable IT on USART handler */
+    USART_ITConfig(USART3, USART_IT_RXNE, DISABLE);
+    USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
+    USART_ITConfig(USART3, USART_IT_TC, DISABLE);
 }
+
+
+/*******************************************************************************
+ * Function Name  : I2C1Init
+ * Description    : Initializes the I2C 1 link.
+ * Input          : None
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
+void I2C1Init(void)
+{
+    I2C_InitTypeDef  I2C_InitStructure;
+    GPIO_InitTypeDef  GPIO_InitStructure;
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
+
+    /* Configure I2C_EE pins: SCL and SDA */
+//  GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_6 | GPIO_Pin_7;
+    GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_8 | GPIO_Pin_9;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    /* I2C configuration */
+    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
+    I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+    I2C_InitStructure.I2C_OwnAddress1 = 0x38;
+    I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+    I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    I2C_InitStructure.I2C_ClockSpeed = 100000;
+
+    /* I2C Peripheral Enable */
+    I2C_Cmd(I2C1, ENABLE);
+    /* Apply I2C configuration after enabling it */
+    I2C_Init(I2C1, &I2C_InitStructure);
+
+    GPIO_PinRemapConfig(GPIO_Remap_I2C1, ENABLE); //Remap I2C1 to use PB8 and PB9
+}
+
 
 /*******************************************************************************
  * Function Name  : CanInit
@@ -398,137 +418,137 @@ void SerialInit(void)
  *******************************************************************************/
 void CanInit(void)
 {
-	CAN_InitTypeDef CAN_InitStruct;
+    CAN_InitTypeDef CAN_InitStruct;
 
-	/* Enable CAN clock */
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN, ENABLE);
-	GPIO_PinRemapConfig(GPIO_Remap1_CAN, DISABLE);
-	GPIO_PinRemapConfig(GPIO_Remap2_CAN, DISABLE);
+    /* Enable CAN clock */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN, ENABLE);
+    GPIO_PinRemapConfig(GPIO_Remap1_CAN, DISABLE);
+    GPIO_PinRemapConfig(GPIO_Remap2_CAN, DISABLE);
 
-	/* Enable USART  */
-	CAN_StructInit(&CAN_InitStruct);
-//	CAN_Cmd(CAN, ENABLE);
-	CAN_Init(&CAN_InitStruct);
+    /* Enable USART  */
+    CAN_StructInit(&CAN_InitStruct);
+//    CAN_Cmd(CAN, ENABLE);
+    CAN_Init(&CAN_InitStruct);
 
-	//Configure CAN
-	CAN_StructInit(&CAN_InitStruct);
+    //Configure CAN
+    CAN_StructInit(&CAN_InitStruct);
 
-	/* CAN cell init */
-	CAN_InitStruct.CAN_TTCM = DISABLE;
-	CAN_InitStruct.CAN_ABOM = DISABLE;
-	CAN_InitStruct.CAN_AWUM = DISABLE;
-	CAN_InitStruct.CAN_NART = DISABLE;
-	CAN_InitStruct.CAN_RFLM = DISABLE;
-	CAN_InitStruct.CAN_TXFP = DISABLE;
-	CAN_InitStruct.CAN_Mode = CAN_Mode_Normal;
+    /* CAN cell init */
+    CAN_InitStruct.CAN_TTCM = DISABLE;
+    CAN_InitStruct.CAN_ABOM = DISABLE;
+    CAN_InitStruct.CAN_AWUM = DISABLE;
+    CAN_InitStruct.CAN_NART = DISABLE;
+    CAN_InitStruct.CAN_RFLM = DISABLE;
+    CAN_InitStruct.CAN_TXFP = DISABLE;
+    CAN_InitStruct.CAN_Mode = CAN_Mode_Normal;
 
-//	/* CAN Baudrate = 250kbps */
-//	/* not working */
-//	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-//	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
-//	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
-//	CAN_InitStruct.CAN_Prescaler = 4;
+//  /* CAN Baudrate = 250kbps */
+//  /* not working */
+//  CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+//  CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+//  CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+//  CAN_InitStruct.CAN_Prescaler = 4;
 //
-//	/* CAN Baudrate = 500kbps */
-	/* not working */
-//	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-//	CAN_InitStruct.CAN_BS1 = CAN_BS1_5tq;
-//	CAN_InitStruct.CAN_BS2 = CAN_BS2_2tq;
-//	CAN_InitStruct.CAN_Prescaler = 1;
+//  /* CAN Baudrate = 500kbps */
+    /* not working */
+//  CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+//  CAN_InitStruct.CAN_BS1 = CAN_BS1_5tq;
+//  CAN_InitStruct.CAN_BS2 = CAN_BS2_2tq;
+//  CAN_InitStruct.CAN_Prescaler = 1;
 
 
 #if (CAN_BAUDRATE == CAN_BAUDRATE_10KBPS)
-	/* Not tested */
-	//	/* CAN Baudrate = 10kbps */
-	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
-	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
-	CAN_InitStruct.CAN_Prescaler = 400;
+    /* Not tested */
+    //  /* CAN Baudrate = 10kbps */
+    CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+    CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+    CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+    CAN_InitStruct.CAN_Prescaler = 400;
 #elif CAN_BAUDRATE == CAN_BAUDRATE_20KBPS
-	//	/* CAN Baudrate = 20kbps */
-	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
-	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
-	CAN_InitStruct.CAN_Prescaler = 200;
+    //  /* CAN Baudrate = 20kbps */
+    CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+    CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+    CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+    CAN_InitStruct.CAN_Prescaler = 200;
 #elif CAN_BAUDRATE == CAN_BAUDRATE_50KBPS
-	//	/* CAN Baudrate = 50kbps */
-	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
-	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
-	CAN_InitStruct.CAN_Prescaler = 80;
+    //  /* CAN Baudrate = 50kbps */
+    CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+    CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+    CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+    CAN_InitStruct.CAN_Prescaler = 80;
 #elif CAN_BAUDRATE == CAN_BAUDRATE_100KBPS
-	//	/* CAN Baudrate = 100kbps */
-	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
-	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
-	CAN_InitStruct.CAN_Prescaler = 40;
+    //  /* CAN Baudrate = 100kbps */
+    CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+    CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+    CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+    CAN_InitStruct.CAN_Prescaler = 40;
 #elif CAN_BAUDRATE == 125
-	//	/* CAN Baudrate = 125kbps */
-	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
-	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
-	CAN_InitStruct.CAN_Prescaler = 32;
+    //  /* CAN Baudrate = 125kbps */
+    CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+    CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+    CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+    CAN_InitStruct.CAN_Prescaler = 32;
 #elif CAN_BAUDRATE == CAN_BAUDRATE_250KBPS
-	//	/* CAN Baudrate = 250kbps */
-	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
-	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
-	CAN_InitStruct.CAN_Prescaler = 16;
+    //  /* CAN Baudrate = 250kbps */
+    CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+    CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+    CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+    CAN_InitStruct.CAN_Prescaler = 16;
 #elif CAN_BAUDRATE == CAN_BAUDRATE_500KBPS
-	//	/* CAN Baudrate = 500kbps */
-//	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-//	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
-//	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
-//	CAN_InitStruct.CAN_Prescaler = 8;
+    //  /* CAN Baudrate = 500kbps */
+//  CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+//  CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+//  CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+//  CAN_InitStruct.CAN_Prescaler = 8;
 
-	/* CAN Baudrate = 500kbps */
-	/* or: system clock = 72MHz (PCLK1 = 36 MHz) */
-	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-	CAN_InitStruct.CAN_BS1 = CAN_BS1_8tq;
-	CAN_InitStruct.CAN_BS2 = CAN_BS2_3tq;
-	CAN_InitStruct.CAN_Prescaler = 6;
+    /* CAN Baudrate = 500kbps */
+    /* or: system clock = 72MHz (PCLK1 = 36 MHz) */
+    CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+    CAN_InitStruct.CAN_BS1 = CAN_BS1_8tq;
+    CAN_InitStruct.CAN_BS2 = CAN_BS2_3tq;
+    CAN_InitStruct.CAN_Prescaler = 6;
 #elif CAN_BAUDRATE == CAN_BAUDRATE_1MPBS
-	/* CAN Baudrate = 1MBps */
-	CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
-	CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
-	CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
-	CAN_InitStruct.CAN_Prescaler = 4;
+    /* CAN Baudrate = 1MBps */
+    CAN_InitStruct.CAN_SJW = CAN_SJW_1tq;
+    CAN_InitStruct.CAN_BS1 = CAN_BS1_3tq;
+    CAN_InitStruct.CAN_BS2 = CAN_BS2_5tq;
+    CAN_InitStruct.CAN_Prescaler = 4;
 #endif
 
-	CAN_Init(&CAN_InitStruct);
+    CAN_Init(&CAN_InitStruct);
 
-	  /* CAN filter init */
-//	#ifdef  __CAN1_USED__
-	  CAN_FilterInitStructure.CAN_FilterNumber = 0;
-//	#else /*__CAN2_USED__*/
-//	  CAN_FilterInitStructure.CAN_FilterNumber = 14;
-//	#endif  /* __CAN1_USED__ */
-	  CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;
-	  CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
-	  CAN_FilterInitStructure.CAN_FilterIdHigh = 0x0100 << 5;
-	  CAN_FilterInitStructure.CAN_FilterIdLow = 0x0000;
-	  CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0x0700 << 5;
-	  CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0x0000;
-	  CAN_FilterInitStructure.CAN_FilterFIFOAssignment = 0;
-	  CAN_FilterInitStructure.CAN_FilterActivation = ENABLE;
-	  CAN_FilterInit(&CAN_FilterInitStructure);
+      /* CAN filter init */
+//  #ifdef  __CAN1_USED__
+      CAN_FilterInitStructure.CAN_FilterNumber = 0;
+//  #else /*__CAN2_USED__*/
+//    CAN_FilterInitStructure.CAN_FilterNumber = 14;
+//  #endif  /* __CAN1_USED__ */
+      CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;
+      CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
+      CAN_FilterInitStructure.CAN_FilterIdHigh = 0x0100 << 5;
+      CAN_FilterInitStructure.CAN_FilterIdLow = 0x0000;
+      CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0x0700 << 5;
+      CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0x0000;
+      CAN_FilterInitStructure.CAN_FilterFIFOAssignment = 0;
+      CAN_FilterInitStructure.CAN_FilterActivation = DISABLE;
+      CAN_FilterInit(&CAN_FilterInitStructure);
 
-//	CAN_Init(&CAN_InitStruct);
+//  CAN_Init(&CAN_InitStruct);
 
-	/* Enable IT on USART handler */
-	CAN_ITConfig(CAN_IT_RQCP0, ENABLE);
-	CAN_ITConfig(CAN_IT_FMP0, ENABLE);
+    /* Enable IT on USART handler */
+    CAN_ITConfig(CAN_IT_RQCP0, ENABLE);
+    CAN_ITConfig(CAN_IT_FMP0, ENABLE);
 
 
-	CAN_ITConfig(CAN_IT_RQCP1, ENABLE);	/* Request completed mailbox 1 */
-	CAN_ITConfig(CAN_IT_RQCP2, ENABLE);	/* Request completed mailbox 2 */
-	CAN_ITConfig(CAN_IT_TME, ENABLE);	/* Transmit mailbox empty */
-	CAN_ITConfig(CAN_IT_FMP0, ENABLE);	/* FIFO 0 message pending */
-	CAN_ITConfig(CAN_IT_FF0, ENABLE);	/* FIFO 0 full */
-	CAN_ITConfig(CAN_IT_FOV0, ENABLE);	/* FIFO 0 overrun */
-	CAN_ITConfig(CAN_IT_FMP1, ENABLE);	/* FIFO 1 message pending */
-	CAN_ITConfig(CAN_IT_FF1, ENABLE);	/* FIFO 1 full */
-	CAN_ITConfig(CAN_IT_FOV1, ENABLE);	/* FIFO 1 overrun */
+    CAN_ITConfig(CAN_IT_RQCP1, ENABLE); /* Request completed mailbox 1 */
+    CAN_ITConfig(CAN_IT_RQCP2, ENABLE); /* Request completed mailbox 2 */
+    CAN_ITConfig(CAN_IT_TME, ENABLE);   /* Transmit mailbox empty */
+    CAN_ITConfig(CAN_IT_FMP0, ENABLE);  /* FIFO 0 message pending */
+    CAN_ITConfig(CAN_IT_FF0, ENABLE);   /* FIFO 0 full */
+    CAN_ITConfig(CAN_IT_FOV0, ENABLE);  /* FIFO 0 overrun */
+    CAN_ITConfig(CAN_IT_FMP1, ENABLE);  /* FIFO 1 message pending */
+    CAN_ITConfig(CAN_IT_FF1, ENABLE);   /* FIFO 1 full */
+    CAN_ITConfig(CAN_IT_FOV1, ENABLE);  /* FIFO 1 overrun */
 }
 //void CAN_Config(void)
 //{
@@ -618,56 +638,56 @@ void CanInit(void)
  *******************************************************************************/
 void ITInit(void)
 {
-	NVIC_InitTypeDef NVIC_InitStruct;
+    NVIC_InitTypeDef NVIC_InitStruct;
 
-	/* USART1 */
-	NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQChannel;
-	NVIC_InitStruct.NVIC_IRQChannelCmd = DISABLE;
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-	NVIC_Init(&NVIC_InitStruct);
+    /* USART1 */
+    NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQChannel;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = DISABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStruct);
 
-	/* USART2 */
-	NVIC_InitStruct.NVIC_IRQChannel = USART2_IRQChannel;
-	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-	NVIC_Init(&NVIC_InitStruct);
+    /* USART2 */
+    NVIC_InitStruct.NVIC_IRQChannel = USART2_IRQChannel;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStruct);
 
-	/* USART3 */
-	NVIC_InitStruct.NVIC_IRQChannel = USART3_IRQChannel;
-	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-	NVIC_Init(&NVIC_InitStruct);
+    /* USART3 */
+    NVIC_InitStruct.NVIC_IRQChannel = USART3_IRQChannel;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStruct);
 
-	/* CAN */
-	NVIC_InitStruct.NVIC_IRQChannel = CAN_RX1_IRQChannel;
-	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-	NVIC_Init(&NVIC_InitStruct);
+    /* CAN */
+    NVIC_InitStruct.NVIC_IRQChannel = CAN_RX1_IRQChannel;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStruct);
 
-	NVIC_InitStruct.NVIC_IRQChannel = USB_LP_CAN_RX0_IRQChannel;
-	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-	NVIC_Init(&NVIC_InitStruct);
+    NVIC_InitStruct.NVIC_IRQChannel = USB_LP_CAN_RX0_IRQChannel;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStruct);
 
-	NVIC_InitStruct.NVIC_IRQChannel = USB_HP_CAN_TX_IRQChannel;
-	NVIC_InitStruct.NVIC_IRQChannelCmd = DISABLE;
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-	NVIC_Init(&NVIC_InitStruct);
+    NVIC_InitStruct.NVIC_IRQChannel = USB_HP_CAN_TX_IRQChannel;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = DISABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 200;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStruct);
 
-	/* TIMER4 */
-	NVIC_InitStruct.NVIC_IRQChannel = TIM4_IRQChannel;
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStruct);
-
+    /* TIMER4 */
+    NVIC_InitStruct.NVIC_IRQChannel = TIM4_IRQChannel;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStruct);
 }
+
 
 /*******************************************************************************
  * Function Name  : Teleinfo_LcdDisplay
@@ -676,38 +696,39 @@ void ITInit(void)
  * Output         : None
  * Return         : None
  *******************************************************************************/
-Teleinfo_LcdDisplay(void)
+void Teleinfo_LcdDisplay(void)
 {
-	/* Update LCD informations */
-	LcdGotoXYFont(0,0);
-	LcdStr(FONT_1X, (unsigned char *)"ADCO:");
+    /* Update LCD informations */
+    LcdGotoXYFont(0,0);
+    LcdStr(FONT_1X, (unsigned char *)"ADCO:");
 
-	LcdGotoXYFont(0,1);
-	LcdStr(FONT_1X, (unsigned char *)"PTEC:");
+    LcdGotoXYFont(0,1);
+    LcdStr(FONT_1X, (unsigned char *)"PTEC:");
 
-	LcdGotoXYFont(6,1);
-	LcdStr(FONT_1X, (unsigned char *) &(TIC_info.PTEC[0]) );
+    LcdGotoXYFont(6,1);
+    LcdStr(FONT_1X, (unsigned char *) &(TIC_info.PTEC[0]) );
 
-	LcdGotoXYFont(0,2);
-	LcdStr(FONT_1X, (unsigned char *)"HCHC:");
+    LcdGotoXYFont(0,2);
+    LcdStr(FONT_1X, (unsigned char *)"HCHC:");
 
-	LcdGotoXYFont(5,2);
-	LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHC[0]) );
+    LcdGotoXYFont(5,2);
+    LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHC[0]) );
 
-	LcdGotoXYFont(0,3);
-	LcdStr(FONT_1X, (unsigned char *)"HCHP:");
+    LcdGotoXYFont(0,3);
+    LcdStr(FONT_1X, (unsigned char *)"HCHP:");
 
-	LcdGotoXYFont(5,3);
-	LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHP[0]) );
+    LcdGotoXYFont(5,3);
+    LcdStr(FONT_1X, (unsigned char *) &(TIC_info.HCHP[0]) );
 
-	LcdGotoXYFont(0,4);
-	LcdStr(FONT_1X, (unsigned char *)"IINST:");
+    LcdGotoXYFont(0,4);
+    LcdStr(FONT_1X, (unsigned char *)"IINST:");
 
-	LcdGotoXYFont(7,4);
-	LcdStr(FONT_1X, (unsigned char *) &(TIC_info.IINST[0]) );
+    LcdGotoXYFont(7,4);
+    LcdStr(FONT_1X, (unsigned char *) &(TIC_info.IINST[0]) );
 
-	LcdUpdate();
+    LcdUpdate();
 }
+
 
 /*******************************************************************************
  * Function Name  : PWMInit
@@ -718,54 +739,55 @@ Teleinfo_LcdDisplay(void)
  *******************************************************************************/
 void PWMInit(void)
 {
-	TIM_TimeBaseInitTypeDef timer;
-	TIM_OCInitTypeDef timerPWM1, timerPWM2, timerPWM3;
+    TIM_TimeBaseInitTypeDef timer;
+    TIM_OCInitTypeDef timerPWM1, timerPWM2, timerPWM3;
 
-	/* Enable peripheral clock for TIMER 3 */
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+    /* Enable peripheral clock for TIMER 3 */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
-	/* Initialize TIMER 3 */
-	TIM_TimeBaseStructInit(&timer);
-	timer.TIM_Prescaler = 720;
-	timer.TIM_Period = PERIOD;
-	timer.TIM_ClockDivision = 0;
-	timer.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseInit(TIM3, &timer);
+    /* Initialize TIMER 3 */
+    TIM_TimeBaseStructInit(&timer);
+    timer.TIM_Prescaler = 720;
+    timer.TIM_Period = PERIOD;
+    timer.TIM_ClockDivision = 0;
+    timer.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInit(TIM3, &timer);
 
-	/* Configure TIM3 - Ch1 */
-	TIM_OCStructInit(&timerPWM1);
-	timerPWM1.TIM_OCMode = TIM_OCMode_PWM1;
-	timerPWM1.TIM_Channel = TIM_Channel_1;
-	timerPWM1.TIM_Pulse = 1000; //0;
-	timerPWM1.TIM_OCPolarity = TIM_OCPolarity_High;
+    /* Configure TIM3 - Ch1 */
+    TIM_OCStructInit(&timerPWM1);
+    timerPWM1.TIM_OCMode = TIM_OCMode_PWM1;
+    timerPWM1.TIM_Channel = TIM_Channel_1;
+    timerPWM1.TIM_Pulse = 1000; //0;
+    timerPWM1.TIM_OCPolarity = TIM_OCPolarity_High;
 
-	/* Configure TIM3 - Ch2 */
-	TIM_OCStructInit(&timerPWM2);
-	timerPWM2.TIM_OCMode = TIM_OCMode_PWM1;
-	timerPWM2.TIM_Channel = TIM_Channel_2;
-	timerPWM2.TIM_Pulse = 1000;
-	timerPWM2.TIM_OCPolarity = TIM_OCPolarity_High;
+    /* Configure TIM3 - Ch2 */
+    TIM_OCStructInit(&timerPWM2);
+    timerPWM2.TIM_OCMode = TIM_OCMode_PWM1;
+    timerPWM2.TIM_Channel = TIM_Channel_2;
+    timerPWM2.TIM_Pulse = 1000;
+    timerPWM2.TIM_OCPolarity = TIM_OCPolarity_High;
 
-	/* Configure TIM3 - Ch3 */
-	TIM_OCStructInit(&timerPWM3);
-	timerPWM3.TIM_OCMode = TIM_OCMode_PWM1;
-	timerPWM3.TIM_Channel = TIM_Channel_3;
-	timerPWM3.TIM_Pulse = 1000;
-	timerPWM3.TIM_OCPolarity = TIM_OCPolarity_High;
+    /* Configure TIM3 - Ch3 */
+    TIM_OCStructInit(&timerPWM3);
+    timerPWM3.TIM_OCMode = TIM_OCMode_PWM1;
+    timerPWM3.TIM_Channel = TIM_Channel_3;
+    timerPWM3.TIM_Pulse = 1000;
+    timerPWM3.TIM_OCPolarity = TIM_OCPolarity_High;
 
-	/* Init timer */
-	TIM_OCInit(TIM3, &timerPWM1);
-	TIM_OCInit(TIM3, &timerPWM2);
-	TIM_OCInit(TIM3, &timerPWM3);
+    /* Init timer */
+    TIM_OCInit(TIM3, &timerPWM1);
+    TIM_OCInit(TIM3, &timerPWM2);
+    TIM_OCInit(TIM3, &timerPWM3);
 
-	/* Reinitialize timer values */
-	TIM3->CCR1 = 0; //Pulse Red
-	TIM3->CCR2 = 0; //Pulse Green
-	TIM3->CCR3 = 0; //Pulse Blue
+    /* Reinitialize timer values */
+    TIM3->CCR1 = 0; //Pulse Red
+    TIM3->CCR2 = 0; //Pulse Green
+    TIM3->CCR3 = 0; //Pulse Blue
 
-	/* Enable TIM3 */
-	TIM_Cmd(TIM3, ENABLE);
+    /* Enable TIM3 */
+    TIM_Cmd(TIM3, ENABLE);
 }
+
 
 /*******************************************************************************
  * Function Name  : RCC_Configuration
@@ -819,6 +841,7 @@ void RCC_Configuration(void)
         }
     }
 }
+
 
 /*******************************************************************************
  * Function Name  : NVIC_Configuration

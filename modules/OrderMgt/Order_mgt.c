@@ -92,14 +92,22 @@ void CanSendMessage(void)
     unsigned char retVal, i;
     CanTxMsg TxMessage;
 
-    
+    T_CAN_MESSAGE tmpCanMsg;
+
     // Send CAN messages    
     NbMsgToSend = CAN_TX_FIFO.NumElem;
     
     for(i=0; i<NbMsgToSend; i++)
     {
-        if( CAN_FIFO_read(&CAN_TX_FIFO, &TxMessage.StdId, &TxMessage.DLC, TxMessage.Data) != 0)
+        if( CAN_FIFO_read(&CAN_TX_FIFO, &tmpCanMsg.addr, &tmpCanMsg.length, tmpCanMsg.data) != 0)
         {
+            TxMessage.StdId = tmpCanMsg.addr;
+            TxMessage.DLC = tmpCanMsg.length;
+            for(i=0; i<TxMessage.DLC; i++)
+            {
+                TxMessage.Data[i] = tmpCanMsg.data[i];
+            }
+
             if( CAN_Transmit(&TxMessage) != CAN_NO_MB)
             {
                 //return TRUE;
