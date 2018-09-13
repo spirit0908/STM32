@@ -3,7 +3,7 @@
 #include "stm32f10x_map.h"
 #include "stm32f10x_gpio.h"
 #include "teleinfo.h"
-
+#include "PushButton.h"
 
 #include "Task.h"
 //#include "def.h"
@@ -61,11 +61,9 @@ unsigned char Task_50ms(void)
 }
 
 unsigned char cpt_test=0;
-T_PushButton PushButton;
 unsigned char Task_100ms(void)
 {
-    unsigned char PB_UP;
-//    LightOrderProcess();
+    unsigned char PBState, i;
     
     cpt_test++;
     if( cpt_test >= 10 )
@@ -73,37 +71,9 @@ unsigned char Task_100ms(void)
         cpt_test=0;
         // every 1sec
 //        LED9 = !LED9;
-
     }
     
-    PB_UP = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0);
-    switch (PushButton)
-    {
-        case PB_IDLE:
-            if(PB_UP)
-            {
-                PushButton = PB_PUSHED;
-            }
-        break;
-
-        case PB_PUSHED:
-            CAN_FIFO_add(&CAN_TX_FIFO, 0x123, 1, PB_UP );
-            CanSendMessage();
-
-            PushButton = PB_WAITING_RELEASED;
-        break;
-
-        case PB_WAITING_RELEASED:
-            if(PB_UP == 0)
-            {
-                PushButton = PB_IDLE;
-            }
-        break;
-
-        default:
-            PushButton = PB_IDLE;
-            break;
-    }
+    PushButton_Mgt();
 
     return 0;
 }

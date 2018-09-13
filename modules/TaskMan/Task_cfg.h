@@ -59,14 +59,6 @@ typedef enum
     TASK_TOTAL_NUM
 }T_TASK_ID;
 
-typedef enum
-{
-    PB_DISABLED,
-    PB_IDLE,
-    PB_PUSHED,
-    PB_WAITING_RELEASED
-}T_PushButton;
-
 unsigned char Task_20ms(void);
 unsigned char Task_50ms(void);
 unsigned char Task_100ms(void);
