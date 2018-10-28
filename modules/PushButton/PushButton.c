@@ -4,16 +4,17 @@
 #include "stm32f10x_gpio.h"
 #include "teleinfo.h"
 #include "PushButton.h"
+#include "LcdMenu.h"
 
 
 
 
 PB_Config_T PushButtonConfig[PB_CONFIG_NB] =
 {
-    {/*"PB_UP",*/ GPIOA, GPIO_Pin_0, NULL, NULL, NULL, PB_IDLE, 0},
-    {/*"PB_LEFT",*/ GPIOC, GPIO_Pin_15, NULL, NULL, NULL, PB_IDLE, 0},
-    {/*"PB_DOWN",*/ GPIOC, GPIO_Pin_14, NULL, NULL, NULL, PB_IDLE, 0},
-    {/*"PB_RIGHT",*/ GPIOC, GPIO_Pin_13, NULL, NULL, NULL, PB_IDLE, 0}
+    {/*"PB_UP",*/    GPIOA, GPIO_Pin_0,  &LcdMenu_MenuUp,    NULL, NULL, PB_IDLE, 0},
+    {/*"PB_LEFT",*/  GPIOC, GPIO_Pin_15, &LcdMenu_MenuLeft,  NULL, NULL, PB_IDLE, 0},
+    {/*"PB_DOWN",*/  GPIOC, GPIO_Pin_14, &LcdMenu_MenuDown,  NULL, NULL, PB_IDLE, 0},
+    {/*"PB_RIGHT",*/ GPIOA, GPIO_Pin_1,  &LcdMenu_MenuRight, NULL, NULL, PB_IDLE, 0}
 };
 
 unsigned char PushButton_Mgt(void)

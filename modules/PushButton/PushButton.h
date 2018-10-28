@@ -27,8 +27,8 @@ typedef struct
 //  unsigned char Name[10];
     GPIO_TypeDef* GPIO_Port;
     u16 GPIO_Pin;
-    unsigned char (*LP_action)();
     unsigned char (*SP_action)();
+    unsigned char (*LP_action)();
     unsigned char (*CP_action)();
     unsigned char curState;
     unsigned char push_cpt;
