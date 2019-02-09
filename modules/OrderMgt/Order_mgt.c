@@ -26,12 +26,12 @@ T_FctGrp fct_group2[] =
     /* ElemId   , type      , pRxIndication */
     { Light_ID_0, TYPE_LIGHT, LightOrderTmt },
     { Light_ID_1, TYPE_LIGHT, LightOrderTmt },
-    { Light_ID_2, TYPE_LIGHT, LightOrderTmt },
-    { Light_ID_3, TYPE_LIGHT, LightOrderTmt },
-    { Light_ID_4, TYPE_LIGHT, LightOrderTmt },
-    { Light_ID_5, TYPE_LIGHT, LightOrderTmt },
-    { Light_ID_6, TYPE_LIGHT, LightOrderTmt },
-    { Light_ID_7, TYPE_LIGHT, LightOrderTmt }
+//    { Light_ID_2, TYPE_LIGHT, LightOrderTmt },
+//    { Light_ID_3, TYPE_LIGHT, LightOrderTmt },
+//    { Light_ID_4, TYPE_LIGHT, LightOrderTmt },
+//    { Light_ID_5, TYPE_LIGHT, LightOrderTmt },
+//    { Light_ID_6, TYPE_LIGHT, LightOrderTmt },
+//    { Light_ID_7, TYPE_LIGHT, LightOrderTmt }
 };
 
 //void OrderProcess(unsigned int CanId, unsigned char msgLenm, unsigned char msgData[8])
@@ -43,7 +43,7 @@ void OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgDa
     unsigned int temp;
     deviceModule = (msgData[0] & 0xF0u);
     
-        //Loop on all functionnal groups
+        //Loop on all functional groups
         for(i=0; i<fct_group_size; i++)
         {
             
@@ -73,9 +73,6 @@ void OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgDa
                 //ShutterOrderTmt();
             break;
         }
-
-
-    
 }
 
 
@@ -124,3 +121,14 @@ void CanSendMessage(void)
 }
 
 
+void SerialOrder_Mgt(void)
+{
+	unsigned char text[10];
+
+
+	USART_SendData(USART2, 'S');
+	Delay(0xAFFFF);
+
+
+	OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgData[8])
+}

@@ -32,6 +32,7 @@
 #include "Task.h"
 #include "Task_cfg.h"
 #include "Fifo_Cfg.h"
+#include "Light.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -113,6 +114,9 @@ int main(void)
     /* Serial Port */
     SerialInit();
 
+    /* SPI init */
+    //SpiInit();
+
     /* CAN Bus */
     CanInit();
 
@@ -124,6 +128,8 @@ int main(void)
 
     /* PWM */
     PWMInit();
+
+    Light_Init();
 
     /* CONFIG INIT */
 
@@ -318,6 +324,18 @@ void GPIOInit(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+    /* Configure PA.4 as Output - PushButton Relay1 */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+    /* Configure PA.5 as Output - PushButton Relay2 */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
 
 
@@ -387,6 +405,83 @@ void SerialInit(void)
     USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
     USART_ITConfig(USART3, USART_IT_TC, DISABLE);
 }
+
+
+/*******************************************************************************
+ * Function Name  : SpiInit
+ * Description    : Initializes the SPI link.
+ * Input          : None
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
+//void SpiInit(void)
+//{
+//    SPI_InitTypeDef SPI_InitStruct;
+//
+//    /* *** SPI1 *** */
+//    /* Enable SPI1 clock */
+//    RCC_APB1PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+//
+////    PORT.GPIO_Mode  = GPIO_Mode_AF_PP;
+////    PORT.GPIO_Speed = GPIO_Speed_50MHz;
+////    PORT.GPIO_Pin   = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+////    GPIO_Init(GPIOB, &PORT);
+//
+//    /* Initialize SPI1 with default parameter*/
+//    SPI_Init(SPI1, SPI_InitStruct);
+//
+//    /* Configure SPI1 for nRF24L01 */
+//    SPI_InitStruct.SPI_Mode = SPI_Mode_Master;
+//    SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+//    SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+//    SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;
+//    SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;
+//    SPI_InitStruct.SPI_CRCPolynomial = 7;
+//    SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;
+//    SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;
+//	SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;
+//
+//    /* Enable SPI1 */
+//	SPI_Init(SPI1, &SPI_InitStruct);
+//	SPI_NSSInternalSoftwareConfig(SPI1, SPI_NSSInternalSoft_Set);
+//    SPI_Cmd(SPI1, ENABLE);
+//
+//    /* Enable IT on SPI1 handler */
+//    USART_ITConfig(SPI1, SPI_IT_RXNE, DISABLE);
+//    USART_ITConfig(SPI1, SPI_IT_TXE, DISABLE);
+//    USART_ITConfig(SPI1, SPI_IT_ERR, DISABLE);
+//
+//
+//
+//    /* *** SPI2 *** */
+//    /* Enable SPI2 clock */
+//	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, DISABLE);
+//
+//    /* Initialize SPI2 with default parameter*/
+////    SPI_Init(SPI2, SPI_InitStruct);
+//
+//    /* Configure SPI2 */
+//    SPI_InitStruct.SPI_Mode = SPI_Mode_Master;
+//    SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+//    SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+//    SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;
+//    SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;
+//    SPI_InitStruct.SPI_CRCPolynomial = 7;
+//    SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;
+//    SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;
+//    SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;
+//
+//    /* Enable SPI2 */
+//   	USART_Init(SPI2, &SPI_InitStruct);
+//   	SPI_NSSInternalSoftwareConfig(SPI2, SPI_NSSInternalSoft_Set);
+//	SPI_Cmd(SPI2, DISABLE);
+//
+//    /* Enable IT on SPI2 handler */
+//    USART_ITConfig(SPI2, SPI_IT_RXNE, DISABLE);
+//    USART_ITConfig(SPI2, SPI_IT_TXE, DISABLE);
+//    USART_ITConfig(SPI2, SPI_IT_ERR, DISABLE);
+//
+//}
 
 
 /*******************************************************************************

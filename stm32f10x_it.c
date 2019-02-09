@@ -27,6 +27,7 @@
 #include "Task.h"
 #include "Task_cfg.h"
 #include "stm32f10x_map.h"
+#include "LcdMenu.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -410,7 +411,7 @@ void USB_LP_CAN_RX0_IRQHandler(void)
 
 	if( CAN->RF1R & 0x03 /*FMP0[1:0]*/ )
 	{
-		CAN_Receive(CAN_FIFO0, &RxMessage);
+		CAN_Receive(CAN_FIFO1, &RxMessage);
 		CAN_FIFO_add ( &CAN_RX_FIFO, RxMessage.StdId, RxMessage.DLC, RxMessage.Data );
 		TaskAdd_unique(Task_CanMsgProcess_ID);
 	}
@@ -743,7 +744,6 @@ void USART2_IRQHandler(void)
 	/* Tx data register empty */
 	if(USART_GetITStatus(USART2, USART_IT_TXE) != RESET)
 	{
-
 		USART_ClearITPendingBit(USART2, USART_IT_TXE);
 	}
 
@@ -759,8 +759,24 @@ void USART2_IRQHandler(void)
 		//Read data
 		usart2_Rdvdata = USART_ReceiveData(USART2);
 
+		switch(usart2_Rdvdata)
+		{
+			case 'u': // up
+				LcdMenu_MenuUp();
+				break;
+			case 'd': // down
+				LcdMenu_MenuDown();
+				break;
+			case 'r': // right
+				LcdMenu_MenuRight();
+				break;
+			case 'l': // left
+				LcdMenu_MenuLeft();
+				break;
+		}
+
 		//Send data
-		USART_SendData(USART2, usart2_Rdvdata);
+//		USART_SendData(USART2, usart2_Rdvdata);
 
 		/* Clear IT flag */
 		USART_ClearITPendingBit(USART2, USART_IT_RXNE);

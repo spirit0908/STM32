@@ -12,6 +12,8 @@
 //#include "Light.h"
 #include "Fifo_Cfg.h"
 #include "Task_cfg.h"
+#include "Light.h"
+#include "LedStrip.h"
 
 extern u8 sens;
 
@@ -50,15 +52,17 @@ extern int TIM_Pulse_B;
 
 unsigned char Task_20ms(void)
 {
+	LedStrip_Mgt();
+
     return 0;
 }
 
 unsigned char Task_50ms(void)
 {
 //    CanSendMessage();
-    
     return 0;
 }
+
 
 unsigned char cpt_test=0;
 unsigned char Task_100ms(void)
@@ -75,12 +79,24 @@ unsigned char Task_100ms(void)
     
     PushButton_Mgt();
 
+    SerialOrder_Mgt();
+
+    //LedStrip_Mgt();
+/*
+    if(TIM3->CCR1 < TIM_Pulse_R)
+    {
+    	TIM3->CCR1 +=1;
+    }*/
+
+    //LedStrip_Mgt();
+
     return 0;
 }
 
+unsigned char order=0;
 unsigned char Task_1s(void)
 {
-//    LightSendStatus();
+	unsigned char i;
 
     if(sens == 0)
     {
@@ -92,7 +108,7 @@ unsigned char Task_1s(void)
         sens = 0;
         GPIO_ResetBits(GPIOC, GPIO_Pin_13);
     }
-
+/*
     TIM_Pulse_R++;
     if (TIM_Pulse_R > PERIOD)
         TIM_Pulse_R = 0;
@@ -107,8 +123,31 @@ unsigned char Task_1s(void)
 
     TIM3->CCR1 = TIM_Pulse_R;
     TIM3->CCR2 = TIM_Pulse_G;
-    TIM3->CCR3 = TIM_Pulse_B;
+    TIM3->CCR3 = TIM_Pulse_B;*/
 
+
+    if(order)
+    {
+    	order = 0;
+    }
+    else
+    {
+    	order = 1;
+    }
+    LightOrderTmt( 0, 0x10+order, 0 );
+    LightOrderTmt( 1, 0x12, 0 );
+
+    for(i=0; i<2; i++)
+    {
+    	if( LightState[i].state )
+    	{
+    		GPIO_SetBits(LightConfig[i].GPIO_Port, LightConfig[i].GPIO_Pin);
+    	}
+    	else
+    	{
+			GPIO_ResetBits(LightConfig[i].GPIO_Port, LightConfig[i].GPIO_Pin);
+		}
+    }
 
     return 0;
 }
