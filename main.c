@@ -32,6 +32,7 @@
 #include "Task.h"
 #include "Task_cfg.h"
 #include "Fifo_Cfg.h"
+#include "serial.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -128,7 +129,7 @@ int main(void)
     /* CONFIG INIT */
 
     /* Send START message over USART bus */
-    USART_SendData(USART2, 'S');
+/*    USART_SendData(USART2, 'S');
     Delay(0xAFFFF);
     USART_SendData(USART2, 'T');
     Delay(0xAFFFF);
@@ -137,8 +138,9 @@ int main(void)
     USART_SendData(USART2, 'R');
     Delay(0xAFFFF);
     USART_SendData(USART2, 'T');
-    Delay(0xAFFFF);
+    Delay(0xAFFFF);*/
 
+    serial_SendMessage("START", 5);
 
     GPIO_ResetBits(GPIOB, CAN_RS_PIN);
 
@@ -359,7 +361,7 @@ void SerialInit(void)
     /* Enable IT on USART handler */
     USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
     USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
-    USART_ITConfig(USART2, USART_IT_TC, DISABLE);
+    USART_ITConfig(USART2, USART_IT_TC, ENABLE);
 
 
     /* *** USART3 *** */
@@ -868,7 +870,7 @@ void RCC_Configuration(void)
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void NVIC_Configuration(void) 
+void NVIC_Configuration(void)
 {
 #ifdef  VECT_TAB_RAM  
     /* Set the Vector Table base location at 0x20000000 */
@@ -886,7 +888,7 @@ void NVIC_Configuration(void)
  * Output         : None
  * Return         : None
  *******************************************************************************/
-void Delay(vu32 nCount) 
+void Delay(vu32 nCount)
 {
     for (; nCount != 0; nCount--)
         ;

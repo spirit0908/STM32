@@ -12,6 +12,7 @@
 //#include "Light.h"
 #include "Fifo_Cfg.h"
 #include "Task_cfg.h"
+#include "serial.h"
 
 extern u8 sens;
 
@@ -74,6 +75,8 @@ unsigned char Task_100ms(void)
     }
     
     PushButton_Mgt();
+
+    serialMenu();
 
     return 0;
 }

@@ -73,9 +73,6 @@ void OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgDa
                 //ShutterOrderTmt();
             break;
         }
-
-
-    
 }
 
 
