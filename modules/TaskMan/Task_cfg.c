@@ -14,6 +14,7 @@
 #include "Task_cfg.h"
 #include "Light.h"
 #include "LedStrip.h"
+#include "serial.h"
 
 extern u8 sens;
 
@@ -79,16 +80,9 @@ unsigned char Task_100ms(void)
     
     PushButton_Mgt();
 
-    SerialOrder_Mgt();
+    //SerialOrder_Mgt();
 
-    //LedStrip_Mgt();
-/*
-    if(TIM3->CCR1 < TIM_Pulse_R)
-    {
-    	TIM3->CCR1 +=1;
-    }*/
-
-    //LedStrip_Mgt();
+    serialMenu();
 
     return 0;
 }

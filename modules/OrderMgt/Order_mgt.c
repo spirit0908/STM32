@@ -130,5 +130,5 @@ void SerialOrder_Mgt(void)
 	Delay(0xAFFFF);
 
 
-	OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgData[8])
+	//OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgData[8])
 }

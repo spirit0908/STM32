@@ -18,10 +18,10 @@
 
 /* Private typedef -----------------------------------------------------------*/
 
-typedef struct
+/* typedef struct
 {
     unsigned char str[30];
-}TIC_label_str;
+}TIC_label_str; */
 
 typedef struct
 {
