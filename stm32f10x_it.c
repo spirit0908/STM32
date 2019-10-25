@@ -799,7 +799,7 @@ void USART3_IRQHandler(void)
 
 		USART_SendData(USART2, (usart3_Rdvdata&0x7F) );
 
-		teleinfo_rawData_receive((usart3_Rdvdata&0x7F));
+		teleinfo_rawByte_receive((usart3_Rdvdata&0x7F));
 
 
 		/* Clear IT flag */

@@ -1,0 +1,5 @@
+lib/*.a
+lib/src/*.o
+*.o
+modules/*/*.o
+out/
