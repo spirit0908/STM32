@@ -134,20 +134,6 @@ int main(void)
 
     /* CONFIG INIT */
 
-    /* Send START message over USART bus */
-/*    USART_SendData(USART2, 'S');
-    Delay(0xAFFFF);
-    USART_SendData(USART2, 'T');
-    Delay(0xAFFFF);
-    USART_SendData(USART2, 'A');
-    Delay(0xAFFFF);
-    USART_SendData(USART2, 'R');
-    Delay(0xAFFFF);
-    USART_SendData(USART2, 'T');
-    Delay(0xAFFFF);*/
-
-    serial_SendMessage("START", 5);
-
     GPIO_ResetBits(GPIOB, CAN_RS_PIN);
 
     TxMessage.StdId = 0x444;
@@ -173,6 +159,9 @@ int main(void)
 
     LcdMenu_Init();
     LcdMenu_Display();
+
+    // Send "START" message on the serial bus
+    serial_SendMessage("START\n", 6);
 
     while(1)
     {
@@ -377,9 +366,9 @@ void SerialInit(void)
     USART_Init(USART2, &USART_InitStruct);
 
     /* Enable IT on USART handler */
-    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
     USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
     USART_ITConfig(USART2, USART_IT_TC, ENABLE);
+    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
 
 
     /* *** USART3 *** */

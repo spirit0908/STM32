@@ -60,9 +60,16 @@ T_TIC_INFO TIC_info;
 /* Private functions ---------------------------------------------------------*/
 
 
+/*******************************************************************************
+ * Function Name  : teleinfo_Init
+ * Description    : Initialize TIC FIFO
+ * Input          : None
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
 void teleinfo_Init(void)
 {
-    // Initialize Fifo
+    /* Initialize Fifo */
     TIC_Fifo.buff       = &TIC_FIFO_Buff[0][0];
     TIC_Fifo.size       = TIC_FIFO_LENGTH;
     TIC_Fifo.WriteIdx   = 0;
@@ -74,66 +81,68 @@ void teleinfo_Init(void)
 
 
 /*******************************************************************************
- * Function Name  : teleinfo_rawData_receive
- * Description    : 
+ * Function Name  : teleinfo_rawByte_receive
+ * Description    : Add each raw byte received from the TIC device in the FIFO
+ *                  and split the differents TIC messages. Each element of the
+ *                  FIFO contain one label with its associated data.
  * Input          : None
  * Output         : None
  * Return         : None
  *******************************************************************************/
-int teleinfo_rawData_receive(u8 rawData)
+int teleinfo_rawByte_receive(u8 rawByte)
 {
-
-    if( rawData == ASCII_LF ) //LF Start of label
+    switch(rawByte)
     {
-        // store
-        cptTIC_label=0;
-        TIC_FIFO_Buff[TIC_Fifo.WriteIdx][cptTIC_label++] = rawData;
-    }
-    else if( rawData == ASCII_CR ) //CR End of label
-    {
-        //store and increment fifo
-        TIC_FIFO_Buff[TIC_Fifo.WriteIdx][cptTIC_label] = rawData;
+        case ASCII_LF: /* Start of Label */
+            cptTIC_label=0;
+            TIC_FIFO_Buff[TIC_Fifo.WriteIdx][cptTIC_label++] = rawByte;
+          break;
 
-        TIC_Fifo.NumElem++;
-        if(TIC_Fifo.NumElem > TIC_Fifo.NumMaxElem ) // For debug purpose
-        {
-            TIC_Fifo.NumMaxElem = TIC_Fifo.NumElem;
-        }
+        case ASCII_CR: /* CR End of label */
+          //store and increment fifo
+          TIC_FIFO_Buff[TIC_Fifo.WriteIdx][cptTIC_label] = rawByte;
 
-        TIC_Fifo.WriteIdx++;
-        if(TIC_Fifo.WriteIdx>=55)
-        {
+          TIC_Fifo.NumElem++;
+          if(TIC_Fifo.NumElem > TIC_Fifo.NumMaxElem ) // For debug purpose
+          {
+              TIC_Fifo.NumMaxElem = TIC_Fifo.NumElem;
+          }
+
+          TIC_Fifo.WriteIdx++;
+          if(TIC_Fifo.WriteIdx>=55)
+          {
             TIC_Fifo.WriteIdx=0;
-        }
-    }
-    else if( rawData == ASCII_STX ) //STX Start of Transmission
-    {
-        // do nothing
-    }
-    else if( rawData == ASCII_ETX ) //ETX End of Transmission - !!! if last caracter was not a CR, label transmission is not complete (telereport access on-going)
-    {
-        // do nothing
-    }
-    else
-    {
-        //store car
-        TIC_FIFO_Buff[TIC_Fifo.WriteIdx][cptTIC_label++] = rawData;
-    }
+          }
+          break;
 
+        case ASCII_CR:  //CR End of label
+        case ASCII_STX: //STX Start of Transmission
+        case ASCII_ETX: //ETX End of Transmission - !!! if last caracter was not a CR, label transmission is not complete (telereport access on-going)
+          break;
 
-//  TIC_Fifo
-
+        default:
+          //store car
+          TIC_FIFO_Buff[TIC_Fifo.WriteIdx][cptTIC_label++] = rawByte;
+          break;
+    }
 
     //temporary added for debug:
-    if( (rawData == ASCII_ETX) /*&& (TIC_Fifo.WriteIdx > 30)*/ )
+    if( (rawByte == ASCII_ETX) /*&& (TIC_Fifo.WriteIdx > 30)*/ )
     {
         Teleinfo_Mgt();
     }
-    
+
     return 0;
 }
 
-void Teleinfo_Mgt()
+/*******************************************************************************
+ * Function Name  : Teleinfo_Mgt
+ * Description    : Check validity for each record of the FIFO
+ * Input          : None
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
+void Teleinfo_Mgt(void)
 {
     unsigned char car, cpt=0, labelLen=0, valueLen=0;
     unsigned char label, value;
@@ -156,7 +165,6 @@ void Teleinfo_Mgt()
             //ignore frame
         }
 
-
         // Manage Fifo
         if(TIC_Fifo.NumElem>0)
         {
@@ -177,6 +185,17 @@ void Teleinfo_Mgt()
     }
 }
 
+/*******************************************************************************
+ * Function Name  : TIC_check_frame
+ * Description    : Check validity of a TIC record and split the label and the
+ *                  value.
+ * Input          : str[30]: TIC record in ASCII format
+ * Output         : labelCode: label of the record
+ *                  valueCode: value of the record
+ * Return         : validity of the record:
+ *                   FALSE: record is invalid, record is discarded
+ *                   TRUE: record is valid and the treatment is done
+ *******************************************************************************/
 unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, unsigned long int *valueCode)
 {
     unsigned char strLen=0, i, tmp;
@@ -184,7 +203,6 @@ unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, u
     unsigned char labelLen=0, valueLen=0;
 
     unsigned char IsValid=FALSE;
-
 
     //Read each line received
     if( str[strLen++] == ASCII_LF ) //Check line begins with LF
@@ -332,16 +350,21 @@ unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, u
                 default:
 //                  labelCode = INVALID;
                     break;
-
             }
-
         }
-
     }
 
     return IsValid;
 }
 
+/*******************************************************************************
+ * Function Name  : Ascii2Int
+ * Description    : Convert a number in ASCII format to an integer value
+ * Input          : *str: string containing the ASCII format number
+ *                  len: length of the ASCII string
+ * Output         : None
+ * Return         : Number in integer format
+ *******************************************************************************/
 unsigned long int Ascii2Int(unsigned char *str, unsigned char len)
 {
     unsigned char i;
@@ -356,6 +379,14 @@ unsigned long int Ascii2Int(unsigned char *str, unsigned char len)
     return tmp;
 }
 
+/*******************************************************************************
+ * Function Name  : TIC_FillInInfo
+ * Description    :
+ * Input          : labelCode: label extracted from a record
+ *                  val: value associated to the label
+ * Output         : None
+ * Return         : Status of the operation
+ *******************************************************************************/
 unsigned char TIC_FillInInfo(unsigned char labelCode, unsigned int val)
 {
 //  switch (labelCode)
@@ -394,9 +425,15 @@ unsigned char TIC_FillInInfo(unsigned char labelCode, unsigned int val)
 //      TIC_info.MOTDETAT = val;
 //      break;
 //  }
-
 }
 
+/*******************************************************************************
+ * Function Name  : TIC_getLabelCode
+ * Description    : Get the code associated to a label
+ * Input          : str: string containing the label
+ * Output         : None
+ * Return         : Label code
+ *******************************************************************************/
 unsigned char TIC_getLabelCode(unsigned char str[5])
 {
     unsigned char labelCode;
@@ -452,6 +489,14 @@ unsigned char TIC_getLabelCode(unsigned char str[5])
     return labelCode;
 }
 
+/*******************************************************************************
+ * Function Name  : TTIC_CRC
+ * Description    : Calculate the checksum of a TIC record
+ * Input          : str: record in string format, containing the label and
+ *                  the associated value
+ * Output         : None
+ * Return         : Checksum value of the record
+ *******************************************************************************/
 unsigned char TIC_CRC(unsigned char *str)
 {
     /* CRC is computed from the input string by summing up each byte of the string.
@@ -492,10 +537,10 @@ unsigned char TIC_CRC(unsigned char *str)
         }
     }
 
-    // Mask with 0x3F
+    /* Mask with 0x3F */
     tmp &= 0x3F;
 
-    //Add 0x20 to display ASCII character
+    /* Add 0x20 to display ASCII character */
     tmp += 0x20;
 
     return tmp;
@@ -532,5 +577,4 @@ void Teleinfo_USART_Init(USART_TypeDef* USARTx)
     USART_ITConfig(USARTx, USART_IT_TXE, DISABLE);
     USART_ITConfig(USARTx, USART_IT_TC, DISABLE);
 }
-
 
