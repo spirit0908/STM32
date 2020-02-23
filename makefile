@@ -47,6 +47,7 @@ SRC_FILES = \
   modules/LcdMenu/LcdMenu.c \
   modules/PushButton/PushButton.c \
   modules/LedStrip/LedStrip.c \
+  modules/Heating/Heating.c \
   serial.c
 
 INC_FILES = \
@@ -63,6 +64,7 @@ INC_FILES = \
   modules/LcdMenu/LcdMenu.h \
   modules/PushButton/PushButton.h \
   modules/LedStrip/LedStrip.h \
+  modules/Heating/Heating.h \
   serial.h
 
 $(MAIN_OUT_ELF): updateIncFiles $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a

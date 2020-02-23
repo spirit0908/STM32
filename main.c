@@ -34,6 +34,7 @@
 #include "Fifo_Cfg.h"
 #include "Light.h"
 #include "serial.h"
+#include "LcdMenu.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -67,14 +68,21 @@ int TIM_Pulse_G = 0;
 int TIM_Pulse_B = 0;
 
 /* Private function prototypes -----------------------------------------------*/
+void TimerInit(void);
+void GPIOInit(void);
+void SerialInit(void);
+//void SpiInit(void);
+void I2C1Init(void);
+void CanInit(void);
+//void CAN_Config(void);
+void ITInit(void);
+void Teleinfo_LcdDisplay(void);
+void PWMInit(void);
 void RCC_Configuration(void);
 void NVIC_Configuration(void);
 void Delay(vu32 nCount);
+void assert_failed(u8* file, u32 line);
 
-void GPIOInit(void);
-void SerialInit(void);
-void CanInit(void);
-void ITInit(void);
 
 //void CAN_Config(void);
 
@@ -96,8 +104,6 @@ int main(void)
 #endif
 //    u16 R.cvData=0;
     CanTxMsg TxMessage;
-
-    unsigned int i;
 
     /* SYSTEM DRIVER INIT */
     /* Configure the system clocks */
@@ -151,7 +157,7 @@ int main(void)
     USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 
     /* FIFO table initialization */
-    FIFO_Init(&FIFO_table);
+    FIFO_Init(FIFO_table);
 
     /* LCD Initialization */
     LcdInit();
@@ -179,7 +185,6 @@ int main(void)
 void TimerInit(void)
 {
     TIM_TimeBaseInitTypeDef TIMER_InitStructure;
-    NVIC_InitTypeDef NVIC_InitStructure;
 
     /* Timer 4 */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE); // Enable clock peripheral TIM4

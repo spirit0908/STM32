@@ -32,10 +32,10 @@ void LcdMenu_Init();
 unsigned char FindNextItem(unsigned char tempItemId);
 unsigned char FindPreviousItem(unsigned char tempItemId);
 void LcdMenu_Display(void);
-void LcdMenu_MenuDown(void);
-void LcdMenu_MenuUp(void);
-void LcdMenu_MenuRight(void);
-void LcdMenu_MenuLeft(void);
+unsigned char LcdMenu_MenuDown(void);
+unsigned char LcdMenu_MenuUp(void);
+unsigned char LcdMenu_MenuRight(void);
+unsigned char LcdMenu_MenuLeft(void);
 
 
 #ifdef  __cplusplus

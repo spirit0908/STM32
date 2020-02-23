@@ -3,6 +3,7 @@
 #include "Order_mgt.h"
 #include "def.h"
 #include "Light.h"
+#include "Heating.h"
 #include "Fifo.h"
 
 #include "stm32f10x_can.h"
@@ -34,47 +35,69 @@ T_FctGrp fct_group2[] =
 //    { Light_ID_7, TYPE_LIGHT, LightOrderTmt }
 };
 
+
+#define GETVERSION(data)        (data[0])
+#define COMMAND_TYPE(data)      (data[1]&0xF0)
+#define COMMAND_ORDER(data)     (data[1]&0x0F)
+#define COMMAND_ID(data)        (data[2])
+#define COMMAND_PARAM_PTR(data) (&data[3])
+
+#define FRAME_TYPE_COMMAND      1
+#define FRAME_TYPE_CONFIG       2
+#define FRAME_TYPE_STATUS       3
+
+
+
 //void OrderProcess(unsigned int CanId, unsigned char msgLenm, unsigned char msgData[8])
-void OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgData[8])
+void OrderProcess(unsigned int CanId, unsigned char msgData[8], unsigned char msgLen)
 {
-    unsigned char deviceModule;
-    unsigned char LightId, param;
-    unsigned char i;
-    unsigned int temp;
-    deviceModule = (msgData[0] & 0xF0u);
-    
-        //Loop on all functional groups
-        for(i=0; i<fct_group_size; i++)
-        {
-            
-        }
-        
-        switch(deviceModule)
+    unsigned char DeviceId, Order;
+    unsigned char *paramPtr;
+
+    if( GETVERSION(msgData) == PROJECT_VERSION )
+    {
+        switch(COMMAND_TYPE(msgData))
         {
             case ORDER_BROADCAST:
                 // this message is a broadcast
-
                 // check if we are concerned by the can id
             break;
 
             case ORDER_LIGHT:
-                Order   = msgData[0];
-                LightId = msgData[1];
-                param   = msgData[2];
+                Order    = COMMAND_ORDER(msgData);
+                DeviceId = COMMAND_ID(msgData);
+                paramPtr = COMMAND_PARAM_PTR(msgData);
 
-                LightOrderTmt(LightId, Order, param);
+                LightOrderTmt(DeviceId, Order, paramPtr);
             break;
 
             case ORDER_HEATING:
-                //HeatingOrderTmt();
+                Order    = COMMAND_ORDER(msgData);
+                DeviceId = COMMAND_ID(msgData);
+                paramPtr = COMMAND_PARAM_PTR(msgData);
+                HeatingOrderTmt(DeviceId, Order, paramPtr);
             break;
 
             case ORDER_SHUTTER:
-                //ShutterOrderTmt();
+                //ShutterOrderTmt(DeviceId, Order, &param);
             break;
-        }
-}
 
+            case ORDER_MEASUREMENT:
+                //MesurementOrderTmt(DeviceId, Order, &param);
+            break;
+
+        }
+
+    }
+
+        /*
+        //Loop on all functional groups
+        for(i=0; i<fct_group_size; i++)
+        {
+
+        }
+        */
+}
 
 
 void updateIndicStatus(unsigned char Idx)
@@ -82,8 +105,7 @@ void updateIndicStatus(unsigned char Idx)
 }
 
 
-
-void CanSendMessage(void)
+unsigned char CanSendMessage(void)
 {
     unsigned char NbMsgToSend;
     unsigned char retVal, i;
@@ -107,7 +129,6 @@ void CanSendMessage(void)
 
             if( CAN_Transmit(&TxMessage) != CAN_NO_MB)
             {
-                //return TRUE;
                 retVal = ret_OK;
             }
             else
@@ -118,17 +139,15 @@ void CanSendMessage(void)
             }
         }
     }
+
+    return retVal;
 }
 
 
 void SerialOrder_Mgt(void)
 {
-	unsigned char text[10];
+    USART_SendData(USART2, 'S');
+    Delay(0xAFFFF);
 
-
-	USART_SendData(USART2, 'S');
-	Delay(0xAFFFF);
-
-
-	//OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgData[8])
+    //OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgData[8])
 }

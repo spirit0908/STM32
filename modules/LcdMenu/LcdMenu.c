@@ -134,14 +134,14 @@ void LcdMenu_Display(void)
             LcdGotoXYFont(0,2+line);
             if(curseur[itemLevel] == line)
             {
-                LcdStr(FONT_1X, ">" );
+                LcdStr(FONT_1X, (unsigned char*)">" );
             }
             else
             {
-                LcdStr(FONT_1X, " " );
+                LcdStr(FONT_1X, (unsigned char*)" " );
             }
             LcdGotoXYFont(1,2+line);
-            LcdStr(FONT_1X, MenuList[ItemId].ItemName );
+            LcdStr(FONT_1X, (unsigned char*)MenuList[ItemId].ItemName );
         }
         ItemId = FindNextItem(ItemId);
     }
@@ -149,11 +149,10 @@ void LcdMenu_Display(void)
     LcdUpdate();
 }
 
-void LcdMenu_MenuDown(void)
+unsigned char LcdMenu_MenuDown(void)
 {
     unsigned char nextItemId;
     unsigned char level = MenuList[curItemId].ItemLevel;
-    unsigned char tempItemId;
 
     nextItemId = FindNextItem(curItemId);
 
@@ -174,9 +173,10 @@ void LcdMenu_MenuDown(void)
     }
 
     LcdMenu_Display();
+    return 0;
 }
 
-void LcdMenu_MenuUp(void)
+unsigned char LcdMenu_MenuUp(void)
 {
     unsigned char previousItemId;
     unsigned char level = MenuList[curItemId].ItemLevel;
@@ -200,9 +200,10 @@ void LcdMenu_MenuUp(void)
     }
 
     LcdMenu_Display();
+    return 0;
 }
 
-void LcdMenu_MenuRight(void)
+unsigned char LcdMenu_MenuRight(void)
 {
     unsigned char level;
     unsigned char newItemId;
@@ -232,11 +233,11 @@ void LcdMenu_MenuRight(void)
     }
 
     LcdMenu_Display();
+    return 0;
 }
 
-void LcdMenu_MenuLeft(void)
+unsigned char LcdMenu_MenuLeft(void)
 {
-    unsigned char level;
     unsigned char tempItemId;
 
     tempItemId = curItemId;
@@ -258,5 +259,6 @@ void LcdMenu_MenuLeft(void)
     }
 
     LcdMenu_Display();
+    return 0;
 }
 

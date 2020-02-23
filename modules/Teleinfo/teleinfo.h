@@ -103,8 +103,8 @@ extern T_TIC_INFO TIC_info;
  * Return         : None
  *******************************************************************************/
 void teleinfo_Init(void);
-int teleinfo_rawData_receive(u8 rawData);
-void Teleinfo_Mgt();
+int teleinfo_rawByte_receive(u8 rawByte);
+void Teleinfo_Mgt(void);
 unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, unsigned long int *valueCode);
 unsigned long int Ascii2Int(unsigned char *str, unsigned char len);
 unsigned char TIC_FillInInfo(unsigned char labelCode, unsigned int val);

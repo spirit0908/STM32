@@ -38,7 +38,7 @@
 void FIFO_Init(FIFO_TAB_T *pFifoTab)
 {
     // Loop on all FIFO created:
-    while(pFifoTab->pFIFO != 0) // #TBD: Whille loop to be tested
+    while(pFifoTab->pFIFO != 0)
     {
         // Initialize Fifo
         (pFifoTab->pFIFO)->msgBuff      = pFifoTab->pFIFO_Buff; //  FIFO1.msgBuff = FIFO1_Buff;
@@ -232,8 +232,6 @@ unsigned char FIFO_add ( T_FIFO *pFIFO, unsigned char data )
  *******************************************************************************/
 unsigned char FIFO_read(T_FIFO *pFIFO, unsigned char *data )
 {
-    unsigned char i;
-
     if( pFIFO->NumElem > 0 )
     {
         // Get data

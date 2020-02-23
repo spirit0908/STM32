@@ -12,21 +12,23 @@ T_LightConfig LightConfig[MAX_LIGHT_NUM]=
     {GPIOA, GPIO_Pin_5},
 };
 
-T_LightState LightState[MAX_LIGHT_NUM]=
-{
-    // light state
-    {0},
-    {0}
-};
-
 //T_LightState LightState[MAX_LIGHT_NUM]=
 //{
-//	/*type | outPin|curState|state|brightness_default|brightness_last|timer_default|timer_val|Current timer value*/
+//    // light state
+//    {0},
+//    {0}
+//};
+
+T_LightState LightState[MAX_LIGHT_NUM]=
+{
+    /*type | outPin|curState|state|brightness_default|brightness_last|timer_default|timer_val|Current timer value*/
+    {{0}, 0},
+    {{0}, 0},
 //	{0b10100000, 0, 0		, 0	  ,12				 , 12		     , 0		   , 0       , 0}, // RELAY 1
 //	{0b10100000, 1, 0		, 0	  ,12				 , 12		     , 0		   , 0       , 0}, // RELAY 2
 ////	{0b10100000, 2, 0		, 0	  ,12				 , 12		     , 0		   , 0       , 0},
 ////	{0b10100000, 3, 0		, 0	  ,12				 , 12		     , 0		   , 0       , 0}
-//};
+};
 
 
 /* CFG */
@@ -45,10 +47,23 @@ void Light_Init(void)
     
     for(i=0u; i<MAX_LIGHT_NUM; i++)
     {
-        LightState[i].state=0u;
+        LightState[i].type.active  	= 1u; /*LIGHT_TYPE_ACTIVE;*/
+        LightState[i].type.dimmable = 0u; /*LIGHT_TYPE_ACTIVE;*/
+        LightState[i].type.timer  	= 1u; /*LIGHT_TYPE_ACTIVE;*/
+        LightState[i].type.ledStrip = 1u; /*LIGHT_TYPE_ACTIVE;*/
+
+        //LightState[i].outPin;
+        //LightState[i].curState;             // State/Brightness of current output: form 00 (OFF) to FF (MAX).
+
+    	LightState[i].state = 0u;
 //        LightState[i].curState=0u;
 //        LightState[i].brightness_last=0u;
 //        LightState[i].timer_val=0u;
+
+        //LightState[i].brightness_default;   // default brightness value
+        //LightState[i].brightness_last;      // last brightness value recorded
+        //LightState[i].timer_default;        // default timer value
+        //LightState[i].timer_val;            // Current timer value
     }
 }
 
@@ -89,8 +104,7 @@ void Light_Init_cfg(void)
 //    LightState[3].timer_default=0xFF;
 }
 
-//unsigned char LightOrderTmt( T_CAN_MESSAGE *Elem )
-unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigned char param )
+unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigned char *param )
 {
     unsigned char brightness;
     unsigned char ret_value=ret_OK;
@@ -102,15 +116,20 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
     
 //    if( (LightState[LightId].type & LIGHT_TYPE_ACTIVE) == 0 ) // check if output is inhibited
 //    {
-//        if( Order != LIGHT_RELEASE_OUTPUT)
+//        if( Order == LIGHT_RELEASE_OUTPUT)
+//        {
+//            LightState[LightId].type |= LIGHT_TYPE_ACTIVE;
+//            return ret_OK;
+//        }
+//        else
 //        {
 //            return ret_OK;
 //        }
 //    }
-    
+
     switch( Order )
     {
-        case LIGHT_OFF :
+        case LIGHT_OFF:
 //            if( LightState[LightId].state > 0)
 //            {
 //                // Store the current state to be able to reuse it on the next ON order
@@ -121,7 +140,7 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
             LightState[LightId].state = 0;
         break;
         
-        case LIGHT_ON :
+        case LIGHT_ON:
             // Reset any timer
 //            LightState[LightId].timer_val = 0x0000;
 
@@ -144,7 +163,7 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
             }
         break;
 
-        case LIGHT_REVERSE :
+        case LIGHT_REVERSE:
             if ( LightState[LightId].state )
             {
                 // Light is ON
@@ -310,7 +329,7 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
 }
 
 
-void LightOrderProcess(void)
+/*void LightOrderProcess(void)
 {
     unsigned char i;
     unsigned char pinnum, pinstate;
@@ -327,7 +346,7 @@ void LightOrderProcess(void)
 //            LightSendOutputStatus(i);
 //        }
 //    }
-}
+}*/
 
 void LightSendStatus(void)
 {

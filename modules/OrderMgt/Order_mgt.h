@@ -13,10 +13,11 @@ extern "C" {
 #endif
 
     
-#define ORDER_BROADCAST 0x00
-#define ORDER_LIGHT     0x10
-#define ORDER_HEATING   0x20
-#define ORDER_SHUTTER   0x30
+#define ORDER_BROADCAST     0x00
+#define ORDER_LIGHT         0x10
+#define ORDER_HEATING       0x20
+#define ORDER_SHUTTER       0x30
+#define ORDER_MEASUREMENT   0x40
 
 #define TYPE_LIGHT      0x10
 
@@ -29,10 +30,9 @@ typedef struct{
     unsigned char (*pRxIndication)();
 }T_FctGrp;
 
-
-void OrderProcess(unsigned int Order, unsigned char msgLenm, unsigned char msgData[8]);
+void OrderProcess(unsigned int CanId, unsigned char msgData[8], unsigned char msgLen);
 void updateIndicStatus(unsigned char Idx);
-void CanSendMessage(void);
+unsigned char CanSendMessage(void);
 
 
 #ifdef  __cplusplus

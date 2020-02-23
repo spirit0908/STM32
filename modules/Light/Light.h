@@ -30,6 +30,11 @@ extern "C" {
 #define LIGHT_ON_TIMER_ADD_30S        0x19
 #define LIGHT_INHIBIT_OUTPUT          0x0A
 #define LIGHT_RELEASE_OUTPUT          0x0B
+#define LIGHT_INFO_REQUEST            0x0C
+
+#define LIGHT_RGB_R                   0x20
+#define LIGHT_RGB_G                   0x30
+#define LIGHT_RGB_B                   0x40
 
 
 enum
@@ -49,9 +54,10 @@ enum
     
 #define MAX_LIGHT_NUM Light_ID_MAX
 
-#define LIGHT_TYPE_ACTIVE   (1<<7)
-#define LIGHT_TYPE_DIMMABLE (1<<6)
-#define LIGHT_TYPE_TIMER    (1<<5)
+#define LIGHT_TYPE_ACTIVE   (0x80);//0b10000000  //1<<7
+#define montest 0
+//#define LIGHT_TYPE_DIMMABLE (0x00)  //1<<6
+#define LIGHT_TYPE_TIMER    (0b00100000)  //1<<5
 
 typedef struct
 {
@@ -59,31 +65,41 @@ typedef struct
     u16 GPIO_Pin;
 } T_LightConfig;
 
+
 typedef struct
 {
-//    unsigned char type;
+    unsigned char active:1;
+    unsigned char dimmable:1;
+    unsigned char timer:1;
+    unsigned char ledStrip:1;
+    unsigned char RESERVED:4;
+} T_LightStateType;
+
+
+typedef struct
+{
+    T_LightStateType type;
     // type of output is:
     // - bit 7: 0: output is inactive / 1: output is active
     // - bit 6: 0: output is not dimmable / 1:output is dimmable
     // - bit 5: 0: timer can not be set / 1: timer can be set
     // - bit 4-0: NA
 //    unsigned char outPin;
-//    unsigned char curState;             // State/Brightness of current output: form 0 (OFF) to FF (MAX).
-    unsigned char state;                // State/Brightness of current output: form 0 (OFF) to FF (MAX).
+//    unsigned char curState;             // State/Brightness of current output: form 00 (OFF) to FF (MAX).
+    unsigned char state;                  // State/Brightness of current output: form 00 (OFF) to FF (MAX).
 //    unsigned char brightness_default;   // default brightness value
 //    unsigned char brightness_last;      // last brightness value recorded
 //    unsigned int  timer_default;        // default timer value
 //    unsigned int  timer_val;            // Current timer value
 } T_LightState;
-    
+
 
 extern T_LightConfig LightConfig[MAX_LIGHT_NUM];
 extern T_LightState LightState[MAX_LIGHT_NUM];
 
 void Light_Init(void);
 void Light_Init_cfg(void);
-unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigned char param );
-void LightOrderProcess(void);
+unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigned char *param );
 void LightSendStatus(void);
 void LightSendOutputStatus(unsigned char i);
 

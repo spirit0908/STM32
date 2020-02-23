@@ -22,13 +22,7 @@ extern unsigned char SERIAL_TX_FIFO_Buff[SERIAL_TX_FIFO_LENGTH];
 //extern unsigned char TELEINFO_FIFO_Buff[TELEINFO_FIFO_LENGTH];
 
 
-//FIFO_TAB_T FIFO_table[]=
-//{
-////    {&CAN_RX_FIFO, CAN_RX_FIFO_Buff, CAN_RX_FIFO_BUFF_LENGTH},
-////    {&CAN_TX_FIFO, CAN_TX_FIFO_Buff, CAN_TX_FIFO_LENGTH},
-//    {&TELEINFO_FIFO, TELEINFO_FIFO_Buff, TELEINFO_FIFO_LENGTH},
-//    {0, 0, 0}
-//};
+extern FIFO_TAB_T FIFO_table[];
 
 #endif
 

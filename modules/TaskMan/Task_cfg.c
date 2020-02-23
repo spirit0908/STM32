@@ -15,6 +15,7 @@
 #include "Light.h"
 #include "LedStrip.h"
 #include "serial.h"
+#include "Order_mgt.h"
 
 extern u8 sens;
 
@@ -53,7 +54,7 @@ extern int TIM_Pulse_B;
 
 unsigned char Task_20ms(void)
 {
-	LedStrip_Mgt();
+    LedStrip_Mgt();
 
     return 0;
 }
@@ -68,8 +69,6 @@ unsigned char Task_50ms(void)
 unsigned char cpt_test=0;
 unsigned char Task_100ms(void)
 {
-    unsigned char PBState, i;
-    
     cpt_test++;
     if( cpt_test >= 10 )
     {
@@ -90,7 +89,7 @@ unsigned char Task_100ms(void)
 unsigned char order=0;
 unsigned char Task_1s(void)
 {
-	unsigned char i;
+    unsigned char i;
 
     if(sens == 0)
     {
@@ -122,25 +121,25 @@ unsigned char Task_1s(void)
 
     if(order)
     {
-    	order = 0;
+        order = 0;
     }
     else
     {
-    	order = 1;
+        order = 1;
     }
     LightOrderTmt( 0, 0x10+order, 0 );
     LightOrderTmt( 1, 0x12, 0 );
 
     for(i=0; i<2; i++)
     {
-    	if( LightState[i].state )
-    	{
-    		GPIO_SetBits(LightConfig[i].GPIO_Port, LightConfig[i].GPIO_Pin);
-    	}
-    	else
-    	{
-			GPIO_ResetBits(LightConfig[i].GPIO_Port, LightConfig[i].GPIO_Pin);
-		}
+        if( LightState[i].state )
+        {
+            GPIO_SetBits(LightConfig[i].GPIO_Port, LightConfig[i].GPIO_Pin);
+        }
+        else
+        {
+            GPIO_ResetBits(LightConfig[i].GPIO_Port, LightConfig[i].GPIO_Pin);
+        }
     }
 
     return 0;
@@ -181,7 +180,7 @@ unsigned char Task_CanMsgProcess(void)
         // Reception of CAN messages
         if( CAN_FIFO_read(&CAN_RX_FIFO, &CanId, &msgLen, msgData) != 0)
         {
-//            OrderProcess(CanId, msgLen, msgData);
+            OrderProcess(CanId, msgLen, msgData);
         }
     }
     

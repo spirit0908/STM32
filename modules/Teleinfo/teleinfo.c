@@ -115,7 +115,6 @@ int teleinfo_rawByte_receive(u8 rawByte)
           }
           break;
 
-        case ASCII_CR:  //CR End of label
         case ASCII_STX: //STX Start of Transmission
         case ASCII_ETX: //ETX End of Transmission - !!! if last caracter was not a CR, label transmission is not complete (telereport access on-going)
           break;
@@ -144,8 +143,8 @@ int teleinfo_rawByte_receive(u8 rawByte)
  *******************************************************************************/
 void Teleinfo_Mgt(void)
 {
-    unsigned char car, cpt=0, labelLen=0, valueLen=0;
-    unsigned char label, value;
+    unsigned char label;
+    unsigned long int value=0;
     unsigned char WriteIdx = TIC_Fifo.WriteIdx;
     unsigned char *ReadIdx = &(TIC_Fifo.ReadIdx);
 
@@ -425,6 +424,7 @@ unsigned char TIC_FillInInfo(unsigned char labelCode, unsigned int val)
 //      TIC_info.MOTDETAT = val;
 //      break;
 //  }
+	return 0;
 }
 
 /*******************************************************************************
