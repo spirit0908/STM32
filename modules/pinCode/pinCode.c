@@ -16,10 +16,10 @@
 /************************************************************************
 * DEFINES *
 ************************************************************************/
-#define PINCODE_MAIN_PERIOD 		10
-#define PINCODE_TIMEOUT_TIME		5  /* sec */
-#define PINCODE_MAXERROR			5
-#define PINCODE_ERROR_LOCK_TIME		5  /* min */
+#define PINCODE_MAIN_PERIOD         10
+#define PINCODE_TIMEOUT_TIME        5  /* sec */
+#define PINCODE_MAXERROR            5
+#define PINCODE_ERROR_LOCK_TIME     5  /* min */
 
 /************************************************************************
 * GLOBAL VARIABLES *
@@ -38,6 +38,29 @@ T_pinCode_state pinCode_state;
 unsigned char pinCode_ChangeCode(void);
 
 
+
+/************************************************************************
+ * Function: pinCode_init                                               *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: Initializes pinCode module                              *
+ ***********************************************************************/
+void pinCode_init(void)
+{
+    /* Set secret pin code */
+    pinCode_secretCode = 1234;
+    pinCode_secretLen  = 4;
+
+    /* initialize variables */
+    pinCode_error       = 0;
+    pinCode_lock        = 0;
+
+    /* Other variables initialization will be done in INIT state */
+    pinCode_state = PINCODE_INIT;
+}
+
+
 /************************************************************************
  * Function: Function_name                                              *
  * input: none                                                          *
@@ -52,18 +75,7 @@ void pinCode_mainfunction(void)
     switch(pinCode_state)
     {
         case PINCODE_INIT:
-        {
-            pinCode_code        = 0;
-            pinCode_digit_pos   = 0;
-            pinCode_error       = 0;
-            pinCode_timeout     = 0;
-            pinCode_lastDigit   = 0;
-            pinCode_state       = PINCODE_WAIT_CODE;
-        }
-        break;
-
         case PINCODE_TIMEOUT:
-        case PINCODE_REINIT:
         {
             pinCode_code        = 0;
             pinCode_digit_pos   = 0;
@@ -72,7 +84,6 @@ void pinCode_mainfunction(void)
             pinCode_state       = PINCODE_WAIT_CODE;
         }
         break;
-
 
         case PINCODE_WAIT_CODE:
         {
@@ -148,27 +159,40 @@ void pinCode_mainfunction(void)
     }
 }
 
-
+/************************************************************************
+ * Function: Function_name                                              *
+ * input: digit - input digit given on keypad                           *
+ * output: none                                                         *
+ * return: status of the function                                       *
+ * description: Adds one digit to the staged code                       *
+ ***********************************************************************/
 unsigned char pinCode_readDigit(unsigned char digit)
 {
-	unsigned char retVal;
+    unsigned char retVal;
 
-	if(digit < 10)
-	{
+    if(digit < 10)
+    {
         pinCode_code *= 10;
         pinCode_code += digit;
         pinCode_digit_pos++;
         pinCode_lastDigit = digit;
         retVal =  0;
-	}
-	else
-	{
-		retVal = 1;
-	}
+    }
+    else
+    {
+        retVal = 1;
+    }
 
-	return retVal;
+    return retVal;
 }
 
+/************************************************************************
+ * Function: Function_name                                              *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: status of the function                                       *
+ * description: replaces the current code by the staged code            *
+ ***********************************************************************/
 unsigned char pinCode_ChangeCode(void)
 {
     unsigned char retVal;
@@ -177,7 +201,7 @@ unsigned char pinCode_ChangeCode(void)
     /* check number of digits*/
     for(int i=0; i<pinCode_digit_pos ;i++)
     {
-    	pinCode_temp = pinCode_temp/10;
+        pinCode_temp = pinCode_temp/10;
     }
 
     if( (pinCode_digit_pos >= 4) && (pinCode_digit_pos <= 8) && (pinCode_temp == 0) )
