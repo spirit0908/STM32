@@ -1,6 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:stm_proto_board-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -1057,71 +1056,34 @@ Wire Wire Line
 	900  3050 1000 3050
 Wire Wire Line
 	1300 3050 1450 3050
-Text GLabel 2250 1600 2    50   Input ~ 0
-OUT_R
-Text GLabel 2200 2350 2    50   Input ~ 0
-OUT_G
-Text GLabel 2200 3150 2    50   Input ~ 0
-OUT_B
 $Comp
 L power:GND #PWR0129
 U 1 1 5BB06CFC
-P 3200 1900
-F 0 "#PWR0129" H 3200 1650 50  0001 C CNN
-F 1 "GND" H 3205 1727 50  0000 C CNN
-F 2 "" H 3200 1900 50  0001 C CNN
-F 3 "" H 3200 1900 50  0001 C CNN
-	1    3200 1900
+P 3200 2000
+F 0 "#PWR0129" H 3200 1750 50  0001 C CNN
+F 1 "GND" H 3205 1827 50  0000 C CNN
+F 2 "" H 3200 2000 50  0001 C CNN
+F 3 "" H 3200 2000 50  0001 C CNN
+	1    3200 2000
 	1    0    0    -1  
 $EndComp
-Text Notes 3450 2050 0    50   ~ 0
+Text Notes 3450 2150 0    50   ~ 0
 LED STRIP RGB
 $Comp
 L Connector_Generic:Conn_01x04 J?
 U 1 1 5BB06CEF
-P 3450 1600
-F 0 "J?" H 3530 1592 50  0000 L CNN
-F 1 "Conn_01x04" H 3530 1501 50  0000 L CNN
-F 2 "Connector_Wire:SolderWirePad_1x04_P3.81mm_Drill1mm" H 3450 1600 50  0001 C CNN
-F 3 "~" H 3450 1600 50  0001 C CNN
-	1    3450 1600
+P 3450 1700
+F 0 "J?" H 3530 1692 50  0000 L CNN
+F 1 "Conn_01x04" H 3530 1601 50  0000 L CNN
+F 2 "Connector_Wire:SolderWirePad_1x04_P3.81mm_Drill1mm" H 3450 1700 50  0001 C CNN
+F 3 "~" H 3450 1700 50  0001 C CNN
+	1    3450 1700
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3250 1800 3200 1800
+	3250 1900 3200 1900
 Wire Wire Line
-	3200 1800 3200 1900
-Text GLabel 3050 1700 0    50   Input ~ 0
-OUT_B
-Text GLabel 3050 1600 0    50   Input ~ 0
-OUT_G
-Text GLabel 3050 1500 0    50   Input ~ 0
-OUT_R
-Wire Wire Line
-	3050 1500 3250 1500
-Wire Wire Line
-	3250 1600 3050 1600
-Wire Wire Line
-	3050 1700 3250 1700
-$Comp
-L power:GND #PWR0130
-U 1 1 5BBD2E1F
-P 3150 950
-F 0 "#PWR0130" H 3150 700 50  0001 C CNN
-F 1 "GND" H 3155 777 50  0000 C CNN
-F 2 "" H 3150 950 50  0001 C CNN
-F 3 "" H 3150 950 50  0001 C CNN
-	1    3150 950 
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3200 850  3150 850 
-Wire Wire Line
-	3150 850  3150 950 
-Text GLabel 3000 750  0    50   Input ~ 0
-OUT_W
-Wire Wire Line
-	3000 750  3200 750 
+	3200 1900 3200 2000
 Wire Wire Line
 	9650 4900 9650 4600
 Wire Wire Line
@@ -1195,12 +1157,6 @@ Wire Notes Line
 	6200 2600 6200 1700
 Wire Notes Line
 	6200 1700 7650 1700
-Wire Wire Line
-	2050 1600 2250 1600
-Wire Wire Line
-	2050 2350 2200 2350
-Wire Wire Line
-	2050 3150 2200 3150
 $Comp
 L power:GND #PWR?
 U 1 1 5BCCFA80
@@ -1255,25 +1211,8 @@ Wire Wire Line
 	900  750  1000 750 
 Wire Wire Line
 	1300 750  1450 750 
-Text GLabel 2200 850  2    50   Input ~ 0
-OUT_W
-Wire Wire Line
-	2050 850  2200 850 
-$Comp
-L Connector_Generic:Conn_01x02 J?
-U 1 1 5BCFD8FC
-P 3400 750
-F 0 "J?" H 3480 742 50  0000 L CNN
-F 1 "Conn_01x02" H 3480 651 50  0000 L CNN
-F 2 "" H 3400 750 50  0001 C CNN
-F 3 "~" H 3400 750 50  0001 C CNN
-	1    3400 750 
-	1    0    0    -1  
-$EndComp
 Text Notes 3350 1150 0    50   ~ 0
 LED STRIP WHITE
-Wire Notes Line
-	600  3500 2700 3500
 Wire Notes Line
 	600  1200 4100 1200
 Wire Notes Line
@@ -1298,6 +1237,54 @@ U 5BCA0F9B
 F0 "Sheet5BCA0F9A" 50
 F1 "file5BCA0F9A.sch" 50
 $EndSheet
+Wire Wire Line
+	2850 1800 3250 1800
+Wire Wire Line
+	2050 3150 2850 3150
+Wire Wire Line
+	2050 2350 2750 2350
+Wire Wire Line
+	2750 1700 2750 2350
+Wire Wire Line
+	2850 1800 2850 3150
+Wire Wire Line
+	2050 1600 3250 1600
+Wire Wire Line
+	2750 1700 3250 1700
+$Comp
+L Connector_Generic:Conn_01x02 J?
+U 1 1 5BCFD8FC
+P 3450 850
+F 0 "J?" H 3530 842 50  0000 L CNN
+F 1 "Conn_01x02" H 3530 751 50  0000 L CNN
+F 2 "" H 3450 850 50  0001 C CNN
+F 3 "~" H 3450 850 50  0001 C CNN
+	1    3450 850 
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0130
+U 1 1 5BBD2E1F
+P 3100 950
+F 0 "#PWR0130" H 3100 700 50  0001 C CNN
+F 1 "GND" H 3105 777 50  0000 C CNN
+F 2 "" H 3100 950 50  0001 C CNN
+F 3 "" H 3100 950 50  0001 C CNN
+	1    3100 950 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2050 850  3250 850 
+Wire Wire Line
+	3100 950  3250 950 
+Text Label 2950 1600 0    50   ~ 0
+OUT_R
+Text Label 2950 1700 0    50   ~ 0
+OUT_G
+Text Label 2950 1800 0    50   ~ 0
+OUT_B
+Text Label 2900 850  0    50   ~ 0
+OUT_W
 Wire Bus Line
 	4050 3450 4050 5500
 Wire Bus Line
