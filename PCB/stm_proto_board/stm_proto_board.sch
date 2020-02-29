@@ -1056,34 +1056,8 @@ Wire Wire Line
 	900  3050 1000 3050
 Wire Wire Line
 	1300 3050 1450 3050
-$Comp
-L power:GND #PWR0129
-U 1 1 5BB06CFC
-P 3200 2000
-F 0 "#PWR0129" H 3200 1750 50  0001 C CNN
-F 1 "GND" H 3205 1827 50  0000 C CNN
-F 2 "" H 3200 2000 50  0001 C CNN
-F 3 "" H 3200 2000 50  0001 C CNN
-	1    3200 2000
-	1    0    0    -1  
-$EndComp
-Text Notes 3450 2150 0    50   ~ 0
-LED STRIP RGB
-$Comp
-L Connector_Generic:Conn_01x04 J?
-U 1 1 5BB06CEF
-P 3450 1700
-F 0 "J?" H 3530 1692 50  0000 L CNN
-F 1 "Conn_01x04" H 3530 1601 50  0000 L CNN
-F 2 "Connector_Wire:SolderWirePad_1x04_P3.81mm_Drill1mm" H 3450 1700 50  0001 C CNN
-F 3 "~" H 3450 1700 50  0001 C CNN
-	1    3450 1700
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	3250 1900 3200 1900
-Wire Wire Line
-	3200 1900 3200 2000
 Wire Wire Line
 	9650 4900 9650 4600
 Wire Wire Line
@@ -1285,6 +1259,162 @@ Text Label 2950 1800 0    50   ~ 0
 OUT_B
 Text Label 2900 850  0    50   ~ 0
 OUT_W
+Text Notes 3450 2150 0    50   ~ 0
+LED STRIP RGB
+$Comp
+L Connector_Generic:Conn_02x05_Counter_Clockwise J?
+U 1 1 5E5DE981
+P 5050 1050
+F 0 "J?" H 5100 1467 50  0000 C CNN
+F 1 "Conn_02x05_Counter_Clockwise" H 5100 1376 50  0000 C CNN
+F 2 "" H 5050 1050 50  0001 C CNN
+F 3 "~" H 5050 1050 50  0001 C CNN
+	1    5050 1050
+	1    0    0    -1  
+$EndComp
+Text GLabel 4650 850  0    50   Input ~ 0
+CLKOUT
+Text GLabel 4650 950  0    50   Input ~ 0
+INT
+Text GLabel 4650 1050 0    50   Input ~ 0
+WOL
+Text GLabel 4650 1150 0    50   Input ~ 0
+SO
+Text GLabel 4650 1250 0    50   Input ~ 0
+SI
+Text GLabel 5550 1250 2    50   Input ~ 0
+SCK
+Text GLabel 5550 1150 2    50   Input ~ 0
+CS
+Text GLabel 5550 1050 2    50   Input ~ 0
+RESET
+Text GLabel 5550 950  2    50   Input ~ 0
+VCC
+Text GLabel 5550 850  2    50   Input ~ 0
+GND
+$Comp
+L Connector_Generic:Conn_01x10 J?
+U 1 1 5E607F6F
+P 5450 2050
+F 0 "J?" H 5530 2042 50  0000 L CNN
+F 1 "Conn_01x10" H 5530 1951 50  0000 L CNN
+F 2 "" H 5450 2050 50  0001 C CNN
+F 3 "~" H 5450 2050 50  0001 C CNN
+	1    5450 2050
+	1    0    0    -1  
+$EndComp
+Text GLabel 5050 1650 0    50   Input ~ 0
+CLKOUT
+Text GLabel 5050 1750 0    50   Input ~ 0
+INT
+Text GLabel 5050 1850 0    50   Input ~ 0
+WOL
+Text GLabel 5050 1950 0    50   Input ~ 0
+SO
+Text GLabel 5050 2050 0    50   Input ~ 0
+SI
+Text GLabel 5050 2150 0    50   Input ~ 0
+SCK
+Text GLabel 5050 2250 0    50   Input ~ 0
+CS
+Text GLabel 5050 2350 0    50   Input ~ 0
+RESET
+Wire Wire Line
+	5050 1650 5250 1650
+Wire Wire Line
+	5250 1750 5050 1750
+Wire Wire Line
+	5050 1850 5250 1850
+Wire Wire Line
+	5250 1950 5050 1950
+Wire Wire Line
+	5050 2050 5250 2050
+Wire Wire Line
+	5250 2150 5050 2150
+Wire Wire Line
+	5050 2250 5250 2250
+Wire Wire Line
+	5250 2350 5050 2350
+Wire Wire Line
+	4650 850  4850 850 
+Wire Wire Line
+	4850 950  4650 950 
+Wire Wire Line
+	4650 1050 4850 1050
+Wire Wire Line
+	4850 1150 4650 1150
+Wire Wire Line
+	4650 1250 4850 1250
+Wire Wire Line
+	5350 850  5550 850 
+Wire Wire Line
+	5350 950  5550 950 
+Wire Wire Line
+	5350 1050 5550 1050
+Wire Wire Line
+	5550 1150 5350 1150
+Wire Wire Line
+	5350 1250 5550 1250
+$Comp
+L Connector_Generic:Conn_01x04 J?
+U 1 1 5BB06CEF
+P 3450 1700
+F 0 "J?" H 3530 1692 50  0000 L CNN
+F 1 "Conn_01x04" H 3530 1601 50  0000 L CNN
+F 2 "Connector_Wire:SolderWirePad_1x04_P3.81mm_Drill1mm" H 3450 1700 50  0001 C CNN
+F 3 "~" H 3450 1700 50  0001 C CNN
+	1    3450 1700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 1900 3200 2000
+$Comp
+L power:GND #PWR0129
+U 1 1 5BB06CFC
+P 3200 2000
+F 0 "#PWR0129" H 3200 1750 50  0001 C CNN
+F 1 "GND" H 3205 1827 50  0000 C CNN
+F 2 "" H 3200 2000 50  0001 C CNN
+F 3 "" H 3200 2000 50  0001 C CNN
+	1    3200 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5E7114CE
+P 4950 2550
+F 0 "#PWR?" H 4950 2300 50  0001 C CNN
+F 1 "GND" H 4955 2377 50  0000 C CNN
+F 2 "" H 4950 2550 50  0001 C CNN
+F 3 "" H 4950 2550 50  0001 C CNN
+	1    4950 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5E7222D3
+P 4600 2450
+F 0 "#PWR?" H 4600 2300 50  0001 C CNN
+F 1 "+3V3" H 4615 2623 50  0000 C CNN
+F 2 "" H 4600 2450 50  0001 C CNN
+F 3 "" H 4600 2450 50  0001 C CNN
+	1    4600 2450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4600 2450 5250 2450
+Wire Wire Line
+	4950 2550 5250 2550
+Wire Notes Line
+	4250 600  4250 2800
+Wire Notes Line
+	4250 2800 6000 2800
+Wire Notes Line
+	6000 2800 6000 600 
+Wire Notes Line
+	6000 600  4250 600 
+Text Notes 5550 2750 0    50   ~ 0
+ENC28J60
 Wire Bus Line
 	4050 3450 4050 5500
 Wire Bus Line
