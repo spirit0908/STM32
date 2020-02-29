@@ -25,7 +25,7 @@ MAIN_OUT = main
 # main
 SRC_FILES = \
   main.c \
-  ../../modules/Teleinfo/teleinfo.c \
+  ../teleinfo.c \
   stubs.c
 
 #INC_FILES = \
@@ -35,7 +35,7 @@ SRC_FILES = \
 #	$(CC) $(CCFLAGS) main.c ../../modules/Teleinfo/teleinfo.c stubs.c -o main
 
 test:
-	$(CC) -I../../lib/inc -I../../ -I../../modules/Teleinfo/ -I../../modules/Fifo main.c ../../modules/Teleinfo/teleinfo.c stubs.c -o main
+	$(CC) -I../../../lib/inc -I../../../ -I../ -I../../Fifo main.c ../teleinfo.c stubs.c -o test_main
 
 
 

@@ -13,8 +13,17 @@ typedef struct
 
 T_testFunction test_list_config[]=
 {
+//    {"teleinfo_Init(void)                                 //void teleinfo_Init(void)
 //    {"teleinfo_rawByte_receive", TEST_teleinfo_rawByte_receive},
+//    {"Teleinfo_Mgt", TEST_Teleinfo_Mgt}                   //void Teleinfo_Mgt(void)
+//    {"TIC_check_frame", TEST_TIC_check_frame},            //unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, unsigned long int *valueCode)
+//    {"Ascii2Int", TEST_Ascii2Int},                        //unsigned long int Ascii2Int(unsigned char *str, unsigned char len)
+//    {"TIC_FillInInfo", TEST_TIC_FillInInfo},              //unsigned char TIC_FillInInfo(unsigned char labelCode, unsigned int val)
+//    {"TIC_getLabelCode", TEST_TIC_getLabelCode},          //unsigned char TIC_getLabelCode(unsigned char str[5])
+//    {"TIC_CRC"}, TEST_TIC_CRC},                           //unsigned char TIC_CRC(unsigned char *str)
     {"TIC_CRC", TEST_TIC_CRC},
+
+
 };
 #define TEST_LIST_CONFIG_SIZE (sizeof(test_list_config)/sizeof(T_testFunction))
 
@@ -35,6 +44,13 @@ typedef struct
   unsigned char expectedResult;
 } T_TIC_CRC;
 
+
+/*******************************************************/
+void Teleinfo_USART_Init(USART_TypeDef* USARTx);
+
+
+
+/********************************************************/
 int TEST_TIC_CRC(void)
 {
   int result=0;
