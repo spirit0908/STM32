@@ -1,5 +1,14 @@
+/************************************************************************
+ * File Name          : templace_source.c
+ * Author             : author
+ * Date               : 08/06/2017
+ * Description        : source template file
+ ***********************************************************************/
 
-//#include "hard.h"
+
+/************************************************************************
+* INCLUDES *
+************************************************************************/
 #include "Order_mgt.h"
 #include "def.h"
 #include "Light.h"
@@ -8,6 +17,26 @@
 
 #include "stm32f10x_can.h"
 
+
+/************************************************************************
+* DEFINES *
+************************************************************************/
+#define fct_group_size ( sizeof(fct_group)/sizeof(T_FctGrp) ) //(sizeof(fct_group) / sizeof(T_FctGrp))
+
+#define GETVERSION(data)        (data[0])
+#define COMMAND_TYPE(data)      (data[1]&0xF0)
+#define COMMAND_ORDER(data)     (data[1]&0x0F)
+#define COMMAND_ID(data)        (data[2])
+#define COMMAND_PARAM_PTR(data) (&data[3])
+
+#define FRAME_TYPE_COMMAND      1
+#define FRAME_TYPE_CONFIG       2
+#define FRAME_TYPE_STATUS       3
+
+
+/************************************************************************
+* GLOBAL VARIABLES *
+************************************************************************/
 T_FctGrp fct_group[] =
 {
     /* ElemId, type , Addr, FctId, pRxIndication */
@@ -20,7 +49,6 @@ T_FctGrp fct_group[] =
     { 6u, TYPE_LIGHT, 0x123, 6u, LightOrderTmt }, // SORTIE 6
     { 7u, TYPE_LIGHT, 0x123, 7u, LightOrderTmt }  // SORTIE 7
 };
-#define fct_group_size ( sizeof(fct_group)/sizeof(T_FctGrp) ) //(sizeof(fct_group) / sizeof(T_FctGrp))
 
 T_FctGrp fct_group2[] =
 {
@@ -36,19 +64,19 @@ T_FctGrp fct_group2[] =
 };
 
 
-#define GETVERSION(data)        (data[0])
-#define COMMAND_TYPE(data)      (data[1]&0xF0)
-#define COMMAND_ORDER(data)     (data[1]&0x0F)
-#define COMMAND_ID(data)        (data[2])
-#define COMMAND_PARAM_PTR(data) (&data[3])
+/************************************************************************
+* FUNCTIONS *
+************************************************************************/
 
-#define FRAME_TYPE_COMMAND      1
-#define FRAME_TYPE_CONFIG       2
-#define FRAME_TYPE_STATUS       3
-
-
-
-//void OrderProcess(unsigned int CanId, unsigned char msgLenm, unsigned char msgData[8])
+/************************************************************************
+ * Function: OrderProcess                                               *
+ * input: CanId                                                         *
+          msgData                                                       *
+          msgLen                                                        *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description:                                                         *
+ ***********************************************************************/
 void OrderProcess(unsigned int CanId, unsigned char msgData[8], unsigned char msgLen)
 {
     unsigned char DeviceId, Order;
@@ -99,12 +127,25 @@ void OrderProcess(unsigned int CanId, unsigned char msgData[8], unsigned char ms
         */
 }
 
-
+/************************************************************************
+ * Function: updateIndicStatus                                          *
+ * input: Idx                                                           *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description:                                                         *
+ ***********************************************************************/
 void updateIndicStatus(unsigned char Idx)
 {
+
 }
 
-
+/************************************************************************
+ * Function: CanSendMessage                                             *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return:                                                              *
+ * description:                                                         *
+ ***********************************************************************/
 unsigned char CanSendMessage(void)
 {
     unsigned char NbMsgToSend;
@@ -144,6 +185,13 @@ unsigned char CanSendMessage(void)
 }
 
 
+/************************************************************************
+ * Function: CanSendMessage                                             *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description:                                                         *
+ ***********************************************************************/
 void SerialOrder_Mgt(void)
 {
     USART_SendData(USART2, 'S');

@@ -4,7 +4,9 @@
  * Description        : Main program body
  *******************************************************************************/
 
-/* Includes ------------------------------------------------------------------*/
+/************************************************************************
+* INCLUDES *
+************************************************************************/
 #include "stm32f10x_lib.h"
 
 #include "stm32f10x_flash.h"
@@ -16,57 +18,40 @@
 #include "Fifo.h"
 #include "teleinfo.h"
 
-/* Private typedef -----------------------------------------------------------*/
-
-/* typedef struct
-{
-    unsigned char str[30];
-}TIC_label_str; */
-
-typedef struct
-{
-    // FIFO struct for TIC messages
-    unsigned char **buff;       // raw data buffer
-    unsigned char size;         // FIFO length
-    unsigned char WriteIdx;     // Next position to write an element
-    unsigned char ReadIdx;      // Next Element to read
-    unsigned char NumElem;      // Total of elements currently in the FIFO
-    unsigned char NumMaxElem;   // maximum of Elements saved (used for debug purpose)
-    unsigned char overrun;
-} T_TIC_FIFO;
-
-
-T_TIC_FIFO TIC_Fifo;
+/************************************************************************
+* DEFINES *
+************************************************************************/
 #define TIC_FIFO_LENGTH     55
-unsigned char TIC_FIFO_Buff[TIC_FIFO_LENGTH][30];
 
-unsigned char IinstMax=0;
-
-/* Private define ------------------------------------------------------------*/
 #define MODE1 1
 #define MODE2 2
 #define TIC_CRC_MODE MODE1
 
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
+
+/************************************************************************
+* GLOBAL VARIABLES *
+************************************************************************/
+unsigned char TIC_FIFO_Buff[TIC_FIFO_LENGTH][30];
+unsigned char IinstMax=0;
+
 u8 rawDataTab[170];
 u16 cptRawData=0;
 u8 cptTIC_label=0;
 
 T_TIC_INFO TIC_info;
+T_TIC_FIFO TIC_Fifo;
 
-/* Private function prototypes -----------------------------------------------*/
+/************************************************************************
+* FUNCTIONS *
+************************************************************************/
 
-/* Private functions ---------------------------------------------------------*/
-
-
-/*******************************************************************************
- * Function Name  : teleinfo_Init
- * Description    : Initialize TIC FIFO
- * Input          : None
- * Output         : None
- * Return         : None
- *******************************************************************************/
+/************************************************************************
+ * Function Name  : teleinfo_Init                                       *
+ * Input          : None                                                *
+ * Output         : None                                                *
+ * Return         : None                                                *
+ * Description    : Initialize TIC FIFO                                 *
+ ************************************************************************/
 void teleinfo_Init(void)
 {
     /* Initialize Fifo */
@@ -80,14 +65,14 @@ void teleinfo_Init(void)
 }
 
 
-/*******************************************************************************
- * Function Name  : teleinfo_rawByte_receive
- * Description    : Add each raw byte received from the TIC device in the FIFO
- *                  and split the differents TIC messages. Each element of the
- *                  FIFO contain one label with its associated data.
- * Input          : None
- * Output         : None
- * Return         : None
+/********************************************************************************
+ * Function Name  : teleinfo_rawByte_receive                                    *
+ * Input          : None                                                        *
+ * Output         : None                                                        *
+ * Return         : None                                                        *
+ * Description    : Add each raw byte received from the TIC device in the FIFO  *
+ *                  and split the differents TIC messages. Each element of the  *
+ *                  FIFO contain one label with its associated data.            *
  *******************************************************************************/
 int teleinfo_rawByte_receive(u8 rawByte)
 {
@@ -134,12 +119,12 @@ int teleinfo_rawByte_receive(u8 rawByte)
     return 0;
 }
 
-/*******************************************************************************
- * Function Name  : Teleinfo_Mgt
- * Description    : Check validity for each record of the FIFO
- * Input          : None
- * Output         : None
- * Return         : None
+/********************************************************************************
+ * Function Name  : Teleinfo_Mgt                                                *
+ * Input          : None                                                        *
+ * Output         : None                                                        *
+ * Return         : None                                                        *
+ * Description    : Check validity for each record of the FIFO                  *
  *******************************************************************************/
 void Teleinfo_Mgt(void)
 {
@@ -184,16 +169,16 @@ void Teleinfo_Mgt(void)
     }
 }
 
-/*******************************************************************************
- * Function Name  : TIC_check_frame
- * Description    : Check validity of a TIC record and split the label and the
- *                  value.
- * Input          : str[30]: TIC record in ASCII format
- * Output         : labelCode: label of the record
- *                  valueCode: value of the record
- * Return         : validity of the record:
- *                   FALSE: record is invalid, record is discarded
- *                   TRUE: record is valid and the treatment is done
+/********************************************************************************
+ * Function Name  : TIC_check_frame                                             *
+ * Input          : str[30]: TIC record in ASCII format                         *
+ * Output         : labelCode: label of the record                              *
+ *                  valueCode: value of the record                              *
+ * Return         : validity of the record:                                     *
+ *                   FALSE: record is invalid, record is discarded              *
+ *                   TRUE: record is valid and the treatment is done            *
+ * Description    : Check validity of a TIC record and split the label and the  *
+ *                  value.                                                      *
  *******************************************************************************/
 unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, unsigned long int *valueCode)
 {
@@ -356,13 +341,13 @@ unsigned char TIC_check_frame(unsigned char str[30], unsigned char *labelCode, u
     return IsValid;
 }
 
-/*******************************************************************************
- * Function Name  : Ascii2Int
- * Description    : Convert a number in ASCII format to an integer value
- * Input          : *str: string containing the ASCII format number
- *                  len: length of the ASCII string
- * Output         : None
- * Return         : Number in integer format
+/********************************************************************************
+ * Function Name  : Ascii2Int                                                   *
+ * Input          : *str: string containing the ASCII format number             *
+ *                  len: length of the ASCII string                             *
+ * Output         : None                                                        *
+ * Return         : Number in integer format                                    *
+ * Description    : Convert a number in ASCII format to an integer value        *
  *******************************************************************************/
 unsigned long int Ascii2Int(unsigned char *str, unsigned char len)
 {
@@ -379,13 +364,13 @@ unsigned long int Ascii2Int(unsigned char *str, unsigned char len)
 }
 
 /*******************************************************************************
- * Function Name  : TIC_FillInInfo
- * Description    :
- * Input          : labelCode: label extracted from a record
- *                  val: value associated to the label
- * Output         : None
- * Return         : Status of the operation
- *******************************************************************************/
+ * Function Name  : TIC_FillInInfo                                             *
+ * Input          : labelCode: label extracted from a record                   *
+ *                  val: value associated to the label                         *
+ * Output         : None                                                       *
+ * Return         : Status of the operation                                    *
+ * Description    :                                                            *
+ ******************************************************************************/
 unsigned char TIC_FillInInfo(unsigned char labelCode, unsigned int val)
 {
 //  switch (labelCode)
@@ -424,16 +409,16 @@ unsigned char TIC_FillInInfo(unsigned char labelCode, unsigned int val)
 //      TIC_info.MOTDETAT = val;
 //      break;
 //  }
-	return 0;
+    return 0;
 }
 
 /*******************************************************************************
- * Function Name  : TIC_getLabelCode
- * Description    : Get the code associated to a label
- * Input          : str: string containing the label
- * Output         : None
- * Return         : Label code
- *******************************************************************************/
+ * Function Name  : TIC_getLabelCode                                           *
+ * Input          : str: string containing the label                           *
+ * Output         : None                                                       *
+ * Return         : Label code                                                 *
+ * Description    : Get the code associated to a label                         *
+ ******************************************************************************/
 unsigned char TIC_getLabelCode(unsigned char str[5])
 {
     unsigned char labelCode;
@@ -490,13 +475,13 @@ unsigned char TIC_getLabelCode(unsigned char str[5])
 }
 
 /*******************************************************************************
- * Function Name  : TTIC_CRC
- * Description    : Calculate the checksum of a TIC record
- * Input          : str: record in string format, containing the label and
- *                  the associated value
- * Output         : None
- * Return         : Checksum value of the record
- *******************************************************************************/
+ * Function Name  : TTIC_CRC                                                   *
+ * Input          : str: record in string format, containing the label and     *
+ *                  the associated value                                       *
+ * Output         : None                                                       *
+ * Return         : Checksum value of the record                               *
+ * Description    : Calculate the checksum of a TIC record                     *
+ ******************************************************************************/
 unsigned char TIC_CRC(unsigned char *str)
 {
     /* CRC is computed from the input string by summing up each byte of the string.
@@ -547,12 +532,12 @@ unsigned char TIC_CRC(unsigned char *str)
 }
 
 /*******************************************************************************
- * Function Name  : Teleinfo_USART_Init
- * Description    : Initialize USART link to be used with EDF smart meters
- * Input          : USART module to initialize
- * Output         : None
- * Return         : None
- *******************************************************************************/
+ * Function Name  : Teleinfo_USART_Init                                        *
+ * Input          : USART module to initialize                                 *
+ * Output         : None                                                       *
+ * Return         : None                                                       *
+ * Description    : Initialize USART link to be used with EDF smart meters     *
+ ******************************************************************************/
 void Teleinfo_USART_Init(USART_TypeDef* USARTx)
 {
     USART_InitTypeDef USART_InitStruct;

@@ -1,16 +1,41 @@
+/************************************************************************
+ * File Name          : Task.c
+ * Author             : author
+ * Date               : 23/02/2020
+ * Description        :
+ ***********************************************************************/
 
+/************************************************************************
+* INCLUDES *
+************************************************************************/
 #include "Task.h"
-//#include "def.h"
-//#include "FIFO.h"
-//#include "Order_mgt.h"
-//#include "Light.h"
 #include "Task_cfg.h"
 
+/************************************************************************
+* DEFINES *
+************************************************************************/
 
+
+
+/************************************************************************
+* GLOBAL VARIABLES *
+************************************************************************/
 unsigned char Tasks[TASK_SCHEDULE_MAX];
 T_TASK_LIST TaskSchedule={Tasks, 0, 0, 0, 0, 0};
 
 
+/************************************************************************
+* FUNCTIONS *
+************************************************************************/
+
+
+/************************************************************************
+ * Function: TaskManager_Init                                           *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: Initialize the Task manager module                      *
+ ***********************************************************************/
 void TaskManager_Init()
 {
     unsigned char i;
@@ -44,6 +69,13 @@ void TaskManager(void)
 }
 
 
+/************************************************************************
+ * Function: TaskAdd                                                    *
+ * input: TaskId - Identifier of a task                                 *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: Adds a task to the execution list                       *
+ ***********************************************************************/
 void TaskAdd(unsigned char TaskId )
 {
     if( TaskSchedule.nbElem < TASK_SCHEDULE_MAX )
@@ -79,6 +111,14 @@ void TaskAdd(unsigned char TaskId )
     }
 }
 
+
+/************************************************************************
+ * Function: TaskAdd_unique                                             *
+ * input: TaskId - Identifier of a task                                 *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: Adds a task to the execution list if not already present*
+ ***********************************************************************/
 void TaskAdd_unique(unsigned char TaskId)
 {
     int i, j;
@@ -129,6 +169,13 @@ void TaskAdd_unique(unsigned char TaskId)
     }
 }
 
+/************************************************************************
+ * Function: TaskGet                                                    *
+ * input:                                                               *
+ * output: TaskId - Identifier of the task to execute                   *
+ * return: none                                                         *
+ * description: Adds a task to the execution list if not already present*
+ ***********************************************************************/
 unsigned char TaskGet(unsigned char *TaskId)
 {
     unsigned char retval;
@@ -159,6 +206,13 @@ unsigned char TaskGet(unsigned char *TaskId)
     return retval;
 }
 
+/************************************************************************
+ * Function: Task_Manager_IT                                            *
+ * input:  none                                                         *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: Interrupt handling                                      *
+ ***********************************************************************/
 void Task_Manager_IT(void)
 {
     // Function called every 5ms
@@ -180,4 +234,5 @@ void Task_Manager_IT(void)
         }
     }
 }
+
 

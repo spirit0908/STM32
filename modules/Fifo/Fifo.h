@@ -1,9 +1,25 @@
+/************************************************************************
+ * File Name          : Fifo.h
+ * Author             :
+ * Date               : 29/02/2020
+ * Description        :
+ ***********************************************************************/
 
 #ifndef FIFO_H
 #define FIFO_H
 
+/************************************************************************
+* INCLUDES *
+************************************************************************/
 #include "Std_Types.h"
 //#include "Fifo_cfg.h"
+
+
+/************************************************************************
+* DEFINES *
+************************************************************************/
+
+
 /************************************************************************
 * STRUCTURES *
 ************************************************************************/
@@ -47,6 +63,9 @@ typedef struct
     unsigned char size;
 } FIFO_TAB_T ;
 
+/************************************************************************
+* GLOBAL VARIABLES *
+************************************************************************/
 extern T_CAN_FIFO CAN_RX_FIFO;
 extern T_CAN_MESSAGE CAN_RX_FIFO_Buff[];
 
@@ -59,9 +78,12 @@ extern unsigned char USART_RX_FIFO_Buff[];
 extern T_FIFO TELEINFO_FIFO;
 extern unsigned char TELEINFO_FIFO_Buff[];
 
-
 extern FIFO_TAB_T FIFO_table[];
 
+
+/************************************************************************
+* FUNCTIONS PROTOTYPE *
+************************************************************************/
 void FIFO_Init(FIFO_TAB_T *pFifoTab);
 unsigned char CAN_FIFO_add ( T_CAN_FIFO *pFIFO, unsigned int CAN_Id, unsigned char msg_len, unsigned char *msg_data);
 unsigned char CAN_FIFO_read(T_CAN_FIFO *pFIFO, unsigned int *CAN_Id, unsigned char *msg_len, unsigned char *msg_data);
@@ -69,4 +91,5 @@ unsigned char CAN_FIFO_read(T_CAN_FIFO *pFIFO, unsigned int *CAN_Id, unsigned ch
 unsigned char FIFO_add ( T_FIFO *pFIFO, unsigned char data );
 unsigned char FIFO_read(T_FIFO *pFIFO, unsigned char *data );
 
-#endif
+
+#endif /* FIFO_H */

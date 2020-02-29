@@ -8,7 +8,7 @@
 #ifndef SERIAL_H_
 #define SERIAL_H_
 
-void serial_SendMessage(unsigned char *strPtr, unsigned char size);
+void serial_SendMessage(char *strPtr, unsigned char size);
 void serial_SendChar(void);
 void serialMenu(void);
 

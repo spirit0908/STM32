@@ -1,11 +1,28 @@
+/************************************************************************
+ * File Name          : LcdMenu.c
+ * Author             :
+ * Date               : 12/02/2017
+ * Description        : Menu display on Lcd screen
+ ***********************************************************************/
 
+
+/************************************************************************
+* INCLUDES *
+************************************************************************/
 #include "LcdMenu.h"
 #include "n3310.h"
 
 
-T_DisplayItemInfo CurMenuItem;
+/************************************************************************
+* DEFINES *
+************************************************************************/
+#define MENULISTMAX 	12
 
-#define MENULISTMAX 12
+
+/************************************************************************
+* GLOBAL VARIABLES *
+************************************************************************/
+T_DisplayItemInfo CurMenuItem;
 
 T_MenuList MenuList[MENULISTMAX] =
 {
@@ -30,6 +47,17 @@ unsigned char curseur[10]={0};
 unsigned char firstItemId[10]={0};
 
 
+/************************************************************************
+* FUNCTIONS *
+************************************************************************/
+
+/************************************************************************
+ * Function: LcdMenu_Init                                               *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: Initialize Lcd menu                                     *
+ ***********************************************************************/
 void LcdMenu_Init(void)
 {
     unsigned char i;
@@ -44,6 +72,39 @@ void LcdMenu_Init(void)
     }
 }
 
+/************************************************************************
+ * Function: FindFirstItem                                              *
+ * input: ItemId - Id of the current menu item displayed                *
+ * output: none                                                         *
+ * return: Id of the first item of the same level                       *
+ * description: Returns the id of the first item of the same level      *
+ ***********************************************************************/
+unsigned char FindFirstItem(unsigned char ItemId)
+{
+    unsigned char level;
+    unsigned char tempItemId = 0;
+    level = MenuList[ItemId].ItemLevel;
+
+
+    while( tempItemId < ItemId )
+    {
+        if( MenuList[tempItemId].ItemLevel == level )
+        {
+            break;
+        }
+        tempItemId++;
+    }
+
+    return tempItemId;
+}
+
+/************************************************************************
+ * Function: FindNextItem                                               *
+ * input: ItemId - Id of the current menu item displayed                *
+ * output: none                                                         *
+ * return: Id of the next item of the same level                        *
+ * description: Returns the id of the next item of the same level       *
+ ***********************************************************************/
 unsigned char FindNextItem(unsigned char tempItemId)
 {
     unsigned char level;
@@ -84,6 +145,13 @@ unsigned char FindNextItem(unsigned char tempItemId)
     return tempItemId;
 }
 
+/************************************************************************
+ * Function: FindPreviousItem                                           *
+ * input: ItemId - Id of the current menu item displayed                *
+ * output: none                                                         *
+ * return: Id of the previous item of the same level                    *
+ * description: Returns the id of the previous item of the same level   *
+ ***********************************************************************/
 unsigned char FindPreviousItem(unsigned char tempItemId)
 {
     unsigned char level;
@@ -112,6 +180,13 @@ unsigned char FindPreviousItem(unsigned char tempItemId)
     return tempItemId;
 }
 
+/************************************************************************
+ * Function: LcdMenu_Display                                            *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: Displays the current menu on the screen                 *
+ ***********************************************************************/
 void LcdMenu_Display(void)
 {
     unsigned char itemLevel = MenuList[curItemId].ItemLevel;
@@ -147,6 +222,21 @@ void LcdMenu_Display(void)
     }
 
     LcdUpdate();
+}
+
+unsigned char LcdMenu_MenuTop(void)
+{
+    unsigned char level = MenuList[curItemId].ItemLevel;
+    unsigned char previousItemId = FindFirstItem(curItemId);
+
+    firstItemId[level] = previousItemId;
+    curItemId = previousItemId;
+
+    curseur[level] = 0;
+
+
+    LcdMenu_Display();
+    return 0;
 }
 
 unsigned char LcdMenu_MenuDown(void)

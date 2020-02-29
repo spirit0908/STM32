@@ -1,38 +1,40 @@
 /************************************************************************
- * File Name          : def.h
+ * File Name          : templace_source.c
  * Author             : author
  * Date               : 23/02/2020
- * Description        : Contains defines related to the hardware
+ * Description        : source template file
  ***********************************************************************/
 
-#ifndef DEF_H
-#define DEF_H
 
 /************************************************************************
 * INCLUDES *
 ************************************************************************/
-
+#include "stm32f10x_lib.h"
+#include "stm32f10x_type.h"
 
 /************************************************************************
 * DEFINES *
 ************************************************************************/
 
-/* Address of the board */
-#define OWN_DEVICE_ID       0x48
-#define OWN_CAN_ID          OWN_DEVICE_ID
-#define CAN_ID_BROADCAST    OWN_DEVICE_ID
-
-/* Version of the project, for compatibility issues with the protocol */
-#define PROJECT_VERSION     0
-
 
 /************************************************************************
-* STRUCTURES *
+* GLOBAL VARIABLES *
 ************************************************************************/
 
 
 /************************************************************************
-* FUNCTIONS PROTOTYPE *
+* FUNCTIONS *
 ************************************************************************/
 
-#endif /* DEF_H */
+
+/************************************************************************
+ * Function: Function_name                                              *
+ * input: param - parameter used in the function                        *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: This function is a template                             *
+ ***********************************************************************/
+void Function_name(unsigned char param)
+{
+	/* Function code*/
+}

@@ -1,25 +1,41 @@
-/* 
- * File:   PushButton.h
- * Author:
- *
- * Created on 12 fevrier 2017, 21:50
- */
+/************************************************************************
+ * File Name          : PushButton.h
+ * Author             : author
+ * Date               : 23/02/2020
+ * Description        : header template file
+ ***********************************************************************/
 
 #ifndef PUSHBUTTON_H
 #define PUSHBUTTON_H
 
-#ifdef  __cplusplus
-extern "C" {
-#endif
+/************************************************************************
+* INCLUDES *
+************************************************************************/
 
+
+/************************************************************************
+* DEFINES *
+************************************************************************/
+#define NULL                0
+#define LONG_PUSH_TIME      2 /*sec*/
+#define CONFIG_PUSH_TIME    8 /*sec*/
+#define PB_READ_PERIOD      100 /*ms*/
+#define LONG_PUSH_CPT       (LONG_PUSH_TIME*1000/PB_READ_PERIOD)
+#define CONFIG_PUSH_CPT     (CONFIG_PUSH_TIME*1000/PB_READ_PERIOD)
+#define PB_CONFIG_NB        4
+
+
+/************************************************************************
+* STRUCTURES *
+************************************************************************/
 typedef enum
 {
     PB_DISABLED,
     PB_IDLE,
     PB_PUSHED,
     PB_SHORT_PUSH,
-	PB_LONG_PUSH,
-	PB_CONFIG_PUSH
+    PB_LONG_PUSH,
+    PB_CONFIG_PUSH
 }T_PushButton;
 
 typedef struct
@@ -34,20 +50,17 @@ typedef struct
     unsigned char push_cpt;
 }PB_Config_T;
 
-#define NULL 0
-#define LONG_PUSH_TIME      2 /*sec*/
-#define CONFIG_PUSH_TIME    8/*sec*/
-#define PB_READ_PERIOD      100 /*ms*/
-#define LONG_PUSH_CPT       (LONG_PUSH_TIME*1000/PB_READ_PERIOD)
-#define CONFIG_PUSH_CPT     (CONFIG_PUSH_TIME*1000/PB_READ_PERIOD)
-#define PB_CONFIG_NB        4
 
-
+/************************************************************************
+* GLOBAL VARIABLES *
+************************************************************************/
 unsigned char PushButton_Mgt(void);
 
-#ifdef  __cplusplus
-}
-#endif
+
+/************************************************************************
+* FUNCTIONS PROTOTYPE *
+************************************************************************/
+unsigned char PushButton_Mgt(void);
+
 
 #endif  /* TASK_H */
-

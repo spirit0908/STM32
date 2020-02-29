@@ -1,23 +1,24 @@
-/* 
- * File:   Light.h
- *
- * Created on 11 f�vrier 2017, 11:42
- */
+/************************************************************************
+ * File Name          : Light.h
+ * Author             :
+ * Date               : 12/02/2017
+ * Description        : header template file
+ ***********************************************************************/
 
 #ifndef LIGHT_H
-#define	LIGHT_H
+#define LIGHT_H
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
-//#include "FIFO.h"
-//#include "def.h"
+/************************************************************************
+* INCLUDES *
+************************************************************************/
 #include "stm32f10x_lib.h"
 #include "stm32f10x_map.h"
 #include "stm32f10x_gpio.h"
     
-// Light orders
+
+/************************************************************************
+* DEFINES *
+************************************************************************/
 #define LIGHT_OFF                     0x10
 #define LIGHT_ON                      0x11
 #define LIGHT_REVERSE                 0x12
@@ -37,6 +38,9 @@ extern "C" {
 #define LIGHT_RGB_B                   0x40
 
 
+/************************************************************************
+* STRUCTURES *
+************************************************************************/
 enum
 {
     Light_ID_0 = 0,
@@ -94,9 +98,16 @@ typedef struct
 } T_LightState;
 
 
+/************************************************************************
+* GLOBAL VARIABLES *
+************************************************************************/
 extern T_LightConfig LightConfig[MAX_LIGHT_NUM];
 extern T_LightState LightState[MAX_LIGHT_NUM];
 
+
+/************************************************************************
+* FUNCTIONS PROTOTYPE *
+************************************************************************/
 void Light_Init(void);
 void Light_Init_cfg(void);
 unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigned char *param );
@@ -104,9 +115,4 @@ void LightSendStatus(void);
 void LightSendOutputStatus(unsigned char i);
 
 
-
-#ifdef	__cplusplus
-}
-#endif
-
-#endif	/* LIGHT_H */
+#endif  /* LIGHT_H */

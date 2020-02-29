@@ -1,12 +1,14 @@
-#ifndef TELEINFO_H
-#define TELEINFO_H
 /********************************************************************************
  * File Name          : teleinfo.c
  * Date               : 10/08/2007
  * Description        : Main program body
  *******************************************************************************/
+#ifndef TELEINFO_H
+#define TELEINFO_H
 
-/* Includes ------------------------------------------------------------------*/
+/************************************************************************
+* INCLUDES *
+************************************************************************/
 #include "stm32f10x_lib.h"
 
 #include "stm32f10x_flash.h"
@@ -16,7 +18,18 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_type.h"
 
-/* Private typedef -----------------------------------------------------------*/
+/************************************************************************
+* DEFINES *
+************************************************************************/
+#define ASCII_STX   0x2  //Start of Text
+#define ASCII_ETX   0x3  //End of Text
+#define ASCII_LF    0xa  //Start of label
+#define ASCII_CR    0xd  //End of label
+#define ASCII_SP    0x20 //Space
+
+/************************************************************************
+* STRUCTURES *
+************************************************************************/
 typedef struct
 {
     unsigned char ADCO[12+1];
@@ -48,12 +61,25 @@ typedef struct
     unsigned char MOTDETAT[6+1];
 } T_TIC_INFO;
 
-/* Private define ------------------------------------------------------------*/
-#define ASCII_STX   0x2  //Start of Text
-#define ASCII_ETX   0x3  //End of Text
-#define ASCII_LF    0xa  //Start of label
-#define ASCII_CR    0xd  //End of label
-#define ASCII_SP    0x20 //Space
+
+/* typedef struct
+{
+    unsigned char str[30];
+}TIC_label_str; */
+
+
+typedef struct
+{
+    // FIFO struct for TIC messages
+    unsigned char **buff;       // raw data buffer
+    unsigned char size;         // FIFO length
+    unsigned char WriteIdx;     // Next position to write an element
+    unsigned char ReadIdx;      // Next Element to read
+    unsigned char NumElem;      // Total of elements currently in the FIFO
+    unsigned char NumMaxElem;   // maximum of Elements saved (used for debug purpose)
+    unsigned char overrun;
+} T_TIC_FIFO;
+
 
 enum
 {
@@ -87,21 +113,16 @@ enum
     MOTDETAT
 } TIC_LABEL_TYPE;
 
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
+
+/************************************************************************
+* GLOBAL VARIABLES *
+************************************************************************/
 extern T_TIC_INFO TIC_info;
 
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
 
-
-/*******************************************************************************
- * Function Name  : 
- * Description    : 
- * Input          : None
- * Output         : None
- * Return         : None
- *******************************************************************************/
+/************************************************************************
+* FUNCTIONS PROTOTYPE *
+************************************************************************/
 void teleinfo_Init(void);
 int teleinfo_rawByte_receive(u8 rawByte);
 void Teleinfo_Mgt(void);
@@ -114,4 +135,3 @@ void Teleinfo_USART_Init(USART_TypeDef* USARTx);
 
 
 #endif /* TELEINFO_H */
-

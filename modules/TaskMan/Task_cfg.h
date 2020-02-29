@@ -41,9 +41,6 @@ extern "C" {
 #define TIMER1_PRESCAL  0x00
 
 
-
-
-    
 extern T_TASK Task_List[];
 
 

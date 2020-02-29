@@ -1,10 +1,27 @@
+/************************************************************************
+ * File Name          : Light.c
+ * Author             :
+ * Date               : 11/02/2017
+ * Description        :
+ ***********************************************************************/
 
-
+/************************************************************************
+* INCLUDES *
+************************************************************************/
+#include "def.h"
 #include "Light.h"
-//#include "Fifo.h"
-//#include "def.h"
 #include "Std_Types.h"
+#include "Fifo_Cfg.h"
 
+
+/************************************************************************v
+* DEFINES *
+************************************************************************/
+
+
+/************************************************************************
+* GLOBAL VARIABLES *
+************************************************************************/
 T_LightConfig LightConfig[MAX_LIGHT_NUM]=
 {
     // port - pin -
@@ -24,10 +41,10 @@ T_LightState LightState[MAX_LIGHT_NUM]=
     /*type | outPin|curState|state|brightness_default|brightness_last|timer_default|timer_val|Current timer value*/
     {{0}, 0},
     {{0}, 0},
-//	{0b10100000, 0, 0		, 0	  ,12				 , 12		     , 0		   , 0       , 0}, // RELAY 1
-//	{0b10100000, 1, 0		, 0	  ,12				 , 12		     , 0		   , 0       , 0}, // RELAY 2
-////	{0b10100000, 2, 0		, 0	  ,12				 , 12		     , 0		   , 0       , 0},
-////	{0b10100000, 3, 0		, 0	  ,12				 , 12		     , 0		   , 0       , 0}
+//  {0b10100000, 0, 0       , 0   ,12                , 12            , 0           , 0       , 0}, // RELAY 1
+//  {0b10100000, 1, 0       , 0   ,12                , 12            , 0           , 0       , 0}, // RELAY 2
+////    {0b10100000, 2, 0       , 0   ,12                , 12            , 0           , 0       , 0},
+////    {0b10100000, 3, 0       , 0   ,12                , 12            , 0           , 0       , 0}
 };
 
 
@@ -35,27 +52,39 @@ T_LightState LightState[MAX_LIGHT_NUM]=
 
 //LightDesc[]=
 //{
-//		{
-//				type: dimmable / RGB /
-//		},
+//      {
+//              type: dimmable / RGB /
+//      },
 //};
 
 
+/************************************************************************
+* FUNCTIONS *
+************************************************************************/
+
+
+/************************************************************************
+ * Function: Light_Init                                                 *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: Initialize the Light module                             *
+ ***********************************************************************/
 void Light_Init(void)
 {
     unsigned char i;
     
     for(i=0u; i<MAX_LIGHT_NUM; i++)
     {
-        LightState[i].type.active  	= 1u; /*LIGHT_TYPE_ACTIVE;*/
+        LightState[i].type.active   = 1u; /*LIGHT_TYPE_ACTIVE;*/
         LightState[i].type.dimmable = 0u; /*LIGHT_TYPE_ACTIVE;*/
-        LightState[i].type.timer  	= 1u; /*LIGHT_TYPE_ACTIVE;*/
+        LightState[i].type.timer    = 1u; /*LIGHT_TYPE_ACTIVE;*/
         LightState[i].type.ledStrip = 1u; /*LIGHT_TYPE_ACTIVE;*/
 
         //LightState[i].outPin;
         //LightState[i].curState;             // State/Brightness of current output: form 00 (OFF) to FF (MAX).
 
-    	LightState[i].state = 0u;
+        LightState[i].state = 0u;
 //        LightState[i].curState=0u;
 //        LightState[i].brightness_last=0u;
 //        LightState[i].timer_val=0u;
@@ -67,7 +96,13 @@ void Light_Init(void)
     }
 }
 
-
+/************************************************************************
+ * Function: Light_Init_cfg                                             *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description: Initialize the configuration part of the Light module   *
+ ***********************************************************************/
 void Light_Init_cfg(void)
 {
     //Light output 0
@@ -104,6 +139,15 @@ void Light_Init_cfg(void)
 //    LightState[3].timer_default=0xFF;
 }
 
+/************************************************************************
+ * Function: LightOrderTmt                                              *
+ * input: LightId                                                       *
+ *        Order                                                         *
+ *        param                                                         *
+ * output: none                                                         *
+ * return:                                                              *
+ * description:                                                         *
+ ***********************************************************************/
 unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigned char *param )
 {
     unsigned char brightness;
@@ -325,29 +369,40 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
         break;
     }
 
-	return ret_value;
+    return ret_value;
 }
 
 
-/*void LightOrderProcess(void)
+/*void LightOrderProcess(unsigned char deviceId)
 {
     unsigned char i;
     unsigned char pinnum, pinstate;
+
+//  LightConfig[deviceId].GPIO_Port
+//  LightConfig[deviceId].GPIO_Pin
     
-//    for( i=0; i<MAX_LIGHT_NUM; i++)
+
+//  for(i=0; i<MAX_LIGHT_NUM; i++)
+//  {
+//    if( LightState[i].curState != LightState[i].state )
 //    {
-//        if( LightState[i].curState != LightState[i].state)
-//        {
-//            pinnum = LightState[i].outPin;
-//            pinstate = LightState[i].state;
-//            //IOsetState( &PinMapping[pinnum], pinstate);
+//      pinnum = LightState[i].outPin;
+//      pinstate = LightState[i].state;
+//      //IOsetState( &PinMapping[pinnum], pinstate);
 //
-//            LightState[i].curState = LightState[i].state;
-//            LightSendOutputStatus(i);
-//        }
+//      LightState[i].curState = LightState[i].state;
+//      LightSendOutputStatus(i);
 //    }
+//  }
 }*/
 
+/************************************************************************
+ * Function: LightSendStatus                                            *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description:                                                         *
+ ***********************************************************************/
 void LightSendStatus(void)
 {
     unsigned char i;
@@ -360,16 +415,24 @@ void LightSendStatus(void)
         }
     }
 }
-        
-void LightSendOutputStatus(unsigned char i)
+
+/************************************************************************
+ * Function: LightSendStatus                                            *
+ * input: deviceId                                                      *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description:                                                         *
+ ***********************************************************************/
+void LightSendOutputStatus(unsigned char deviceId)
 {
     unsigned char pinnum, pinstate;
     unsigned char msg[8];
     
-//    msg[0]=OWN_CAN_ID;
-//    msg[1]=i;
-//    msg[2]=LightState[i].state;
-//
-//    CAN_FIFO_add(&CAN_TX_FIFO, CAN_ID_BROADCAST, 3, msg);
+    msg[0] = PROJECT_VERSION;
+    msg[1] = OWN_CAN_ID;
+    msg[2] = LightState[deviceId].state;
+    msg[3] = deviceId;
+
+    CAN_FIFO_add(&CAN_TX_FIFO, CAN_ID_BROADCAST, 4, msg);
 }
 
