@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="pin">
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string"/>
+        <xs:element name="portPin" type="xs:string"/>
+        <xs:element name="analog" type="xs:string"/>
+        <xs:element name="can" type="xs:string"/>
+        <xs:element name="serial" type="xs:string"/>
+        <xs:element name="spi" type="xs:string"/>
+        <xs:element name="i2c" type="xs:string"/>
+        <xs:element name="pwm" type="xs:string"/>
+        <xs:element name="analog" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
