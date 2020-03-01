@@ -1,7 +1,7 @@
 /************************************************************************
  * File Name          : pinCode.c
- * Author             : author
- * Date               : 28/02/2020
+ * Author             : rd
+ * Date               : 23/02/2020
  * Description        :
  ***********************************************************************/
 
@@ -12,6 +12,7 @@
 #include "stm32f10x_lib.h"
 #include "stm32f10x_type.h"
 #include "pinCode.h"
+#include "Std_Types.h"
 
 /************************************************************************
 * DEFINES *
@@ -35,9 +36,6 @@ T_pinCode_state pinCode_state;
 /************************************************************************
 * FUNCTIONS *
 ************************************************************************/
-unsigned char pinCode_ChangeCode(void);
-
-
 
 /************************************************************************
  * Function: pinCode_init                                               *
@@ -168,7 +166,7 @@ void pinCode_mainfunction(void)
  ***********************************************************************/
 unsigned char pinCode_readDigit(unsigned char digit)
 {
-    unsigned char retVal;
+    unsigned char retVal = ret_NOK;
 
     if(digit < 10)
     {
@@ -176,11 +174,8 @@ unsigned char pinCode_readDigit(unsigned char digit)
         pinCode_code += digit;
         pinCode_digit_pos++;
         pinCode_lastDigit = digit;
-        retVal =  0;
-    }
-    else
-    {
-        retVal = 1;
+
+        retVal =  ret_OK;
     }
 
     return retVal;
@@ -219,5 +214,3 @@ unsigned char pinCode_ChangeCode(void)
 
     return retVal;
 }
-
-

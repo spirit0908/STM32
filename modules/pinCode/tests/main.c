@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "pinCode.h"
 
 /************************************************
  *
@@ -58,27 +58,27 @@ typedef struct
 
 unsigned char TEST_pinCode_readDigit(void)
 {
-	T_test_readDigit_seq test_readDigit_seq[] =
+    T_test_readDigit_seq test_readDigit_seq[] =
     {
         { {1, 2,  3, 4, 0, 0, 0, 0, 0, 0}, {1, 12, 123, 1234,     0, 0, 0, 0, 0}, 4 },
-		{ {0, 0,  0, 0, 0, 0, 0, 0, 0, 0}, {0, 00, 000, 0000,     0, 0, 0, 0, 0}, 4 },
-		{ {4, 3,  2, 1, 0, 0, 0, 0, 0, 0}, {4, 43, 432, 4321,     0, 0, 0, 0, 0}, 4 },
+        { {0, 0,  0, 0, 0, 0, 0, 0, 0, 0}, {0, 00, 000, 0000,     0, 0, 0, 0, 0}, 4 },
+        { {4, 3,  2, 1, 0, 0, 0, 0, 0, 0}, {4, 43, 432, 4321,     0, 0, 0, 0, 0}, 4 },
 
-		{ {1, 2,  3, 4, 0, 0, 0, 0, 0, 0}, {1,  1,   1,    1,     0, 0, 0, 0, 0}, 1 },
-		{ {1, 1,  1, 1, 1, 1, 1, 1, 1, 1}, {1, 11, 111, 1111, 11111, 111111, 1111111, 11111111, 111111111, 1111111111}, 10 },
+        { {1, 2,  3, 4, 0, 0, 0, 0, 0, 0}, {1,  1,   1,    1,     0, 0, 0, 0, 0}, 1 },
+        { {1, 1,  1, 1, 1, 1, 1, 1, 1, 1}, {1, 11, 111, 1111, 11111, 111111, 1111111, 11111111, 111111111, 1111111111}, 10 },
 
 
         { {0, 0,  0, 0, 0, 0, 0, 0, 0, 0}, {0,  0,   0,    0,     0, 0, 0, 0, 0}, 8 },
         { {9, 9,  9, 9, 9, 0, 0, 0, 0, 0}, {9, 99, 999, 9999, 99999, 0, 0, 0, 0}, 5 },
         { {5, 5, 55, 5, 5, 0, 0, 0, 0, 0}, {5, 55,  55,  555,  5555, 0, 0, 0, 0}, 4 },
 
-		{ {0xA, 0xA, 0xA, 0xA, 0, 0, 0, 0, 0, 0}, {0, 0,  0,  0, 0, 0, 0, 0, 0}, 4 },
+        { {0xA, 0xA, 0xA, 0xA, 0, 0, 0, 0, 0, 0}, {0, 0,  0,  0, 0, 0, 0, 0, 0}, 4 },
     };
 
-	unsigned char TEST_READDIGIT_SEQ_SIZE = (sizeof(test_readDigit_seq)/sizeof(T_test_readDigit_seq));
+    unsigned char TEST_READDIGIT_SEQ_SIZE = (sizeof(test_readDigit_seq)/sizeof(T_test_readDigit_seq));
 
-	for(int i=0; i<TEST_READDIGIT_SEQ_SIZE ;i++)
-	{
+    for(int i=0; i<TEST_READDIGIT_SEQ_SIZE ;i++)
+    {
         assert_init("TEST_pinCode_readDigit", i);
 
         /* Initialize code variables */
@@ -94,7 +94,7 @@ unsigned char TEST_pinCode_readDigit(void)
           f_ret = pinCode_readDigit(test_readDigit_seq[i].digits[j]);
           if(f_ret == 0)
           {
-        	  digit_cpt++;
+              digit_cpt++;
               assert(pinCode_lastDigit == test_readDigit_seq[i].digits[j], "wrong last digit\n");
           }
           assert(pinCode_code == test_readDigit_seq[i].pinCodes[j], "wrong pin code\n");
@@ -117,19 +117,19 @@ typedef struct
 
 unsigned char TEST_pinCode_ChangeCode(void)
 {
-	T_test_changeCode_seq test_changeCode_seq[] =
+    T_test_changeCode_seq test_changeCode_seq[] =
     {
         {   1234,  4, 1234, 4, 0 },
-		{     00,  2, 1234, 4, 1 },
-		{      0, 10, 1234, 4, 1 },
-		{   0000,  4, 0000, 4, 0 },
+        {     00,  2, 1234, 4, 1 },
+        {      0, 10, 1234, 4, 1 },
+        {   0000,  4, 0000, 4, 0 },
         {  54321, 5, 54321, 5, 0 },
         { 563412, 6, 563412, 6, 0 },
-		{ 99999999, 8, 99999999, 8, 0 },
-		{ 563412, 5, 99999999, 8, 1 },
+        { 99999999, 8, 99999999, 8, 0 },
+        { 563412, 5, 99999999, 8, 1 },
     };
 
-	unsigned char TEST_CHANGECODE_SEQ_SIZE = (sizeof(test_changeCode_seq)/sizeof(T_test_changeCode_seq));
+    unsigned char TEST_CHANGECODE_SEQ_SIZE = (sizeof(test_changeCode_seq)/sizeof(T_test_changeCode_seq));
 
     /* Initialize code variables */
     pinCode_secretCode = 1234;
@@ -138,23 +138,23 @@ unsigned char TEST_pinCode_ChangeCode(void)
     pinCode_digit_pos=0;
     pinCode_lastDigit=0;
 
-	for(int i=0; i<TEST_CHANGECODE_SEQ_SIZE ;i++)
-	{
+    for(int i=0; i<TEST_CHANGECODE_SEQ_SIZE ;i++)
+    {
         unsigned char f_ret;
 
-		assert_init("pinCode_ChangeCode", i);
+        assert_init("pinCode_ChangeCode", i);
 
-		pinCode_code = test_changeCode_seq[i].code;
-		pinCode_digit_pos = test_changeCode_seq[i].codeLen;
+        pinCode_code = test_changeCode_seq[i].code;
+        pinCode_digit_pos = test_changeCode_seq[i].codeLen;
 
-		/* Call function */
-		f_ret = pinCode_ChangeCode();
+        /* Call function */
+        f_ret = pinCode_ChangeCode();
 
-		assert(pinCode_secretCode == test_changeCode_seq[i].secredCode, "wrong code");
-		assert(pinCode_secretLen == test_changeCode_seq[i].secretLen, "wrong codeLen");
-		assert(f_ret == test_changeCode_seq[i].retval, "wrong return value");
+        assert(pinCode_secretCode == test_changeCode_seq[i].secredCode, "wrong code");
+        assert(pinCode_secretLen == test_changeCode_seq[i].secretLen, "wrong codeLen");
+        assert(f_ret == test_changeCode_seq[i].retval, "wrong return value");
 
-		assert_end();
+        assert_end();
     }
 
 }
