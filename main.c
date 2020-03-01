@@ -99,10 +99,6 @@ CanTxMsg CanTxMessage;
  *******************************************************************************/
 int main(void)
 {
-#ifdef DEBUG
-    debug();
-#endif
-//    u16 R.cvData=0;
     CanTxMsg TxMessage;
 
     /* SYSTEM DRIVER INIT */
@@ -116,6 +112,11 @@ int main(void)
     /* Gpio */
     GPIOInit();
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
+    GPIO_ResetBits(GPIOB, CAN_RS_PIN);
+
+    /* PWM */
+    PWMInit();
+
 
     /* COM DRIVER INIT */
     /* Serial Port */
@@ -127,27 +128,13 @@ int main(void)
     /* CAN Bus */
     CanInit();
 
+
+    /* SYSTEM TIME INIT */
     /* Timer */
     TimerInit();
 
     /* Interrupt */
     ITInit();
-
-    /* PWM */
-    PWMInit();
-
-    Light_Init();
-
-    /* CONFIG INIT */
-
-    GPIO_ResetBits(GPIOB, CAN_RS_PIN);
-
-    TxMessage.StdId = 0x444;
-    TxMessage.IDE = CAN_ID_STD;
-    TxMessage.RTR = CAN_RTR_DATA;
-    TxMessage.DLC = 1;
-    TxMessage.Data[0] = 0xAA;
-    CAN_Transmit(&TxMessage);
 
 
     /* MODULE INIT */
@@ -159,12 +146,26 @@ int main(void)
     /* FIFO table initialization */
     FIFO_Init(FIFO_table);
 
-    /* LCD Initialization */
+    /* Light initialization*/
+    Light_Init();
+
+    /* LCD initialization */
     LcdInit();
     LcdClear();
 
     LcdMenu_Init();
     LcdMenu_Display();
+
+
+    /* System ready*/
+
+    /* Send a test CAN frame */
+    TxMessage.StdId = 0x444;
+    TxMessage.IDE = CAN_ID_STD;
+    TxMessage.RTR = CAN_RTR_DATA;
+    TxMessage.DLC = 1;
+    TxMessage.Data[0] = 0xAA;
+    CAN_Transmit(&TxMessage);
 
     // Send "START" message on the serial bus
     serial_SendMessage("START\n", 6);
@@ -214,7 +215,7 @@ void GPIOInit(void)
 
     /* Configure PA.6 as Alternate Function push-pull - TIM3_CH1*/
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;f
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
