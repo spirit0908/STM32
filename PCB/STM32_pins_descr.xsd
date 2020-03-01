@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="STM32F103C8T6">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="pin" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="portPin" type="xs:string"/>
+            <xs:element name="aName" type="xs:string" minOccurs="0"/>
+            <xs:element name="analog" type="xs:string" minOccurs="0"/>
+            <xs:element name="usb" type="xs:string" minOccurs="0"/>
+            <xs:element name="can" type="xs:string" minOccurs="0"/>
+            <xs:element name="serial" type="xs:string" minOccurs="0"/>
+            <xs:element name="spi" type="xs:string" minOccurs="0"/>
+            <xs:element name="i2c" type="xs:string" minOccurs="0"/>
+            <xs:element name="pwm" type="xs:string" minOccurs="0"/>
+          </xs:sequence>
+        <xs:attribute name="id"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>
