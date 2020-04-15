@@ -9,8 +9,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 # Pinout
 
 <xsl:text>
-Pin |  Name  | Port/Pin | AName | Dig IN | dig OUT | Analog | USB |CAN | Serial | SPI | I2C| PWM
-----|--------|----------|-------|--------|---------|--------|-----|-----|--------|-----|----|-----
+Pin |  Name  | Port/Pin | AName | Analog | USB |CAN | Serial | SPI | I2C| PWM
+----|--------|----------|-------|--------|-----|----|--------|-----|----|-----
 </xsl:text>
   <xsl:for-each select="pin">
     <xsl:text> </xsl:text>
@@ -21,10 +21,6 @@ Pin |  Name  | Port/Pin | AName | Dig IN | dig OUT | Analog | USB |CAN | Serial 
     <xsl:value-of select="portPin"/>
     <xsl:text> | </xsl:text>
     <xsl:value-of select="aName"/>
-    <xsl:text> | </xsl:text>
-    <xsl:value-of select="digIn"/>
-    <xsl:text> | </xsl:text>
-    <xsl:value-of select="digOut"/>
     <xsl:text> | </xsl:text>
     <xsl:value-of select="analog"/>
     <xsl:text> | </xsl:text>

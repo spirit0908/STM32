@@ -14,275 +14,161 @@
     <pin id="2">
       <name>GND</name>
       <portPin></portPin>
-      <aName></aName>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="3">
       <name>+5V</name>
       <portPin></portPin>
       <aName>D15</aName>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="4">
       <name>PB9</name>
       <portPin>PB_9</portPin>
       <aName>D14</aName>
       <can>CAN1 TD</can>
-      <serial></serial>
-      <spi></spi>
       <i2c>I2C1 SDA</i2c>
-      <pwm></pwm>
     </pin>
     <pin id="5">
       <name>PB8</name>
       <portPin>PB_8</portPin>
-      <analog>D15</analog>
+      <aName>D15</aName>
       <can>CAN1 RD</can>
-      <serial></serial>
-      <spi></spi>
       <i2c>I2C1 SCL</i2c>
-      <pwm>		</pwm>
     </pin>
     <pin id="6">
       <name>PB7</name>
       <portPin>PB_7</portPin>
-      <analog></analog>
-      <can></can>
       <serial>Serial1 RX</serial>
-      <spi></spi>
       <i2c>I2C1 SDA</i2c>
-      <pwm></pwm>
     </pin>
     <pin id="7">
       <name>PB6	</name>
       <portPin>PB_6	</portPin>
       <aName>D10</aName>
-      <can></can>
       <serial>Serial1 TX</serial>
-      <spi></spi>
       <i2c>I2C1 SCL</i2c>
-      <pwm></pwm>
     </pin>
     <pin id="8">
       <name>PB5</name>
       <portPin>PB_5</portPin>
       <aName>D4</aName>
-      <can></can>
-      <serial></serial>
       <spi>SPI1 MOSI</spi>
-      <i2c></i2c>
       <pwm>PWM3/2</pwm>
     </pin>
     <pin id="9">
       <name>PB4</name>
       <portPin>PB_4</portPin>
       <aName>D5</aName>
-      <can></can>
-      <serial></serial>
       <spi>SPI1 MISO</spi>
-      <i2c></i2c>
       <pwm>PWM3/1</pwm>
     </pin>
     <pin id="10">
       <name>PB3</name>
       <portPin>PB_3</portPin>
       <aName>D3</aName>
-      <can></can>
-      <serial></serial>
       <spi>SPI1 SCK</spi>
-      <i2c></i2c>
       <pwm>PWM2/2</pwm>
     </pin>
     <pin id="11">
       <name>PA15</name>
       <portPin>PA_15</portPin>
-      <aName></aName>
-      <can></can>
-      <serial></serial>
       <spi>SPI1 NSS</spi>
-      <i2c></i2c>
       <pwm>PWM2/1</pwm>
     </pin>
     <pin id="12">
       <name>PA12</name>
       <portPin>PA_12</portPin>
-      <aName></aName>
       <usb>USB DP</usb>
       <can>CAN1 TD</can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="13">
       <name>PA11</name>
       <portPin>PA_11</portPin>
-      <aName></aName>
       <usb>USB DM</usb>
       <can>CAN1 RD</can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
       <pwm>PWM1/4</pwm>
     </pin>
     <pin id="14">
       <name>PA10</name>
       <portPin>PA_10</portPin>
       <aName>D2</aName>
-      <can></can>
       <serial>Serial1 TX</serial>
-      <spi></spi>
-      <i2c></i2c>
       <pwm>PWM1/3</pwm>
     </pin>
     <pin id="15">
       <name>PA9</name>
       <portPin>PA_9</portPin>
       <aName>D8</aName>
-      <can></can>
       <serial>Serial1 RX</serial>
-      <spi></spi>
-      <i2c></i2c>
       <pwm>PWM1/2</pwm>
     </pin>
     <pin id="16">
       <name>PA8</name>
       <portPin>PA_8</portPin>
       <aName>D7</aName>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
       <pwm>PWM1/1</pwm>
     </pin>
     <pin id="17">
       <name>PB15</name>
       <portPin>PB_15</portPin>
-      <aName></aName>
-      <can></can>
-      <serial></serial>
       <spi>SPI2 MOSI</spi>
-      <i2c></i2c>
       <pwm>PWM1/2N</pwm>
     </pin>
     <pin id="18">
       <name>PB14</name>
       <portPin>PB_14</portPin>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
       <spi>SPI2 MISO</spi>
-      <i2c></i2c>
       <pwm>PWM1/2N</pwm>
     </pin>
     <pin id="19">
       <name>PB13</name>
       <portPin>PB_13</portPin>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
       <spi>SPI2 SCK</spi>
-      <i2c></i2c>
       <pwm>PWM1/1N</pwm>
     </pin>
     <pin id="20">
       <name>PB12</name>
       <portPin>PB_12</portPin>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
       <spi>SPI2 NSS</spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="21">
       <name>VSS</name>
       <portPin></portPin>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="22">
       <name>VSS</name>
       <portPin></portPin>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="23">
       <name>+3.3V</name>
       <portPin></portPin>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="24">
       <name>RESET</name>
       <portPin></portPin>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="25">
       <name>PB11</name>
-      <portPin></portPin>
-      <analog></analog>
-      <can></can>
+      <portPin>PB_11</portPin>
       <serial>Serial3 RX</serial>
-      <spi></spi>
       <i2c>I2C2 SDA</i2c>
-      <pwm></pwm>
     </pin>
     <pin id="26">
       <name>PB10</name>
       <portPin>PB_10</portPin>
       <aName>D6</aName>
-      <can></can>
       <serial>Serial3 TX</serial>
-      <spi></spi>
       <i2c>I2C2 SCL</i2c>
-      <pwm></pwm>
     </pin>
     <pin id="27">
       <name>PB1</name>
       <portPin>PB_1</portPin>
-      <aName></aName>
       <analog>Analog In</analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="28">
       <name>PB0</name>
       <portPin>PB_0</portPin>
       <aName>A3</aName>
       <analog>Analog In</analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
       <pwm>PWM3/3</pwm>
     </pin>
     <pin id="29">
@@ -290,10 +176,7 @@
       <portPin>PA_7</portPin>
       <aName>D11</aName>
       <analog>Analog In</analog>
-      <can></can>
-      <serial></serial>
       <spi>SPI1 MOSI</spi>
-      <i2c></i2c>
       <pwm>PWM3/2</pwm>
     </pin>
     <pin id="30">
@@ -301,10 +184,7 @@
       <portPin>PA_6</portPin>
       <aName>D12</aName>
       <analog>Analog In</analog>
-      <can></can>
-      <serial></serial>
       <spi>SPI1 MISO</spi>
-      <i2c></i2c>
       <pwm>PWM3/1</pwm>
     </pin>
     <pin id="31">
@@ -312,32 +192,21 @@
       <portPin>PA_5</portPin>
       <aName>D13</aName>
       <analog>Analog In</analog>
-      <can></can>
-      <serial></serial>
       <spi>SPI1 SCK</spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="32">
       <name>PA4</name>
       <portPin>PA_4</portPin>
       <aName>A2</aName>
       <analog>Analog In</analog>
-      <can></can>
-      <serial></serial>
       <spi>SPI1 NSS</spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="33">
       <name>PA3</name>
       <portPin>PA_3</portPin>
       <aName>D0</aName>
       <analog>Analog In</analog>
-      <can></can>
       <serial>Serial2 RX</serial>
-      <spi></spi>
-      <i2c></i2c>
       <pwm>PWM2/4</pwm>
     </pin>
     <pin id="34">
@@ -345,10 +214,7 @@
       <portPin>PA_2</portPin>
       <aName>D1</aName>
       <analog>Analog In</analog>
-      <can></can>
       <serial>Serial2 TX</serial>
-      <spi></spi>
-      <i2c></i2c>
       <pwm>PWM2/3</pwm>
     </pin>
     <pin id="35">
@@ -356,10 +222,6 @@
       <portPin>PA_1</portPin>
       <aName>A1</aName>
       <analog>Analog In</analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
       <pwm>PWM2/2</pwm>
     </pin>
     <pin id="36">
@@ -367,53 +229,22 @@
       <portPin>PA_0</portPin>
       <aName>A0</aName>
       <analog>Analog In</analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="37">
       <name>PC15</name>
       <portPin>PC_15</portPin>
-      <aName></aName>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="38">
       <name>PC14</name>
       <portPin>PC_14</portPin>
-      <aName></aName>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="39">
       <name>PC13</name>
       <portPin>PC_13</portPin>
       <aName>C13</aName>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
     <pin id="40">
       <name>VBAT</name>
       <portPin></portPin>
-      <aName></aName>
-      <analog></analog>
-      <can></can>
-      <serial></serial>
-      <spi></spi>
-      <i2c></i2c>
-      <pwm></pwm>
     </pin>
 </STM32F103C8T6>
