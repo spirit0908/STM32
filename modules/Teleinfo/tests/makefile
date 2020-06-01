@@ -40,7 +40,7 @@ test:
 
 
 runtest: test
-	./main
+	./test_main
 
 clean:
-	rm main
+	rm test_main
