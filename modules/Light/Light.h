@@ -44,13 +44,6 @@
 enum
 {
     Light_ID_0 = 0,
-    Light_ID_1,
-//    Light_ID_2,
-//    Light_ID_3,
-//    Light_ID_4,
-//    Light_ID_5,
-//    Light_ID_6,
-//    Light_ID_7,
     
     // Keep this position
     Light_ID_MAX
@@ -58,16 +51,10 @@ enum
     
 #define MAX_LIGHT_NUM Light_ID_MAX
 
-#define LIGHT_TYPE_ACTIVE   (0x80);//0b10000000  //1<<7
-#define montest 0
-//#define LIGHT_TYPE_DIMMABLE (0x00)  //1<<6
-#define LIGHT_TYPE_TIMER    (0b00100000)  //1<<5
-
-typedef struct
-{
-    GPIO_TypeDef* GPIO_Port;
-    u16 GPIO_Pin;
-} T_LightConfig;
+#define LIGHT_TYPE_ACTIVE   (0x80)
+#define LIGHT_TYPE_DIMMABLE (0x40)
+#define LIGHT_TYPE_TIMER    (0x20)
+#define LIGHT_TYPE_RGB      (0x10)
 
 
 typedef struct
@@ -79,23 +66,31 @@ typedef struct
     unsigned char RESERVED:4;
 } T_LightStateType;
 
-
 typedef struct
 {
+    GPIO_TypeDef* GPIO_Port;
+    u16 GPIO_Pin;
     T_LightStateType type;
     // type of output is:
     // - bit 7: 0: output is inactive / 1: output is active
     // - bit 6: 0: output is not dimmable / 1:output is dimmable
     // - bit 5: 0: timer can not be set / 1: timer can be set
     // - bit 4-0: NA
-//    unsigned char outPin;
-//    unsigned char curState;             // State/Brightness of current output: form 00 (OFF) to FF (MAX).
-    unsigned char state;                  // State/Brightness of current output: form 00 (OFF) to FF (MAX).
 //    unsigned char brightness_default;   // default brightness value
-//    unsigned char brightness_last;      // last brightness value recorded
 //    unsigned int  timer_default;        // default timer value
+} T_LightConfig;
+
+
+typedef struct
+{
+    /* Config */
+    unsigned char state;                  // State/Brightness of current output: form 00 (OFF) to FF (MAX).
+    unsigned char order;                  // State/Brightness of received order: form 00 (OFF) to FF (MAX).
+//    unsigned char brightness_last;      // last brightness value recorded
 //    unsigned int  timer_val;            // Current timer value
 } T_LightState;
+
+
 
 
 /************************************************************************

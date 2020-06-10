@@ -23,11 +23,11 @@
 ************************************************************************/
 #define fct_group_size ( sizeof(fct_group)/sizeof(T_FctGrp) ) //(sizeof(fct_group) / sizeof(T_FctGrp))
 
-#define GETVERSION(data)        (data[0])
-#define COMMAND_TYPE(data)      (data[1]&0xF0)
-#define COMMAND_ORDER(data)     (data[1]&0x0F)
-#define COMMAND_ID(data)        (data[2])
-#define COMMAND_PARAM_PTR(data) (&data[3])
+// #define GETVERSION(data)        (data[0])
+#define COMMAND_TYPE(data)      (data[0]&0xF0)
+#define COMMAND_ORDER(data)     (data[0])
+#define COMMAND_ID(data)        (data[1])
+#define COMMAND_PARAM_PTR(data) (&data[2])
 
 #define FRAME_TYPE_COMMAND      1
 #define FRAME_TYPE_CONFIG       2
@@ -40,21 +40,21 @@
 T_FctGrp fct_group[] =
 {
     /* ElemId, type , Addr, FctId, pRxIndication */
-    { 0u, TYPE_LIGHT, 0x123, 0u, LightOrderTmt }, // FCT_GROUP 0 - SORTIE 0 - 
-    { 1u, TYPE_LIGHT, 0x123, 1u, LightOrderTmt }, // SORTIE 1
-    { 2u, TYPE_LIGHT, 0x123, 2u, LightOrderTmt }, // SORTIE 2
-    { 3u, TYPE_LIGHT, 0x123, 3u, LightOrderTmt }, // SORTIE 3
-    { 4u, TYPE_LIGHT, 0x123, 4u, LightOrderTmt }, // SORTIE 4
-    { 5u, TYPE_LIGHT, 0x123, 5u, LightOrderTmt }, // SORTIE 5
-    { 6u, TYPE_LIGHT, 0x123, 6u, LightOrderTmt }, // SORTIE 6
-    { 7u, TYPE_LIGHT, 0x123, 7u, LightOrderTmt }  // SORTIE 7
+    { 0u, TYPE_LIGHT, 0x123, 0u, &LightOrderTmt }, // FCT_GROUP 0 - SORTIE 0 - 
+    { 1u, TYPE_LIGHT, 0x123, 1u, &LightOrderTmt }, // SORTIE 1
+    { 2u, TYPE_LIGHT, 0x123, 2u, &LightOrderTmt }, // SORTIE 2
+    { 3u, TYPE_LIGHT, 0x123, 3u, &LightOrderTmt }, // SORTIE 3
+    { 4u, TYPE_LIGHT, 0x123, 4u, &LightOrderTmt }, // SORTIE 4
+    { 5u, TYPE_LIGHT, 0x123, 5u, &LightOrderTmt }, // SORTIE 5
+    { 6u, TYPE_LIGHT, 0x123, 6u, &LightOrderTmt }, // SORTIE 6
+    { 7u, TYPE_LIGHT, 0x123, 7u, &LightOrderTmt }  // SORTIE 7
 };
 
 T_FctGrp fct_group2[] =
 {
     /* ElemId   , type      , pRxIndication */
-    { Light_ID_0, TYPE_LIGHT, LightOrderTmt },
-    { Light_ID_1, TYPE_LIGHT, LightOrderTmt },
+    // { Light_ID_0, TYPE_LIGHT, LightOrderTmt },
+    // { Light_ID_1, TYPE_LIGHT, LightOrderTmt },
 //    { Light_ID_2, TYPE_LIGHT, LightOrderTmt },
 //    { Light_ID_3, TYPE_LIGHT, LightOrderTmt },
 //    { Light_ID_4, TYPE_LIGHT, LightOrderTmt },
@@ -82,7 +82,7 @@ void OrderProcess(unsigned int CanId, unsigned char msgData[8], unsigned char ms
     unsigned char DeviceId, Order;
     unsigned char *paramPtr;
 
-    if( GETVERSION(msgData) == PROJECT_VERSION )
+    if( CanId == OWN_CAN_ID )
     {
         switch(COMMAND_TYPE(msgData))
         {
@@ -115,16 +115,7 @@ void OrderProcess(unsigned int CanId, unsigned char msgData[8], unsigned char ms
             break;
 
         }
-
     }
-
-        /*
-        //Loop on all functional groups
-        for(i=0; i<fct_group_size; i++)
-        {
-
-        }
-        */
 }
 
 /************************************************************************

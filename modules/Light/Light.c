@@ -24,38 +24,15 @@
 ************************************************************************/
 T_LightConfig LightConfig[MAX_LIGHT_NUM]=
 {
-    // port - pin -
-    {GPIOA, GPIO_Pin_4},
-    {GPIOA, GPIO_Pin_5},
+    /* Port | Pin | type */
+    { GPIOC , GPIO_Pin_13, {0} }
 };
-
-//T_LightState LightState[MAX_LIGHT_NUM]=
-//{
-//    // light state
-//    {0},
-//    {0}
-//};
 
 T_LightState LightState[MAX_LIGHT_NUM]=
 {
-    /*type | outPin|curState|state|brightness_default|brightness_last|timer_default|timer_val|Current timer value*/
-    {{0}, 0},
-    {{0}, 0},
-//  {0b10100000, 0, 0       , 0   ,12                , 12            , 0           , 0       , 0}, // RELAY 1
-//  {0b10100000, 1, 0       , 0   ,12                , 12            , 0           , 0       , 0}, // RELAY 2
-////    {0b10100000, 2, 0       , 0   ,12                , 12            , 0           , 0       , 0},
-////    {0b10100000, 3, 0       , 0   ,12                , 12            , 0           , 0       , 0}
+    /* state | order */
+    {0, 0}
 };
-
-
-/* CFG */
-
-//LightDesc[]=
-//{
-//      {
-//              type: dimmable / RGB /
-//      },
-//};
 
 
 /************************************************************************
@@ -76,23 +53,12 @@ void Light_Init(void)
     
     for(i=0u; i<MAX_LIGHT_NUM; i++)
     {
-        LightState[i].type.active   = 1u; /*LIGHT_TYPE_ACTIVE;*/
-        LightState[i].type.dimmable = 0u; /*LIGHT_TYPE_ACTIVE;*/
-        LightState[i].type.timer    = 1u; /*LIGHT_TYPE_ACTIVE;*/
-        LightState[i].type.ledStrip = 1u; /*LIGHT_TYPE_ACTIVE;*/
-
-        //LightState[i].outPin;
-        //LightState[i].curState;             // State/Brightness of current output: form 00 (OFF) to FF (MAX).
-
         LightState[i].state = 0u;
-//        LightState[i].curState=0u;
-//        LightState[i].brightness_last=0u;
-//        LightState[i].timer_val=0u;
+        LightState[i].order = 0u;
+//      LightState[i].timer_val=0u;
 
-        //LightState[i].brightness_default;   // default brightness value
-        //LightState[i].brightness_last;      // last brightness value recorded
-        //LightState[i].timer_default;        // default timer value
-        //LightState[i].timer_val;            // Current timer value
+//      LightState[i].brightness_last = LightConfig[i].brightness_default;      // last brightness value recorded
+//      LightState[i].timer_val = LightConfig[i].timer_default;
     }
 }
 
@@ -150,10 +116,9 @@ void Light_Init_cfg(void)
  ***********************************************************************/
 unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigned char *param )
 {
-    unsigned char brightness;
     unsigned char ret_value=ret_OK;
     
-    if( LightId > MAX_LIGHT_NUM )
+    if( LightId >= MAX_LIGHT_NUM )
     {
         return ret_NOK;
     }
@@ -167,10 +132,11 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
 //        }
 //        else
 //        {
-//            return ret_OK;
+//            return ret_not_OK;
 //        }
 //    }
 
+    
     switch( Order )
     {
         case LIGHT_OFF:
@@ -182,6 +148,7 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
 //            // Reset the timer and set the state to OFF:
 //            LightState[LightId].timer_val = 0;
             LightState[LightId].state = 0;
+            GPIO_ResetBits(LightConfig[LightId].GPIO_Port, LightConfig[LightId].GPIO_Pin);
         break;
         
         case LIGHT_ON:
@@ -192,6 +159,7 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
             {
                 // If the light state was OFF before, switch it to on at the max brightness
                 LightState[LightId].state = 0xFF;
+                GPIO_SetBits(LightConfig[LightId].GPIO_Port, LightConfig[LightId].GPIO_Pin);
             }
             else if( LightState[LightId].state == 0xFF)
             {
@@ -204,6 +172,7 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
 //
 //                // Set maximum brightness
                 LightState[LightId].state = 0xFF;
+                GPIO_SetBits(LightConfig[LightId].GPIO_Port, LightConfig[LightId].GPIO_Pin);
             }
         break;
 
@@ -214,6 +183,7 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
                 // Store the current brightness and switch it OFF.
 //                LightState[LightId].brightness_last = LightState[LightId].state ;
                 LightState[LightId].state = 0;
+                GPIO_ResetBits( LightConfig[LightId].GPIO_Port, LightConfig[LightId].GPIO_Pin);
             }
             else
             {
@@ -238,6 +208,8 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
 //                else
 //                {
                     LightState[LightId].state = 0xFF;
+                    GPIO_SetBits( LightConfig[LightId].GPIO_Port, LightConfig[LightId].GPIO_Pin);
+
 //                }
             }
         break;
@@ -373,29 +345,6 @@ unsigned char LightOrderTmt( unsigned char LightId, unsigned char Order, unsigne
 }
 
 
-/*void LightOrderProcess(unsigned char deviceId)
-{
-    unsigned char i;
-    unsigned char pinnum, pinstate;
-
-//  LightConfig[deviceId].GPIO_Port
-//  LightConfig[deviceId].GPIO_Pin
-    
-
-//  for(i=0; i<MAX_LIGHT_NUM; i++)
-//  {
-//    if( LightState[i].curState != LightState[i].state )
-//    {
-//      pinnum = LightState[i].outPin;
-//      pinstate = LightState[i].state;
-//      //IOsetState( &PinMapping[pinnum], pinstate);
-//
-//      LightState[i].curState = LightState[i].state;
-//      LightSendOutputStatus(i);
-//    }
-//  }
-}*/
-
 /************************************************************************
  * Function: LightSendStatus                                            *
  * input: none                                                          *
@@ -417,6 +366,25 @@ void LightSendStatus(void)
 }
 
 /************************************************************************
+ * Function: LightMainFunction                                          *
+ * input: none                                                          *
+ * output: none                                                         *
+ * return: none                                                         *
+ * description:                                                         *
+ ***********************************************************************/
+void LightMainFunction(void)
+{
+    unsigned char i;
+
+    for( i=0; i<MAX_LIGHT_NUM; i++)
+    {
+    	// send state
+        LightSendOutputStatus(i);
+
+    }
+}
+
+/************************************************************************
  * Function: LightSendStatus                                            *
  * input: deviceId                                                      *
  * output: none                                                         *
@@ -425,13 +393,13 @@ void LightSendStatus(void)
  ***********************************************************************/
 void LightSendOutputStatus(unsigned char deviceId)
 {
-    unsigned char pinnum, pinstate;
+    // unsigned char pinnum;
+    // unsigned char pinstate;
     unsigned char msg[8];
     
-    msg[0] = PROJECT_VERSION;
-    msg[1] = OWN_CAN_ID;
-    msg[2] = LightState[deviceId].state;
-    msg[3] = deviceId;
+    msg[0] = OWN_CAN_ID;
+    msg[1] = LightState[deviceId].state;
+    msg[2] = deviceId;
 
     CAN_FIFO_add(&CAN_TX_FIFO, CAN_ID_BROADCAST, 4, msg);
 }

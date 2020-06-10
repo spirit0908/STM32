@@ -879,8 +879,8 @@ unsigned long int Ascii2Int(unsigned char *str, unsigned char len)
 
     for(i=0; i<len; i++)
     {
-        if( (str[i] >= 'A') && (str[i]<='Z') ||
-            (str[i] >= 'a') && (str[i]<='z') )
+        if( ((str[i] >= 'A') && (str[i]<='Z')) ||
+            ((str[i] >= 'a') && (str[i]<='z')) )
         {
             tmp = tmp*10;
             tmp += ( str[i] - 48 );

@@ -33,7 +33,7 @@ typedef struct{
     unsigned char type;
     unsigned int  Addr;
     unsigned char FctId;
-    unsigned char (*pRxIndication)();
+    unsigned char (*pRxIndication)(unsigned char a, unsigned char b, unsigned char *c);
 }T_FctGrp;
 
 
