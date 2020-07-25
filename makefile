@@ -14,7 +14,8 @@ AS = arm-none-eabi-gcc
 ASFLAGS = $(COMPILE_OPTS) -c
 
 LD = arm-none-eabi-gcc
-LDFLAGS = -Wl,--gc-sections,-Map=$(OUT_PATH)/$(MAIN_OUT).map,-cref,-u,Reset_Handler $(INCLUDE_DIRS) $(LIBRARY_DIRS) -T stm32f103c8t6.ld
+#LDFLAGS = -Wl,--gc-sections,-Map=$(OUT_PATH)/$(MAIN_OUT).map,-cref,-u,Reset_Handler $(INCLUDE_DIRS) $(LIBRARY_DIRS) -T stm32f103c8t6.ld
+LDFLAGS = -Wl,--gc-sections,-cref,-u,Reset_Handler $(INCLUDE_DIRS) $(LIBRARY_DIRS) -T stm32f103c8t6.ld
 
 OBJCP = arm-none-eabi-objcopy
 OBJCPFLAGS = -O binary
