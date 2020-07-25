@@ -70,6 +70,9 @@ INC_FILES = \
 
 $(MAIN_OUT_ELF): updateIncFiles $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a
 	$(LD) $(LDFLAGS) $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a --output $@
+	ls -la
+	ls -la out/
+
 
 $(MAIN_OUT_BIN): $(MAIN_OUT_ELF)
 	$(OBJCP) $(OBJCPFLAGS) $< $@
