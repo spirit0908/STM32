@@ -48,6 +48,7 @@ SRC_FILES = \
   modules/PushButton/PushButton.c \
   modules/LedStrip/LedStrip.c \
   modules/Heating/Heating.c \
+  modules/Security/Security.c \
   serial.c
 
 INC_FILES = \
@@ -65,6 +66,7 @@ INC_FILES = \
   modules/PushButton/PushButton.h \
   modules/LedStrip/LedStrip.h \
   modules/Heating/Heating.h \
+  modules/Security/Security.h \
   serial.h
 
 $(MAIN_OUT_ELF): updateIncFiles $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a
@@ -79,6 +81,7 @@ $(MAIN_OUT_BIN): $(MAIN_OUT_ELF)
 updateIncFiles:
 	mkdir -p build/src
 	mkdir -p build/inc
+	mkdir -p out/
 #	cp $(SRC_FILES) build/src
 	cp $(INC_FILES) build/inc
 
