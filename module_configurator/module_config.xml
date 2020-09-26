@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<span>
+  <generatorConfig>
+    <ConfigName>ConfigTest</ConfigName>
+    <outputPath>./output/generate/</outputPath>
+    <mcUid>000</mcUid>
+    <mcAddress>0x48</mcAddress>
+  </generatorConfig> 
+  <Switch>
+    <pushButton id="1">
+      <name>PB_UP</name>
+      <port>GPIOx</port>
+      <pin>PinY</pin>
+      <pushConfig>
+        <shortPush>
+          <action>LcdMenu_MenuUp</action>
+          <address>0x123</address>
+        </shortPush>
+        <longPush>
+          <action>LcdMenu_MenuTop</action>
+          <address>0x123</address>
+        </longPush>
+        <configPush>
+          <action>NULL</action>
+          <address></address>
+        </configPush>
+      </pushConfig>
+      <ledStatus>
+        <activated>yes</activated>
+        <pushConfigId>0</pushConfigId>
+        <fondu>yes</fondu>
+      </ledStatus>
+    </pushButton>
+    <pushButton id="2">
+      <name>PB_DOWN</name>
+      <port>GPIOp</port>
+      <pin>PinZ</pin>
+      <pushConfig>
+        <shortPush>
+          <action>LcdMenu_MenuDown</action>
+          <address>0x123</address>
+        </shortPush>
+        <longPush>
+          <action>NULL</action>
+          <address></address>
+        </longPush>
+        <configPush>
+          <action>NULL</action>
+          <address></address>
+        </configPush>
+      </pushConfig>
+      <ledStatus>
+        <activated>yes</activated>
+        <pushConfigId>0</pushConfigId>
+        <fondu>yes</fondu>
+      </ledStatus>
+    </pushButton>
+  </Switch>
+  <Lights>
+    <light id="1">
+      <name>Living room</name>
+      <type>
+        <active>YES</active>
+        <dimmer>NO</dimmer>
+        <timer>NO</timer>
+        <ledStrip>NO</ledStrip>
+      </type>
+      <port>GPIOA</port>
+      <pin>Pin1</pin>
+      <brightness_default></brightness_default>
+      <timer_default></timer_default>
+    </light>
+    <light id="2">
+      <name>Bed room</name>
+      <type>
+        <active>YES</active>
+        <dimmer>YES</dimmer>
+        <timer>NO</timer>
+        <ledStrip>NO</ledStrip>
+      </type>
+      <port>GPIOA</port>
+      <pin>Pin2</pin>
+      <brightness_default>60</brightness_default>
+      <timer_default></timer_default>
+    </light>
+  </Lights>
+  <Heating>
+    <heater id="1">
+      <name>Living room heater 1</name>
+      <zone>LivingRoom</zone>
+      <type>elec</type> <!-- elec/chaudiere -->
+      <port>GPIOx</port>
+      <pin>PinY</pin>
+      <temp_default>19.0</temp_default>
+      <temp_confort>21.0</temp_confort>
+      <mode_gestion>MODE4</mode_gestion>
+    </heater>
+    <heater id="2">
+      <name>Bedroom heater 1</name>
+      <zone>BedRoom</zone>
+      <type>elec</type> <!-- elec/chaudiere -->
+      <port>GPIOx</port>
+      <pin>pin5</pin>
+      <temp_default>18.0</temp_default>
+      <temp_confort>22.0</temp_confort>
+      <mode_gestion>MODE4</mode_gestion>
+    </heater>
+    <thermostat id="1">
+      <name>Thermostat living room</name>
+      <heater_addr></heater_addr>
+    </thermostat>
+    <thermostat id="2">
+      <name>Thermostat bedroom</name>
+      <heater_addr></heater_addr>
+    </thermostat>
+  </Heating>
+  <Security>
+    <element id='1'>
+      <type>door_1</type> <!-- door/magnet/portail/...-->a
+      <zone>Z1</zone>
+      <port>GPIOX</port>
+      <pin>PINy</pin>
+      <mode>NC</mode> <!-- NC/NO -->
+    </element>
+  </Security>
+</span>

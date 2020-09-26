@@ -39,11 +39,11 @@ T_testFunction test_list_config[]=
 };
 #define TEST_LIST_CONFIG_SIZE (sizeof(test_list_config)/sizeof(T_testFunction))
 
-#define TST_ASCII_STX   0x2  //Start of Text
-#define TST_ASCII_ETX   0x3  //End of Text
-#define TST_ASCII_LF    0xa  //Start of label
-#define TST_ASCII_CR    0xd  //End of label
-#define TST_ASCII_SP    0x20 //Space
+#define TST_ASCII_STX   0x2  // Start of Text
+#define TST_ASCII_ETX   0x3  // End of Text
+#define TST_ASCII_LF    0xa  // Start of label
+#define TST_ASCII_CR    0xd  // End of label
+#define TST_ASCII_SP    0x20 // Space
 
 #define TST_RET_OK    0
 #define TST_RET_N_OK  1
@@ -141,6 +141,13 @@ int TEST_teleinfo_rawByte_receive(void)
   TEST_init();
 
   int testStr[10];
+
+//  int testVector[]={ /* testChar, cpt | cpt_out, writeIdx, ReadIdx, NumOfElem */
+//                   { ASCII_STC, 2, 0, 0, 0, 0},
+//                   { }, 
+//                 }
+//  unsigned char testVectorSize = sizeof(testVector)/sizeof(testVectorType);
+
   unsigned char testChar;
   /*
    * Start of transmission
@@ -166,7 +173,7 @@ int TEST_teleinfo_rawByte_receive(void)
   teleinfo_rawByte_receive(testChar);
 
   /* checks */
-  cptTIC_label == 0;
+  assert(cptTIC_label == 0, "STX - wrong cpt");
 
   TIC_Fifo.WriteIdx == 0;
   TIC_Fifo.ReadIdx == 0;
@@ -174,13 +181,13 @@ int TEST_teleinfo_rawByte_receive(void)
 
 
   /* End of transmission */
-  testChar=TST_ASCII_STX;
+  testChar=TST_ASCII_ETX;
 
   cptTIC_label = 2;
   teleinfo_rawByte_receive(testChar);
 
   /* checks */
-  assert(cptTIC_label == 2, "wrong cpt");
+  assert(cptTIC_label == 0, "ETX - wrong cpt");
 
   assert(TIC_Fifo.WriteIdx == 0, "fail1");
   assert(TIC_Fifo.ReadIdx == 0, "fail2");
@@ -614,17 +621,17 @@ int TEST_TeleInfo_Integration(void)
   }
   
   result += tst_cmp(TIC_info.ADCO,    "-------------", 12+1);
-  result += tst_cmp(TIC_info.OPTARIF, "-----",                 4+1);
-  result += tst_cmp(TIC_info.ISOUSC,  "---",                     2+1);
-  result += tst_cmp(TIC_info.HCHC,    "----------",       9+1);
-  result += tst_cmp(TIC_info.HCHP,    "----------",       9+1);
-  result += tst_cmp(TIC_info.PTEC,    "----------",       4+1);
-  result += tst_cmp(TIC_info.IINST,   "-----",                 3+1);
-  result += tst_cmp(TIC_info.ADPS,    "-----",                 3+1);
-  result += tst_cmp(TIC_info.IMAX,    "-----",                 3+1);
-  result += tst_cmp(TIC_info.PAPP,    "-----",                 4+1);
-  result += tst_cmp(TIC_info.HHPHC,   "--",                       1+1);
-  result += tst_cmp(TIC_info.MOTDETAT,"-------",             6+1);
+  result += tst_cmp(TIC_info.OPTARIF, "-----",          4+1);
+  result += tst_cmp(TIC_info.ISOUSC,  "---",            2+1);
+  result += tst_cmp(TIC_info.HCHC,    "----------",     9+1);
+  result += tst_cmp(TIC_info.HCHP,    "----------",     9+1);
+  result += tst_cmp(TIC_info.PTEC,    "----------",     4+1);
+  result += tst_cmp(TIC_info.IINST,   "-----",          3+1);
+  result += tst_cmp(TIC_info.ADPS,    "-----",          3+1);
+  result += tst_cmp(TIC_info.IMAX,    "-----",          3+1);
+  result += tst_cmp(TIC_info.PAPP,    "-----",          4+1);
+  result += tst_cmp(TIC_info.HHPHC,   "--",             1+1);
+  result += tst_cmp(TIC_info.MOTDETAT,"-------",        6+1);
 
   if(result == 0)
   {
@@ -683,17 +690,17 @@ int TEST_TeleInfo_Integration(void)
 
   /* at this point, 2 more index are received: */
   result += tst_cmp(TIC_info.ADCO,    "030022261629\0", 12+1);
-  result += tst_cmp(TIC_info.OPTARIF, "-----",          4+1);
-  result += tst_cmp(TIC_info.ISOUSC,  "---",            2+1);
-  result += tst_cmp(TIC_info.HCHC,    "035047226\0",    9+1); /* LF HCHC space 035047226 space # CR */
-  result += tst_cmp(TIC_info.HCHP,    "027667018\0",    9+1); /* LF HCHP space 027667018 space 8 CR */
-  result += tst_cmp(TIC_info.PTEC,    "-----",          4+1);
-  result += tst_cmp(TIC_info.IINST,   "----",           3+1);
-  result += tst_cmp(TIC_info.ADPS,    "----",           3+1);
-  result += tst_cmp(TIC_info.IMAX,    "----",           3+1);
-  result += tst_cmp(TIC_info.PAPP,    "-----",          4+1);
-  result += tst_cmp(TIC_info.HHPHC,   "--",             1+1);
-  result += tst_cmp(TIC_info.MOTDETAT,"000000\0",       6+1);
+  result += tst_cmp(TIC_info.OPTARIF, "-----",           4+1);
+  result += tst_cmp(TIC_info.ISOUSC,  "---",             2+1);
+  result += tst_cmp(TIC_info.HCHC,    "035047226\0",     9+1); /* LF HCHC space 035047226 space # CR */
+  result += tst_cmp(TIC_info.HCHP,    "027667018\0",     9+1); /* LF HCHP space 027667018 space 8 CR */
+  result += tst_cmp(TIC_info.PTEC,    "-----",           4+1);
+  result += tst_cmp(TIC_info.IINST,   "----",            3+1);
+  result += tst_cmp(TIC_info.ADPS,    "----",            3+1);
+  result += tst_cmp(TIC_info.IMAX,    "----",            3+1);
+  result += tst_cmp(TIC_info.PAPP,    "-----",           4+1);
+  result += tst_cmp(TIC_info.HHPHC,   "--",              1+1);
+  result += tst_cmp(TIC_info.MOTDETAT,"000000\0",        6+1);
   if(result == 0)
   {
     printf("[OK]  Step3: next 2 indexes\n");
@@ -714,17 +721,17 @@ int TEST_TeleInfo_Integration(void)
 
   /* at this point, all indexes are received: */
   result += tst_cmp(TIC_info.ADCO,    "030022261629\0", 12+1); /* STX LF ADCO space 030022261629 space 8 CR */
-  result += tst_cmp(TIC_info.OPTARIF, "HC..\0", 		    4+1); /*LF OPTARIF space HC.. space < CR */
-  result += tst_cmp(TIC_info.ISOUSC,  "30\0",  		      2+1); /* LF ISOUSC space 30 space 9 CR */
-  result += tst_cmp(TIC_info.HCHC,    "035047226\0",    9+1); /* LF HCHC space 035047226 space # CR */
-  result += tst_cmp(TIC_info.HCHP,    "027667018\0",    9+1); /* LF HCHP space 027667018 space 8 CR */
-  result += tst_cmp(TIC_info.PTEC,    "HP..\0",         4+1); /* LF PTEC space  space  space CR */
-  result += tst_cmp(TIC_info.IINST,   "001\0",          3+1); /* LF IINST space 001 space X CR */
-  result += tst_cmp(TIC_info.ADPS,    "----",           3+1);
-  result += tst_cmp(TIC_info.IMAX,    "025\0",          3+1); /* LF IMAX space 025 space F CR */
-  result += tst_cmp(TIC_info.PAPP,    "00130\0",        4+1); /* LF  PAPP  space  00130  space  % CR */
-  result += tst_cmp(TIC_info.HHPHC,   "A\0",            1+1); /* LF HHPHC space A space , CR */
-  result += tst_cmp(TIC_info.MOTDETAT,"000000\0",       6+1); /* LF MOTDETAT space 000000 space B CR ETX */
+  result += tst_cmp(TIC_info.OPTARIF, "HC..\0",          4+1); /* LF OPTARIF space HC.. space < CR          */
+  result += tst_cmp(TIC_info.ISOUSC,  "30\0",            2+1); /* LF ISOUSC space 30 space 9 CR             */
+  result += tst_cmp(TIC_info.HCHC,    "035047226\0",     9+1); /* LF HCHC space 035047226 space # CR        */
+  result += tst_cmp(TIC_info.HCHP,    "027667018\0",     9+1); /* LF HCHP space 027667018 space 8 CR        */
+  result += tst_cmp(TIC_info.PTEC,    "HP..\0",          4+1); /* LF PTEC space  space  space CR            */
+  result += tst_cmp(TIC_info.IINST,   "001\0",           3+1); /* LF IINST space 001 space X CR             */
+  result += tst_cmp(TIC_info.ADPS,    "----",            3+1);
+  result += tst_cmp(TIC_info.IMAX,    "025\0",           3+1); /* LF IMAX space 025 space F CR              */
+  result += tst_cmp(TIC_info.PAPP,    "00130\0",         4+1); /* LF  PAPP  space  00130  space  % CR       */
+  result += tst_cmp(TIC_info.HHPHC,   "A\0",             1+1); /* LF HHPHC space A space , CR               */
+  result += tst_cmp(TIC_info.MOTDETAT,"000000\0",        6+1); /* LF MOTDETAT space 000000 space B CR ETX   */
 
   if(result == 0)
   {
