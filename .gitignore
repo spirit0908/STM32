@@ -3,5 +3,5 @@ lib/src/*.o
 *.o
 modules/*/*.o
 modules/*/tests/test_main
-out/
+#out/
 build/
