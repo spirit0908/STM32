@@ -35,7 +35,7 @@ SRC_FILES = \
 #	$(CC) $(CCFLAGS) main.c ../../modules/Teleinfo/Heating.c stubs.c -o main
 
 test:
-	$(CC) -I../ -I../../../ test_main.c ../Heating.c stubs.c -o test_main
+	$(CC) -g -I../ -I../../../ test_main.c ../Heating.c stubs.c -o test_main
 
 
 

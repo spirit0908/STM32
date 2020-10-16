@@ -193,13 +193,12 @@ int TEST_Heating_mainfunction(void)
   
   /* Transission from WAIT to HEAT */
   HeatingState[testIndex].temperature = TST_INIT_VAL_HEATING_CONSIGNE-(1*2);
-  printf("temp=%d \n", HeatingState[testIndex].temperature);
   returnVal = Heating_mainfunction();
   assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_HEAT, "error: wrong state. State HEAT expected (1)" );
   
   /* decrease temperature */
   /* stay in HEAT */
-  for(i=TST_INIT_VAL_HEATING_CONSIGNE-1; i>0; i--)
+  for(i=TST_INIT_VAL_HEATING_CONSIGNE-(1*2); i>0; i--)
   {
     HeatingState[testIndex].temperature = i;
     returnVal = Heating_mainfunction();
@@ -215,8 +214,8 @@ int TEST_Heating_mainfunction(void)
     assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_HEAT, "error: wrong state. State HEAT expected (3)" );
   }
 
-  /* transition to WAIT */
-  for(i=TST_INIT_VAL_HEATING_CONSIGNE; i<TST_HEATING_TEMPERATURE_MAX; i++)
+  /* transition from HEAT to WAIT */
+  for(i=TST_INIT_VAL_HEATING_CONSIGNE+(1*2); i<TST_HEATING_TEMPERATURE_MAX; i++)
   {
     HeatingState[testIndex].temperature = i;
     returnVal = Heating_mainfunction();
@@ -227,8 +226,6 @@ int TEST_Heating_mainfunction(void)
   HeatingState[testIndex].state = 255;
   returnVal = Heating_mainfunction();
   assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_OFF, "error: wrong state. State OFF expected (2)" );
-  
-
 
   return TEST_finish();
 }
