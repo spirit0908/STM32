@@ -10,6 +10,7 @@
 ************************************************************************/
 #include "Std_Types.h"
 #include "Heating.h"
+
 /************************************************************************
 * DEFINES *
 ************************************************************************/
@@ -17,7 +18,7 @@
 /************************************************************************
 * GLOBAL VARIABLES *
 ************************************************************************/
-T_HeatingState HeatingState;
+T_HeatingConfig HeatingState[HEATING_MAX_DEVICES];
 
 /************************************************************************
 * FUNCTIONS *
@@ -32,16 +33,15 @@ T_HeatingState HeatingState;
  ************************************************************************/
 void Heating_Init(void)
 {
-    unsigned char i;
+  unsigned char i;
 
-    for(i=0u; i<MAX_HEATING_NUM; i++)
-    {
-    	HeatingState.mode 					= HEATING_MODE_OFF;
-    	HeatingState.temperature_default 	= 20*2;
-    	HeatingState.temperature_confort 	= 21*2;
-    	HeatingState.temperature 			= HeatingState.temperature_default;
-
-    }
+  for(i=0u; i<HEATING_MAX_DEVICES; i++)
+  {
+  	HeatingState[i].mode 				= HEATING_MODE_OFF;
+   	HeatingState[i].temperature_default	= 20*2;
+   	HeatingState[i].temperature_confort = 21*2;
+   	HeatingState[i].temperature 		= HeatingState[i].temperature_default;
+  }
 }
 
 /************************************************************************
@@ -54,45 +54,92 @@ void Heating_Init(void)
  ************************************************************************/
 unsigned char HeatingOrderTmt( unsigned char DeviceId, unsigned char Order, unsigned char *param)
 {
-	unsigned char ret_value;
+  unsigned char retVal = ret_NOK;
 
-    switch( Order )
-    {
-        case HEATING_MODE_OFF:
-            HeatingState.mode = HEATING_MODE_OFF;
-        break;
-        
-        case HEATING_MODE_NORMAL:
-        	HeatingState.mode = HEATING_MODE_NORMAL;
-        	HeatingState.temperature = HeatingState.temperature_default;
-        break;
+  T_HeatingConfig HeatingStatePtr = HeatingState[DeviceId];
 
-        case HEATING_MODE_ECO:
-        	HeatingState.mode = HEATING_MODE_ECO;
-        	HeatingState.temperature = HeatingState.temperature_confort - DELTA_TEMP_ECO;
-        break;
+  switch( Order )
+  {
+    case HEATING_MODE_NORMAL:
+      HeatingStatePtr.temperature = HeatingStatePtr.temperature_default;
+      retVal = ret_OK;
+    break;
 
-        case HEATING_MODE_CONFORT:
-        	HeatingState.mode = HEATING_MODE_CONFORT;
-        	HeatingState.temperature = HeatingState.temperature_confort;
-        break;
+    case HEATING_MODE_ECO:
+      HeatingStatePtr.temperature = HeatingStatePtr.temperature_confort - DELTA_TEMP_ECO;
+      retVal = ret_OK;
+    break;
 
-        case HEATING_MODE_FROST:
-        	HeatingState.mode = HEATING_MODE_FROST;
-        break;
+    case HEATING_MODE_CONFORT:
+      HeatingStatePtr.temperature = HeatingStatePtr.temperature_confort;
+      retVal = ret_OK;
+    break;
 
-        case HEATING_MODE_INHIBIT:
-        	HeatingState.mode = HEATING_MODE_OFF;
-        break;
+    case HEATING_MODE_OFF:
+    case HEATING_MODE_FROST:
+    case HEATING_MODE_INHIBIT:
+    case HEATING_MODE_ACTIVATE:
+      retVal = ret_OK;
+    break;
 
-        case HEATING_MODE_ACTIVATE:
-        	HeatingState.mode = HEATING_MODE_OFF;
-        break;
+    default:
+      retVal = ret_NOK;
+    break;
+  }
 
-        default:
-        	ret_value = ret_NOK;
-        break;
-    }
+  if( retVal == ret_OK)
+  {
+    HeatingStatePtr.mode = Order;
+  }
 
-    return ret_value;
+  return retVal;
 }
+
+/************************************************************************
+ * Function: HeatingOrderTmt                                            *
+ * input: DeviceId - Device identifier                                  *
+ *        Order - Order to execute                                      *
+ *        param - pointer to parameters                                 *
+ * return: none                                                         *
+ * description: Treatment of the received order                         *
+ ************************************************************************/
+unsigned char Heating_mainfunction(void)
+{
+  unsigned char ret_value;
+  unsigned char i;
+  T_HeatingConfig HeatingStatePtr;
+
+  for(i=0u; i<HEATING_MAX_DEVICES; i++)
+  {
+    HeatingStatePtr = HeatingState[i];
+
+    switch( HeatingStatePtr.state )
+    {
+      case HEATING_STATE_OFF:
+      break;
+        
+      case HEATING_SATE_WAIT:
+        if(HeatingStatePtr.temperature < (HeatingStatePtr.consigne - HeatingStatePtr.threshold) )
+        {
+          HeatingStatePtr.state = HEATING_STATE_HEAT;
+        }
+      break;
+
+      case HEATING_STATE_HEAT:
+        if(HeatingStatePtr.temperature > (HeatingStatePtr.consigne + HeatingStatePtr.threshold) )
+        {
+          HeatingStatePtr.state = HEATING_SATE_WAIT;
+        }
+        HeatingStatePtr.state = HEATING_STATE_HEAT;
+      break;
+
+      default:
+        HeatingStatePtr.state = HEATING_STATE_OFF;
+        ret_value = ret_NOK;
+      break;
+    }
+  }
+  return ret_value;
+}
+
+

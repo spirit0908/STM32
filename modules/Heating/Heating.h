@@ -4,32 +4,19 @@
  * Date               : 23/02/2020
  * Description        : header file for heating functions
  ***********************************************************************/
-
 #ifndef HEATING_H_
 #define HEATING_H_
-
 
 /************************************************************************
 * INCLUDES *
 ************************************************************************/
-#define MAX_HEATING_NUM	1
 
 /************************************************************************
 * DEFINES *
 ************************************************************************/
-#define DELTA_TEMP_ECO 2*2
-
-/************************************************************************
-* STRUCTURES *
-************************************************************************/
-typedef struct
-{
-	unsigned char mode;
-	unsigned char temperature;
-	unsigned char temperature_default;
-	unsigned char temperature_confort;
-}T_HeatingState;
-
+#define HEATING_MAX_DEVICES         2
+#define DELTA_TEMP_ECO            2*2
+#define DELTA_TEMP_CONFORT        2*2
 
 /************************************************************************
 * STRUCTURES *
@@ -47,6 +34,24 @@ typedef enum
 	HEATING_MODE_ACTIVATE
 }T_Heating_Mode;
 
+typedef enum
+{
+	HEATING_STATE_OFF,
+	HEATING_SATE_WAIT,
+	HEATING_STATE_HEAT,
+	HEATING_STATE_,
+}T_HeatingSM_State;
+
+typedef struct
+{
+	T_Heating_Mode mode; 
+	T_HeatingSM_State state;
+	unsigned char consigne;
+	unsigned char threshold;
+	unsigned char temperature;
+	unsigned char temperature_default;
+	unsigned char temperature_confort;
+}T_HeatingConfig;
 
 /************************************************************************
 * FUNCTIONS PROTOTYPE *
