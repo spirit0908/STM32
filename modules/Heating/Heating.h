@@ -23,13 +23,13 @@
 ************************************************************************/
 typedef enum
 {
-	HEATING_MODE_OFF,
+	HEATING_MODE_OFF = 0,
 	HEATING_MODE_NORMAL,
 	HEATING_MODE_ECO,
 	HEATING_MODE_CONFORT,
 	HEATING_MODE_FROST,
-	HEATING_MODE_ERROR,
-	HEATING_MODE_INIT,
+//	HEATING_MODE_ERROR,
+//	HEATING_MODE_INIT,
 	HEATING_MODE_INHIBIT,
 	HEATING_MODE_ACTIVATE
 }T_Heating_Mode;
@@ -54,10 +54,15 @@ typedef struct
 }T_HeatingConfig;
 
 /************************************************************************
-* FUNCTIONS PROTOTYPE *
+* GLOBAL VARIABLES *
+************************************************************************/
+extern T_HeatingConfig HeatingState[HEATING_MAX_DEVICES];
+
+/************************************************************************
+* FUNCTIONS PROTOTYPES *
 ************************************************************************/
 void Heating_Init(void);
 unsigned char HeatingOrderTmt( unsigned char DeviceId, unsigned char Order, unsigned char *param);
-
+unsigned char Heating_mainfunction(void);
 
 #endif /* HEATING_H_ */

@@ -1,7 +1,7 @@
 # setup
 
 COMPILE_OPTS = -W -Wall -ansi -pedantic
-INCLUDE_DIRS = -I../
+INCLUDE_DIRS = -I../ -I../../../
 #LIBRARY_DIRS = -L lib
 
 CC = gcc
@@ -35,7 +35,7 @@ SRC_FILES = \
 #	$(CC) $(CCFLAGS) main.c ../../modules/Teleinfo/Heating.c stubs.c -o main
 
 test:
-	$(CC) -I../../../lib/inc -I../../../ -I../ ../Heating.c stubs.c -o test_main
+	$(CC) -I../ -I../../../ test_main.c ../Heating.c stubs.c -o test_main
 
 
 
