@@ -37,7 +37,7 @@ typedef enum
 typedef enum
 {
 	HEATING_STATE_OFF,
-	HEATING_SATE_WAIT,
+	HEATING_STATE_WAIT,
 	HEATING_STATE_HEAT,
 	HEATING_STATE_,
 }T_HeatingSM_State;

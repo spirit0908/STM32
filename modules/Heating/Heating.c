@@ -100,45 +100,43 @@ unsigned char HeatingOrderTmt( unsigned char DeviceId, unsigned char Order, unsi
 }
 
 /************************************************************************
- * Function: HeatingOrderTmt                                            *
- * input: DeviceId - Device identifier                                  *
- *        Order - Order to execute                                      *
- *        param - pointer to parameters                                 *
+ * Function: unsigned char Heating_mainfunction                         *
+ * input: none                                                          *
  * return: none                                                         *
- * description: Treatment of the received order                         *
+ * description: Main function                                           *
  ************************************************************************/
 unsigned char Heating_mainfunction(void)
 {
   unsigned char ret_value;
   unsigned char i;
-  T_HeatingConfig HeatingStatePtr;
+  T_HeatingConfig * HeatingStatePtr;
 
   for(i=0u; i<HEATING_MAX_DEVICES; i++)
   {
-    HeatingStatePtr = HeatingState[i];
+    HeatingStatePtr = &HeatingState[i];
 
-    switch( HeatingStatePtr.state )
+    switch( HeatingStatePtr->state )
     {
       case HEATING_STATE_OFF:
       break;
-        
-      case HEATING_SATE_WAIT:
-        if(HeatingStatePtr.temperature <= (HeatingStatePtr.consigne - HeatingStatePtr.threshold) )
+      
+      case HEATING_STATE_WAIT:
+        if(HeatingStatePtr->temperature <= (HeatingStatePtr->consigne - HeatingStatePtr->threshold) )
         {
-          HeatingStatePtr.state = HEATING_STATE_HEAT;
+          HeatingStatePtr->state = HEATING_STATE_HEAT;
         }
       break;
 
       case HEATING_STATE_HEAT:
-        if(HeatingStatePtr.temperature >= (HeatingStatePtr.consigne + HeatingStatePtr.threshold) )
+        if(HeatingStatePtr->temperature >= (HeatingStatePtr->consigne + HeatingStatePtr->threshold) )
         {
-          HeatingStatePtr.state = HEATING_SATE_WAIT;
+          HeatingStatePtr->state = HEATING_STATE_WAIT;
         }
-        HeatingStatePtr.state = HEATING_STATE_HEAT;
+        
       break;
 
       default:
-        HeatingStatePtr.state = HEATING_STATE_OFF;
+        HeatingStatePtr->state = HEATING_STATE_OFF;
         ret_value = ret_NOK;
       break;
     }
