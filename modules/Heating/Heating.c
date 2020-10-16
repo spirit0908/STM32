@@ -37,10 +37,14 @@ void Heating_Init(void)
 
   for(i=0u; i<HEATING_MAX_DEVICES; i++)
   {
+  	HeatingState[i].state 				= HEATING_STATE_OFF;
   	HeatingState[i].mode 				= HEATING_MODE_OFF;
+
+    HeatingState[i].threshold           = 1;
    	HeatingState[i].temperature_default	= 20*2;
    	HeatingState[i].temperature_confort = 21*2;
-   	HeatingState[i].temperature 		= HeatingState[i].temperature_default;
+   	HeatingState[i].temperature 		= 0;
+    HeatingState[i].consigne            = HeatingState[i].temperature_default;;
   }
 }
 
@@ -119,14 +123,14 @@ unsigned char Heating_mainfunction(void)
       break;
         
       case HEATING_SATE_WAIT:
-        if(HeatingStatePtr.temperature < (HeatingStatePtr.consigne - HeatingStatePtr.threshold) )
+        if(HeatingStatePtr.temperature <= (HeatingStatePtr.consigne - HeatingStatePtr.threshold) )
         {
           HeatingStatePtr.state = HEATING_STATE_HEAT;
         }
       break;
 
       case HEATING_STATE_HEAT:
-        if(HeatingStatePtr.temperature > (HeatingStatePtr.consigne + HeatingStatePtr.threshold) )
+        if(HeatingStatePtr.temperature >= (HeatingStatePtr.consigne + HeatingStatePtr.threshold) )
         {
           HeatingStatePtr.state = HEATING_SATE_WAIT;
         }

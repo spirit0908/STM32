@@ -10,11 +10,13 @@ typedef struct
 
 
 int TEST_Heating_Init(void);
+int TEST_Heating_mainfunction(void);
 
 T_testFunction test_list_config[]=
 {
   /* Unit tests*/
   {"Heating_Init", TEST_Heating_Init},
+  {"Heating_mainfunction", TEST_Heating_mainfunction},
 
   /* Integration tests*/
 //  {"Integration test: TeleInfo_Integration", TEST_TeleInfo_Integration},
@@ -43,6 +45,15 @@ void assert(int check, char *str)
   if(check == 0)
   {
     printf("Error: %s\n", str);
+    errorNum++;
+  }
+}
+
+void assert_cmp(unsigned int val1, unsigned int val2, char *str)
+{
+  if(val1 != val2)
+  {
+    printf("Error: %s (%d!=%d)\n", str, val1, val2);
     errorNum++;
   }
 }
@@ -90,31 +101,35 @@ int TEST_TIC_FillInInfo(void)
 }
 
 
-#define TST_HEATING_MODE_NORMAL                        0
-#define TST_HEATING_MODE_ECO                           1
-#define TST_HEATING_MODE_CONFORT                       2
-#define TST_HEATING_MODE_OFF                           3
+
+#define TST_HEATING_MODE_OFF                           0
+#define TST_HEATING_MODE_NORMAL                        1
+#define TST_HEATING_MODE_ECO                           2
+#define TST_HEATING_MODE_CONFORT                       3
 #define TST_HEATING_MODE_FROST                         4
 #define TST_HEATING_MODE_INHIBIT                       5
 #define TST_HEATING_MODE_ACTIVATE                      6
 
 
 #define TST_HEATING_SM_STATE_OFF                       0
-#define TST_HEATING_SATE_SM_WAIT                       1
-#define TST_HEATING_STATE_SM_HEAT                      2
+#define TST_HEATING_SM_STATE_WAIT                      1
+#define TST_HEATING_SM_STATE_HEAT                      2
 
 
 #define TST_HEATING_PRECISION                          2 /* 1/0,5 */
 
 #define TST_INIT_VAL_HEATING_MODE                      TST_HEATING_MODE_OFF
 #define TST_INIT_VAL_HEATING_STATE                     TST_HEATING_SM_STATE_OFF
-#define TST_INIT_VAL_HEATING_CONSIGNE                  255  
 #define TST_INIT_VAL_HEATING_THRESHOLD                 1 /* 0,5 degre */
-#define TST_INIT_VAL_HEATING_TEMPERATURE               20 * TST_HEATING_PRECISION
 #define TST_INIT_VAL_HEATING_TEMPERATURE_DEFAULT       20 * TST_HEATING_PRECISION
 #define TST_INIT_VAL_HEATING_TEMPERATURE_COMFORT       21 * TST_HEATING_PRECISION
+#define TST_INIT_VAL_HEATING_TEMPERATURE_ECO           TST_INIT_VAL_HEATING_TEMPERATURE_DEFAULT - (2 * TST_HEATING_PRECISION)
+#define TST_INIT_VAL_HEATING_TEMPERATURE               0
+#define TST_INIT_VAL_HEATING_CONSIGNE                  TST_INIT_VAL_HEATING_TEMPERATURE_DEFAULT
 
 
+#define TST_HEATING_MAX_DEVICES                        2
+#define TST_HEATING_TEMPERATURE_MAX                    255
 /************************************************
  *
  *   UNIT TESTS
@@ -124,6 +139,7 @@ int TEST_TIC_FillInInfo(void)
 int TEST_Heating_Init(void)
 {
   int result=-1;
+  int i;
   TEST_init();
 
   /* Init */
@@ -131,13 +147,13 @@ int TEST_Heating_Init(void)
 
   for(i=0; i< TST_HEATING_MAX_DEVICES; i++)
   {
-    assert(HeatingState[i].mode                = TST_INIT_VAL_HEATING_MODE,                 "wrong init value: mode");
-    assert(HeatingState[i].state               = TST_INIT_VAL_HEATING_STATE,                "wrong init value: state");
-    assert(HeatingState[i].consigne            = TST_INIT_VAL_HEATING_CONSIGNE,             "wrong init value: consigne");
-    assert(HeatingState[i].threshold           = TST_INIT_VAL_HEATING_THRESHOLD,            "wrong init value: threshold");
-    assert(HeatingState[i].temperature         = TST_INIT_VAL_HEATING_TEMPERATURE,          "wrong init value: temperature");
-    assert(HeatingState[i].temperature_default = TST_INIT_VAL_HEATING_TEMPERATURE_DEFAULT,  "wrong init value: temperature_default");
-    assert(HeatingState[i].temperature_confort = TST_INIT_VAL_HEATING_TEMPERATURE_COMFORT;, "wrong init value: temperature_comfort");
+    assert_cmp(HeatingState[i].mode,                TST_INIT_VAL_HEATING_MODE,                "wrong init value: mode");
+    assert_cmp(HeatingState[i].state,               TST_INIT_VAL_HEATING_STATE,               "wrong init value: state");
+    assert_cmp(HeatingState[i].consigne,            TST_INIT_VAL_HEATING_CONSIGNE,            "wrong init value: consigne");
+    assert_cmp(HeatingState[i].threshold ,          TST_INIT_VAL_HEATING_THRESHOLD,           "wrong init value: threshold");
+    assert_cmp(HeatingState[i].temperature,         TST_INIT_VAL_HEATING_TEMPERATURE,         "wrong init value: temperature");
+    assert_cmp(HeatingState[i].temperature_default, TST_INIT_VAL_HEATING_TEMPERATURE_DEFAULT, "wrong init value: temperature_default");
+    assert_cmp(HeatingState[i].temperature_confort, TST_INIT_VAL_HEATING_TEMPERATURE_COMFORT, "wrong init value: temperature_comfort");
   }
   
   assert(HEATING_MAX_DEVICES == TST_HEATING_MAX_DEVICES, "Nb of HEATING_MAX_DEVICES mismatched");
@@ -146,9 +162,76 @@ int TEST_Heating_Init(void)
 }
 
 //unsigned char HeatingOrderTmt( unsigned char DeviceId, unsigned char Order, unsigned char *param)
-//unsigned char Heating_mainfunction(void)
+int TEST_Heating_mainfunction(void)
+{
+  int result=-1;
+  unsigned char returnVal;
+  int i;
+  unsigned char testIndex=0;
+  TEST_init();
 
 
+  Heating_Init();
+  returnVal = Heating_mainfunction();
+  assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_OFF, "error: wrong init state. State OFF expected" );
+
+  /* stay in OFF */
+  HeatingState[testIndex].state = /*(T_HeatingConfig)*/TST_HEATING_SM_STATE_OFF;
+  returnVal = Heating_mainfunction();
+  assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_OFF, "error: wrong state. State OFF expected" );
+
+  /* force to WAIT */
+  HeatingState[testIndex].state = /*(T_HeatingConfig)*/TST_HEATING_SM_STATE_WAIT;
+  
+  /* stay in WAIT */
+  for(i=TST_INIT_VAL_HEATING_CONSIGNE; i<TST_HEATING_TEMPERATURE_MAX; i++)
+  {
+    HeatingState[testIndex].temperature = i;
+    returnVal = Heating_mainfunction();
+    assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_WAIT, "error: wrong state. State WAIT expected" );
+  }
+  
+  /* Transission from WAIT to HEAT */
+  HeatingState[testIndex].temperature = TST_INIT_VAL_HEATING_CONSIGNE-(1*2);
+  printf("temp=%d \n", HeatingState[testIndex].temperature);
+  returnVal = Heating_mainfunction();
+  assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_HEAT, "error: wrong state. State HEAT expected (1)" );
+  
+  /* decrease temperature */
+  /* stay in HEAT */
+  for(i=TST_INIT_VAL_HEATING_CONSIGNE-1; i>0; i--)
+  {
+    HeatingState[testIndex].temperature = i;
+    returnVal = Heating_mainfunction();
+    assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_HEAT, "error: wrong state. State HEAT expected (2)" );
+  }
+  
+  /* increase temperature */
+  /* stay in HEAT */
+  for(i=0; i<TST_INIT_VAL_HEATING_CONSIGNE; i++)
+  {
+    HeatingState[testIndex].temperature = i;
+    returnVal = Heating_mainfunction();
+    assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_HEAT, "error: wrong state. State HEAT expected (3)" );
+  }
+
+  /* transition to WAIT */
+  for(i=TST_INIT_VAL_HEATING_CONSIGNE; i<TST_HEATING_TEMPERATURE_MAX; i++)
+  {
+    HeatingState[testIndex].temperature = i;
+    returnVal = Heating_mainfunction();
+    assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_WAIT, "error: wrong state. State WAIT expected (2)" );
+  }
+
+  /* unknown state - transission to OFF */
+  HeatingState[testIndex].state = 255;
+  returnVal = Heating_mainfunction();
+  assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_OFF, "error: wrong state. State OFF expected (2)" );
+  
+
+
+  return TEST_finish();
+}
 
 /************************************************
  *
