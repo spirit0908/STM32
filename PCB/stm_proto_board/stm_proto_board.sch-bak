@@ -1031,6 +1031,17 @@ Wire Wire Line
 	6550 4000 6650 4000
 Wire Wire Line
 	6550 4100 6650 4100
+$Comp
+L Connector:Conn_01x05_Male J8
+U 1 1 5F917C50
+P 4950 950
+F 0 "J8" H 4922 882 50  0000 R CNN
+F 1 "Conn_01x05_Male" H 4922 973 50  0000 R CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical" H 4950 950 50  0001 C CNN
+F 3 "~" H 4950 950 50  0001 C CNN
+	1    4950 950 
+	-1   0    0    1   
+$EndComp
 Text GLabel 4750 3600 0    50   Input ~ 0
 Ext1
 Text GLabel 4750 3700 0    50   Input ~ 0
@@ -1053,6 +1064,28 @@ Text GLabel 6700 4300 2    50   Input ~ 0
 Ext9
 Text GLabel 6700 4600 2    50   Input ~ 0
 Ext8
+$Comp
+L Connector:Conn_01x05_Male J9
+U 1 1 5F9EABC0
+P 4950 1450
+F 0 "J9" H 4922 1382 50  0000 R CNN
+F 1 "Conn_01x05_Male" H 4922 1473 50  0000 R CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical" H 4950 1450 50  0001 C CNN
+F 3 "~" H 4950 1450 50  0001 C CNN
+	1    4950 1450
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x05_Male J10
+U 1 1 5F9F46F3
+P 4950 1950
+F 0 "J10" H 4922 1882 50  0000 R CNN
+F 1 "Conn_01x05_Male" H 4922 1973 50  0000 R CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x05_P1.00mm_Vertical" H 4950 1950 50  0001 C CNN
+F 3 "~" H 4950 1950 50  0001 C CNN
+	1    4950 1950
+	-1   0    0    1   
+$EndComp
 Wire Notes Line
 	4100 600  4100 2300
 Wire Notes Line

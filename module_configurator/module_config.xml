@@ -6,6 +6,14 @@
     <mcUid>000</mcUid>
     <mcAddress>0x48</mcAddress>
   </generatorConfig> 
+  <Interfaces>
+    <CAN>
+      <enable>true</enable>
+    </CAN>
+    <SERIAL>
+      <enable>true</enable>
+    </SERIAL>
+  </Interfaces>
   <Switch>
     <pushButton id="1">
       <name>PB_UP</name>
