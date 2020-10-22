@@ -17,8 +17,8 @@
   <switch>
     <pushButton id="1">
       <name>PB_UP</name>
-      <port>GPIOx</port>
-      <pin>PinY</pin>
+      <port>GPIOB</port>
+      <pin>PB5</pin>
       <pushConfig>
         <shortPush>
           <action>LcdMenu_MenuUp</action>
@@ -34,15 +34,15 @@
         </configPush>
       </pushConfig>
       <ledStatus>
-        <activated>yes</activated>
+        <activated>no</activated>
         <pushConfigId>0</pushConfigId>
         <fondu>yes</fondu>
       </ledStatus>
     </pushButton>
     <pushButton id="2">
       <name>PB_DOWN</name>
-      <port>GPIOp</port>
-      <pin>PinZ</pin>
+      <port>GPIOB</port>
+      <pin>PB7</pin>
       <pushConfig>
         <shortPush>
           <action>LcdMenu_MenuDown</action>
@@ -58,7 +58,55 @@
         </configPush>
       </pushConfig>
       <ledStatus>
-        <activated>yes</activated>
+        <activated>no</activated>
+        <pushConfigId>0</pushConfigId>
+        <fondu>yes</fondu>
+      </ledStatus>
+    </pushButton>
+    <pushButton id="3">
+      <name>PB_LEFT</name>
+      <port>GPIOB</port>
+      <pin>PB4</pin>
+      <pushConfig>
+        <shortPush>
+          <action>LcdMenu_MenuDown</action>
+          <address>0x123</address>
+        </shortPush>
+        <longPush>
+          <action>NULL</action>
+          <address></address>
+        </longPush>
+        <configPush>
+          <action>NULL</action>
+          <address></address>
+        </configPush>
+      </pushConfig>
+      <ledStatus>
+        <activated>no</activated>
+        <pushConfigId>0</pushConfigId>
+        <fondu>yes</fondu>
+      </ledStatus>
+    </pushButton>
+    <pushButton id="4">
+      <name>PB_RIGHT</name>
+      <port>GPIOB</port>
+      <pin>PB6</pin>
+      <pushConfig>
+        <shortPush>
+          <action>LcdMenu_MenuDown</action>
+          <address>0x123</address>
+        </shortPush>
+        <longPush>
+          <action>NULL</action>
+          <address></address>
+        </longPush>
+        <configPush>
+          <action>NULL</action>
+          <address></address>
+        </configPush>
+      </pushConfig>
+      <ledStatus>
+        <activated>no</activated>
         <pushConfigId>0</pushConfigId>
         <fondu>yes</fondu>
       </ledStatus>
@@ -123,9 +171,8 @@
     </thermostat>
   </heating>
   <Security>
-    <secuElem id="1">
-      <name>door_1</name>
-      <type>door</type> <!-- door/magnet/portail/...-->
+    <secuElem id='1'>
+      <type>door_1</type> <!-- door/magnet/portail/...-->
       <zone>Z1</zone>
       <port>GPIOX</port>
       <pin>PINy</pin>

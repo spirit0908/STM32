@@ -3,118 +3,214 @@
 <xs:element name="span">
   <xs:complexType>
     <xs:sequence>
-       <xs:element name="switch" maxOccurs="unbounded">
+      <xs:element name="generatorConfig" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
-            <xs:element name="port" type="xs:string"/>
-            <xs:element name="pin" type="xs:string"/>
-            <xs:element name="shortPush" type="xs:string" minOccurs="0"/>
-            <xs:element name="longPush" type="xs:string" minOccurs="0"/>
-            <xs:element name="configPush" type="xs:string" minOccurs="0"/>
+            <xs:element name="ConfigName" type="xs:string"/>
+            <xs:element name="outputPath" type="xs:string"/>
+            <xs:element name="mcUid" type="xs:string"/>
+            <xs:element name="mcAddress" type="xs:string"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="light" maxOccurs="unbounded">
+      <xs:element name="Interfaces" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
-            <xs:element name="type" type="xs:string">
+            <xs:element name="CAN">
               <xs:complexType>
                 <xs:sequence>
-                  <xs:element name="active" type="xs:string">
-                    <xs:simpleType>
-                      <xs:restriction base="xs:string">
-                        <xs:enumeration value="yes"/>
-                        <xs:enumeration value="no"/>
-                      </xs:restriction>
-                    </xs:simpleType>
-                  </xs:element>
-                  <xs:element name="dimmable" type="xs:string">
-                    <xs:simpleType>
-                      <xs:restriction base="xs:string">
-                        <xs:enumeration value="yes"/>
-                        <xs:enumeration value="no"/>
-                      </xs:restriction>
-                    </xs:simpleType>
-                  </xs:element>
-                  <xs:element name="timer" type="xs:string">
-                    <xs:simpleType>
-                      <xs:restriction base="xs:string">
-                        <xs:enumeration value="yes"/>
-                        <xs:enumeration value="no"/>
-                      </xs:restriction>
-                    </xs:simpleType>
-                  </xs:element>
-                  <xs:element name="ledStrip" type="xs:string" minOccurs="0">
-                    <xs:simpleType>
-                      <xs:restriction base="xs:string">
-                        <xs:enumeration value="yes"/>
-                        <xs:enumeration value="no"/>
-                      </xs:restriction>
-                    </xs:simpleType>
-                  </xs:element>
+                  <xs:element name="enable" type="xs:string"/>
                 </xs:sequence>
               </xs:complexType>
             </xs:element>
-            <xs:element name="port" type="xs:string"/>
-            <xs:element name="pin" type="xs:string"/>
-            <xs:element name="defaultBrightness" type="xs:string"/>
-            <xs:element name="defaultTime" type="xs:string"/>
+            <xs:element name="SERIAL">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="enable" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>  
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="heating" maxOccurs="unbounded">
+      <xs:element name="switch">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
-            <xs:element name="zone" type="xs:string" minOccurs="0"/>
-            <xs:element name="type" type="xs:string" minOccurs="0">
-              <xs:simpleType>
-                <xs:restriction base="xs:string">
-                  <xs:enumeration value="elec"/>
-                  <xs:enumeration value="chaudiere"/>
-                </xs:restriction>
-              </xs:simpleType>
-            </xs:element>
-            <xs:element name="port" type="xs:string"/>
-            <xs:element name="pin" type="xs:string"/>
-            <xs:element name="temp_default" type="xs:string"/>
-            <xs:element name="temp_confort" type="xs:string"/>
-            <xs:element name="mode_gestion" type="xs:string"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      
-      <xs:element name="thermostat" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
-            <xs:element name="zone" type="xs:string" minOccurs="0"/>
-            <xs:element name="addr" type="xs:string" minOccurs="0"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-       
-      <xs:element name="security" maxOccurs="unbounded">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
-            <xs:element name="element" type="xs:string" minOccurs="0"/>
-            <xs:element name="port" type="xs:string" minOccurs="0"/>
-            <xs:element name="pin" type="xs:string" minOccurs="0"/>
-            <xs:element name="port" type="xs:string" minOccurs="0">
-              <xs:simpleType>
-                <xs:restriction base="xs:string">
-                  <xs:enumeration value="NC"/>
-                  <xs:enumeration value="NO"/>
-                </xs:restriction>
-              </xs:simpleType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+            <xs:element name="pushButton" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string"/>
+                  <xs:element name="port" type="xs:string"/>
+                  <xs:element name="pin" type="xs:string"/>
+                  <xs:element name="pushConfig">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="shortPush" minOccurs="0" maxOccurs="1">
+                          <xs:complexType>
+                            <xs:sequence>
+                             <xs:element name="action" type="xs:string" minOccurs="0"/>
+                             <xs:element name="address" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="longPush" minOccurs="0" maxOccurs="1">
+                          <xs:complexType>
+                            <xs:sequence>
+                             <xs:element name="action" type="xs:string" minOccurs="0"/>
+                             <xs:element name="address" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="configPush" minOccurs="0" maxOccurs="1">
+                          <xs:complexType>
+                            <xs:sequence>
+                             <xs:element name="action" type="xs:string" minOccurs="0"/>
+                             <xs:element name="address" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="ledStatus" minOccurs="0">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="activated" type="xs:string" minOccurs="0"/>
+                        <xs:element name="pushConfigId" type="xs:string" minOccurs="0"/>
+                        <xs:element name="fondu" type="xs:string" minOccurs="0"/>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
 
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="lights" >
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="light" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string"/>
+                  <xs:element name="type">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="active">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:enumeration value="yes"/>
+                              <xs:enumeration value="no"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="dimmer">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:enumeration value="yes"/>
+                              <xs:enumeration value="no"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="timer">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:enumeration value="yes"/>
+                              <xs:enumeration value="no"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ledStrip" minOccurs="0">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:enumeration value="yes"/>
+                              <xs:enumeration value="no"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element name="port" type="xs:string"/>
+                  <xs:element name="pin" type="xs:string"/>
+                  <xs:element name="defaultBrightness" type="xs:string"/>
+                  <xs:element name="defaultTimer" type="xs:string"/>
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="heating" >
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="heater" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string"/>
+                  <xs:element name="zone" type="xs:string" minOccurs="0"/>
+                  <xs:element name="type" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="elec"/>
+                        <xs:enumeration value="chaudiere"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="port" type="xs:string"/>
+                  <xs:element name="pin" type="xs:string"/>
+                  <xs:element name="temp_default" type="xs:string"/>
+                  <xs:element name="temp_confort" type="xs:string"/>
+                  <xs:element name="mode_gestion" type="xs:string"/>
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="thermostat" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string"/>
+                  <xs:element name="zone" type="xs:string" minOccurs="0"/>
+                  <xs:element name="addr" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Security">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="secuElem" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string" minOccurs="0"/>
+                  <xs:element name="type" type="xs:string" minOccurs="0"/>
+                  <xs:element name="zone" type="xs:string" minOccurs="0"/>
+                  <xs:element name="port" type="xs:string" minOccurs="0"/>
+                  <xs:element name="pin" type="xs:string" minOccurs="0"/>
+                  <xs:element name="mode" type="xs:string" minOccurs="0"/><!-- NC/NO -->
+
+            <!--      <xs:element name="port">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="NC"/>
+                        <xs:enumeration value="NO"/>
+                      </xs:restriction> 
+                    </xs:simpleType>
+                  </xs:element> -->
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
   </xs:complexType>
 </xs:element>
