@@ -161,7 +161,6 @@ int TEST_Heating_Init(void)
   return TEST_finish();
 }
 
-//unsigned char HeatingOrderTmt( unsigned char DeviceId, unsigned char Order, unsigned char *param)
 int TEST_Heating_mainfunction(void)
 {
   int result=-1;
@@ -176,12 +175,12 @@ int TEST_Heating_mainfunction(void)
   assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_OFF, "error: wrong init state. State OFF expected" );
 
   /* stay in OFF */
-  HeatingState[testIndex].state = /*(T_HeatingConfig)*/TST_HEATING_SM_STATE_OFF;
+  HeatingState[testIndex].state = TST_HEATING_SM_STATE_OFF;
   returnVal = Heating_mainfunction();
   assert_cmp(HeatingState[testIndex].state, TST_HEATING_SM_STATE_OFF, "error: wrong state. State OFF expected" );
 
   /* force to WAIT */
-  HeatingState[testIndex].state = /*(T_HeatingConfig)*/TST_HEATING_SM_STATE_WAIT;
+  HeatingState[testIndex].state = TST_HEATING_SM_STATE_WAIT;
   
   /* stay in WAIT */
   for(i=TST_INIT_VAL_HEATING_CONSIGNE; i<TST_HEATING_TEMPERATURE_MAX; i++)

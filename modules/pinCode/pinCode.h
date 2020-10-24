@@ -32,13 +32,18 @@ typedef enum
 	PINCODE_CODE_LOCKED,
 	PINCODE_CODE_CHANGE,
 	PINCODE_REINIT,
-	PINCODE_TIMEOUT,
+	PINCODE_TIMEOUT
 } T_pinCode_state;
 
 
 /************************************************************************
 * FUNCTIONS PROTOTYPE *
 ************************************************************************/
+void pinCode_init(void);
+void pinCode_mainfunction(void);
+unsigned char pinCode_readDigit(unsigned char digit);
+unsigned char pinCode_ChangeCode(void);
+unsigned char pinCode_checkCode(unsigned char num_digit);
 
 
 #endif /* TEMPLATE_HEADER_H_ */

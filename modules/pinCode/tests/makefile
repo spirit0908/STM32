@@ -1,7 +1,7 @@
 # setup
 
-COMPILE_OPTS = -W -Wall -ansi -pedantic
-INCLUDE_DIRS = -I../
+COMPILE_OPTS = -W -Wall -ansi -pedantic -std=c99 -g
+INCLUDE_DIRS = -I../ -I../../../lib/inc -I../../../
 #LIBRARY_DIRS = -L lib
 
 CC = gcc
@@ -24,23 +24,31 @@ MAIN_OUT = main
 
 # main
 SRC_FILES = \
-  main.c \
+  test_main.c \
   ../*.c \
   stubs.c
 
 #INC_FILES = \
   Std_Types.h
 
-#test:
-#	$(CC) $(CCFLAGS) main.c ../../modules/Teleinfo/teleinfo.c stubs.c -o main
 
-test:
-	$(CC) -I../ -I../../../lib/inc -I../../../ main.c ../pinCode.c -o test_main
+test_main:
+	$(CC) $(CFLAGS) test_main.c ../pinCode.c -o test_main
 
 
-
-runtest: test
+test: test_main
 	./test_main
 
+runtest: test_main
+	./test_main > test_exec.log
+	perl generate_test_report.pl test_exec.log test_result_pinCode.xml
+	mkdir -p ../../../out/tests
+	cp test_result_pinCode.xml ../../../out/tests/test_result_pinCode.xml
+
+debug: test
+	gdb -tui test_main test_main.c
+
 clean:
-	rm test_main
+	rm -f test_main
+	rm -f test_exec.log
+	rm -f test_result_*.xml

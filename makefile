@@ -103,6 +103,13 @@ debug: $(MAIN_OUT_BIN)
 	arm-none-eabi-gdb -tui out/main.elf -x "target extended-remote localhost:4242"
 
 
+#Test
+test: $(MAIN_OUT_BIN)
+	(cd modules/Teleinfo/tests; make runtest)
+	(cd modules/Heating/tests; make runtest)
+	(cd modules/pinCode/tests; make runtest)
+#	(cd out/tests; xsltproc test_report_generator.xsl test_result_pinCode.xml > Test_results.html )
+
 # libstm32.a
 
 LIBSTM32_OUT = lib/libstm32.a
