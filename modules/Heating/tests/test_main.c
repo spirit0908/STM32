@@ -6,17 +6,21 @@ typedef struct
 {
   unsigned char functionName[40];
   int (*pf)(void);
+  unsigned char run;
 } T_testFunction;
 
 
 int TEST_Heating_Init(void);
 int TEST_Heating_mainfunction(void);
 
+/* Test configuration (test_cfg.c) */
+unsigned char TEST_module[50] = "Heating";
+
 T_testFunction test_list_config[]=
 {
   /* Unit tests*/
-  {"Heating_Init", TEST_Heating_Init},
-  {"Heating_mainfunction", TEST_Heating_mainfunction},
+  {"Heating_Init", TEST_Heating_Init, 1},
+  {"Heating_mainfunction", TEST_Heating_mainfunction, 1},
 
   /* Integration tests*/
 //  {"Integration test: TeleInfo_Integration", TEST_TeleInfo_Integration},
@@ -24,10 +28,12 @@ T_testFunction test_list_config[]=
 
 #define TEST_LIST_CONFIG_SIZE (sizeof(test_list_config)/sizeof(T_testFunction))
 
-
+/* Test (test.h)*/
 #define TST_RET_OK    0
 #define TST_RET_N_OK  1
+unsigned int errorNum;
 
+/* Test (test.c)*/
 int testStringFill(int *strPtr, int *string)
 {
   unsigned char strSize = sizeof(string);
@@ -37,6 +43,7 @@ int testStringFill(int *strPtr, int *string)
   {
     strPtr[i] = string[i];
   }
+  return 0;
 }
 
 unsigned int errorNum;
@@ -44,7 +51,7 @@ void assert(int check, char *str)
 {
   if(check == 0)
   {
-    printf("Error: %s\n", str);
+    printf("  Error: %s\n", str);
     errorNum++;
   }
 }
@@ -53,7 +60,7 @@ void assert_cmp(unsigned int val1, unsigned int val2, char *str)
 {
   if(val1 != val2)
   {
-    printf("Error: %s (%d!=%d)\n", str, val1, val2);
+    printf("  Error: %s (%d!=%d)\n", str, val1, val2);
     errorNum++;
   }
 }
@@ -236,6 +243,7 @@ int TEST_Heating_mainfunction(void)
  *************************************************/
 
 
+
 /************************************************
  *
  *   MAIN TESTS
@@ -243,45 +251,63 @@ int TEST_Heating_mainfunction(void)
  *************************************************/
 int main(void)
 {
-  unsigned int ret[TEST_LIST_CONFIG_SIZE];
-  unsigned int test_passed=0, test_failed=0;
-
+  int ret[TEST_LIST_CONFIG_SIZE];
+  unsigned int test_passed=0, test_failed=0, test_notrun=0;
+  
+  printf("Module: %s\n", TEST_module);
   printf("Test sequence begin\n");
   printf("-------------------\n");
 
-  for(int i=0; i<TEST_LIST_CONFIG_SIZE; i++)
+  for(unsigned int i=0; i<TEST_LIST_CONFIG_SIZE; i++)
   {
     printf("Executing test: %s\n", test_list_config[i].functionName);
-    ret[i] = (test_list_config[i].pf)();
+    if(test_list_config[i].run)
+    {
+      ret[i] = (test_list_config[i].pf)();
+    }
+    else 
+    {
+      ret[i] = -1;
+    }
+    printf("End of test test: %s - ", test_list_config[i].functionName);
     if(ret[i] == 0)
     {
-      printf("TEST %s: passed", test_list_config[i].functionName);
+      printf("PASSED\n");
+    }
+    else if(ret[i] == 1)
+    {
+      printf("FAILED\n");
     }
     else
     {
-      printf("TEST %s: failed", test_list_config[i].functionName);
+      printf("NOT EXECUTED\n");
     }
-
-    printf(" - end of test\n"); 
   }
   printf("-------------------\n");
   printf("Test sequence end  \n\n");
 
   printf("------Sum Up-------\n");
-  for(int i=0; i<TEST_LIST_CONFIG_SIZE; i++)
+  for(unsigned int i=0; i<TEST_LIST_CONFIG_SIZE; i++)
   {
     if(ret[i] == 0)
     {
       test_passed++;
       printf("[v] TEST %s: passed\n", test_list_config[i].functionName);
     }
-    else
+    else if(ret[i] > 1)
     {
       test_failed++;
       printf("[x] TEST %s: failed\n", test_list_config[i].functionName);
     }
+    else
+    {
+      test_notrun++;
+      printf("[u] TEST %s: not executed\n", test_list_config[i].functionName);
+    }
+    
   }
-  printf("%d failed - %d passed - total: %d tests\n", test_failed, test_passed, test_passed+test_failed);
+  printf("%d failed - %d passed - %d unexecuted - total: %d tests\n", test_failed, test_passed, test_notrun, test_passed+test_failed+test_notrun);
   printf("-------------------\n");
+
   return 0;
 }

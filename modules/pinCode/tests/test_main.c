@@ -89,8 +89,7 @@ unsigned int TEST_finish(void)
 
 unsigned char tst_cmp(unsigned char *a, unsigned char *b, unsigned char len)
 {
-  unsigned char i;
-  for(i=0; i<len; i++)
+  for(unsigned char i=0; i<len; i++)
   {
     if(*a++ != *b++)
     {
@@ -103,8 +102,7 @@ unsigned char tst_cmp(unsigned char *a, unsigned char *b, unsigned char len)
 
 unsigned char tst_set(unsigned char *a, unsigned char *b, unsigned char len)
 {
-  unsigned char i;
-  for(i=0; i<len; i++)
+  for(unsigned char i=0; i<len; i++)
   {
     *a = *b;
     a++;

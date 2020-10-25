@@ -58,10 +58,14 @@ while (<INPUT_FILE>)
     }
 }
 
+$nbTotal = $nbPassed+$nbFailed+$nbNotrun;
+$percentPassed = int( ($nbPassed*100) / $nbTotal);
+
 print OUTPUT_FILE "    <nbPass>".$nbPassed."</nbPass>\n";
 print OUTPUT_FILE "    <nbFail>".$nbFailed."</nbFail>\n";
 print OUTPUT_FILE "    <nbNotrun>".$nbNotrun."</nbNotrun>\n";
 print OUTPUT_FILE "    <nbTotal>".($nbPassed+$nbFailed+$nbNotrun)."</nbTotal>\n";
+print OUTPUT_FILE "    <percentPassed>".$percentPassed."</percentPassed>\n";
 
 print OUTPUT_FILE "  </testModule>\n";
 print OUTPUT_FILE "</span>\n";

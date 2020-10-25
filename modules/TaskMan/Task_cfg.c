@@ -173,8 +173,8 @@ unsigned char Task_CanMsgProcess(void)
     unsigned char msgLen, msgData[8];
     unsigned char i, NbMsgReceived;
     
-    NbMsgReceived = CAN_RX_FIFO.NumElem;
-    
+    NbMsgReceived = CAN_FIFO_GetNumOfElem(&CAN_RX_FIFO);
+
     for(i=0; i<NbMsgReceived; i++)
     {
         // Reception of CAN messages

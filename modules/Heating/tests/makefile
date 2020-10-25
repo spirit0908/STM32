@@ -1,7 +1,7 @@
 # setup
 
-COMPILE_OPTS = -W -Wall -ansi -pedantic
-INCLUDE_DIRS = -I../ -I../../../
+COMPILE_OPTS = -W -Wall -ansi -pedantic -std=c99 -g
+INCLUDE_DIRS = -I../ -I../../../lib/inc -I../../../
 #LIBRARY_DIRS = -L lib
 
 CC = gcc
@@ -18,29 +18,41 @@ LD = gcc
 
 
 MAIN_OUT = main
+MODULE_NAME = Heating
 
 # all
 #all: $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
 
 # main
 SRC_FILES = \
-  main.c \
-  ../Heating.c \
-  stubs.c
+  stubs.c \
+  ../*.c \
+  test_main.c
 
 #INC_FILES = \
   Std_Types.h
 
-#test:
-#	$(CC) $(CCFLAGS) main.c ../../modules/Teleinfo/Heating.c stubs.c -o main
 
-test:
-	$(CC) -g -I../ -I../../../ test_main.c ../Heating.c stubs.c -o test_main
-
+test_main:
+	$(CC) $(CFLAGS) $(SRC_FILES) -o test_main
+#	$(CC) $(CFLAGS) stubs.c ../Heating.c test_main.c -o test_main
 
 
-runtest: test
+
+test: test_main
 	./test_main
 
+runtest: test_main
+	./test_main > test_exec.log
+	perl generate_test_report.pl test_exec.log test_result_$(MODULE_NAME).xml
+	mkdir -p ../../../out/tests
+	cp test_result_$(MODULE_NAME).xml ../../../out/tests/test_result_$(MODULE_NAME).xml
+
+debug: test
+	gdb -tui test_main test_main.c
+
 clean:
-	rm test_main
+	rm -f test_main
+	rm -f test_exec.log
+	rm -f test_result_*.xml
+

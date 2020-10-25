@@ -39,7 +39,7 @@ PB_Config_T PushButtonConfig[MAX_PB_CONFIG_NB] =
 };
 
 
-/* Generate PushButton configuration: */
+/* Generate Heater configuration: */
 PB_Config_T hHeating[MAX_HEATING_CONFIG_NB] =
 {
   <xsl:for-each select="heating/heater">{<xsl:value-of select="port"/>, <xsl:value-of select="pin"/>, <xsl:value-of select="type"/>, <xsl:value-of select="temp_default"/>, <xsl:value-of select="temp_confort"/>, <xsl:value-of select="mode_gestion"/>, <xsl:value-of select="zone"/>}, /* "<xsl:value-of select="name"/>"*/

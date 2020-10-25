@@ -52,3 +52,4 @@ clean:
 	rm -f test_main
 	rm -f test_exec.log
 	rm -f test_result_*.xml
+
