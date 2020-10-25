@@ -35,8 +35,6 @@ SRC_FILES = \
 
 test_main:
 	$(CC) $(CFLAGS) $(SRC_FILES) -o test_main
-#	$(CC) $(CFLAGS) stubs.c ../Heating.c test_main.c -o test_main
-
 
 
 test: test_main

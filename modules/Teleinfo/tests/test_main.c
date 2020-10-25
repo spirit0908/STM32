@@ -18,24 +18,27 @@ typedef struct
 {
   unsigned char functionName[40];
   int (*pf)(void);
+  unsigned char run;
 } T_testFunction;
 
+/* Test configuration (test_cfg.c) */
+unsigned char TEST_module[50] = "Teleinfo";
 T_testFunction test_list_config[]=
 {
   /* Unit tests*/
-  {"teleinfo_Init", TEST_teleinfo_Init},
-  {"teleinfo_rawByte_receive", TEST_teleinfo_rawByte_receive},
+  {"teleinfo_Init", TEST_teleinfo_Init, 1},
+  {"teleinfo_rawByte_receive", TEST_teleinfo_rawByte_receive, 1},
 //  {"Teleinfo_Mgt", TEST_Teleinfo_Mgt},
 //  {"TIC_check_frame", TEST_TIC_check_frame},
-  {"TIC_set_option", TEST_TIC_set_option},
-  {"TIC_get_option", TEST_TIC_get_option},
+  {"TIC_set_option", TEST_TIC_set_option, 1},
+  {"TIC_get_option", TEST_TIC_get_option, 1},
 //  {"Ascii2Int", TEST_Ascii2Int},
 //  {"TIC_FillInInfo", TEST_TIC_FillInInfo},
-  {"TIC_getLabelCode", TEST_TIC_getLabelCode},
-  {"TIC_CRC", TEST_TIC_CRC},
+  {"TIC_getLabelCode", TEST_TIC_getLabelCode, 1},
+  {"TIC_CRC", TEST_TIC_CRC, 1},
 
   /* Integration tests*/
-  {"Integration test: TeleInfo_Integration", TEST_TeleInfo_Integration},
+  {"Integration test: TeleInfo_Integration", TEST_TeleInfo_Integration, 1},
 };
 #define TEST_LIST_CONFIG_SIZE (sizeof(test_list_config)/sizeof(T_testFunction))
 
@@ -47,7 +50,9 @@ T_testFunction test_list_config[]=
 
 #define TST_RET_OK    0
 #define TST_RET_N_OK  1
+unsigned int errorNum;
 
+/* Test (test.c)*/
 int testStringFill(int *strPtr, int *string)
 {
   unsigned char strSize = sizeof(string);
@@ -57,6 +62,7 @@ int testStringFill(int *strPtr, int *string)
   {
     strPtr[i] = string[i];
   }
+  return 0;
 }
 
 unsigned int errorNum;
@@ -64,7 +70,16 @@ void assert(int check, char *str)
 {
   if(check == 0)
   {
-    printf("Error: %s\n", str);
+    printf("  Error: %s\n", str);
+    errorNum++;
+  }
+}
+
+void assert_cmp(unsigned int val1, unsigned int val2, char *str)
+{
+  if(val1 != val2)
+  {
+    printf("  Error: %s (%d!=%d)\n", str, val1, val2);
     errorNum++;
   }
 }
@@ -94,8 +109,6 @@ unsigned char tst_cmp(unsigned char *a, unsigned char *b, unsigned char len)
 
 unsigned char tst_set(unsigned char *a, unsigned char *b, unsigned char len)
 {
-  unsigned char *tmpcar;
-
   for(unsigned char i=0; i<len; i++)
   {
     *a = *b;
@@ -173,7 +186,7 @@ int TEST_teleinfo_rawByte_receive(void)
   teleinfo_rawByte_receive(testChar);
 
   /* checks */
-  assert(cptTIC_label == 0, "STX - wrong cpt");
+  assert(cptTIC_label == 2, "STX - wrong cpt");
 
   TIC_Fifo.WriteIdx == 0;
   TIC_Fifo.ReadIdx == 0;
@@ -183,11 +196,11 @@ int TEST_teleinfo_rawByte_receive(void)
   /* End of transmission */
   testChar=TST_ASCII_ETX;
 
-  cptTIC_label = 2;
+  cptTIC_label = 3;
   teleinfo_rawByte_receive(testChar);
 
   /* checks */
-  assert(cptTIC_label == 0, "ETX - wrong cpt");
+  assert(cptTIC_label == 3, "ETX - wrong cpt");
 
   assert(TIC_Fifo.WriteIdx == 0, "fail1");
   assert(TIC_Fifo.ReadIdx == 0, "fail2");
@@ -752,45 +765,63 @@ int TEST_TeleInfo_Integration(void)
  *************************************************/
 int main(void)
 {
-  unsigned int ret[TEST_LIST_CONFIG_SIZE];
-  unsigned int test_passed=0, test_failed=0;
-
+  int ret[TEST_LIST_CONFIG_SIZE];
+  unsigned int test_passed=0, test_failed=0, test_notrun=0;
+  
+  printf("Module: %s\n", TEST_module);
   printf("Test sequence begin\n");
   printf("-------------------\n");
 
-  for(int i=0; i<TEST_LIST_CONFIG_SIZE; i++)
+  for(unsigned int i=0; i<TEST_LIST_CONFIG_SIZE; i++)
   {
     printf("Executing test: %s\n", test_list_config[i].functionName);
-    ret[i] = (test_list_config[i].pf)();
+    if(test_list_config[i].run)
+    {
+      ret[i] = (test_list_config[i].pf)();
+    }
+    else 
+    {
+      ret[i] = -1;
+    }
+    printf("End of test test: %s - ", test_list_config[i].functionName);
     if(ret[i] == 0)
     {
-      printf("TEST %s: passed", test_list_config[i].functionName);
+      printf("PASSED\n");
+    }
+    else if(ret[i] == 1)
+    {
+      printf("FAILED\n");
     }
     else
     {
-      printf("TEST %s: failed", test_list_config[i].functionName);
+      printf("NOT EXECUTED\n");
     }
-
-    printf(" - end of test\n"); 
   }
   printf("-------------------\n");
   printf("Test sequence end  \n\n");
 
   printf("------Sum Up-------\n");
-  for(int i=0; i<TEST_LIST_CONFIG_SIZE; i++)
+  for(unsigned int i=0; i<TEST_LIST_CONFIG_SIZE; i++)
   {
     if(ret[i] == 0)
     {
       test_passed++;
       printf("[v] TEST %s: passed\n", test_list_config[i].functionName);
     }
-    else
+    else if(ret[i] > 1)
     {
       test_failed++;
       printf("[x] TEST %s: failed\n", test_list_config[i].functionName);
     }
+    else
+    {
+      test_notrun++;
+      printf("[u] TEST %s: not executed\n", test_list_config[i].functionName);
+    }
+    
   }
-  printf("%d failed - %d passed - total: %d tests\n", test_failed, test_passed, test_passed+test_failed);
+  printf("%d failed - %d passed - %d unexecuted - total: %d tests\n", test_failed, test_passed, test_notrun, test_passed+test_failed+test_notrun);
   printf("-------------------\n");
+
   return 0;
 }

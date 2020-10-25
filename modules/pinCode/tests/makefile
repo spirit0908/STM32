@@ -18,22 +18,23 @@ LD = gcc
 
 
 MAIN_OUT = main
+MODULE_NAME = pinCode
 
 # all
 #all: $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
 
 # main
 SRC_FILES = \
-  test_main.c \
   ../*.c \
-  stubs.c
+  test_main.c
+  
 
 #INC_FILES = \
   Std_Types.h
 
 
 test_main:
-	$(CC) $(CFLAGS) test_main.c ../pinCode.c -o test_main
+	$(CC) $(CFLAGS) $(SRC_FILES) -o test_main
 
 
 test: test_main
@@ -41,9 +42,9 @@ test: test_main
 
 runtest: test_main
 	./test_main > test_exec.log
-	perl generate_test_report.pl test_exec.log test_result_pinCode.xml
+	perl generate_test_report.pl test_exec.log test_result_$(MODULE_NAME).xml
 	mkdir -p ../../../out/tests
-	cp test_result_pinCode.xml ../../../out/tests/test_result_pinCode.xml
+	cp test_result_$(MODULE_NAME).xml ../../../out/tests/test_result_$(MODULE_NAME).xml
 
 debug: test
 	gdb -tui test_main test_main.c
