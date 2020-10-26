@@ -108,9 +108,9 @@ test: $(MAIN_OUT_BIN)
 	rm -f out/tests/*.xml
 	(cd modules/Teleinfo/tests; make runtest)
 	(cd modules/Heating/tests; make runtest)
-	(cd modules/pinCode/tests; make runtest)
-	(cd out/tests; ./combine_xml.sh test_results.xml)
-	(cd out/tests; xsltproc test_report_generator.xsl test_results.xml > Test_results.html )
+#	(cd modules/pinCode/tests; make runtest)
+#	(cd out/tests; ./combine_xml.sh test_results.xml)
+#	(cd out/tests; xsltproc test_report_generator.xsl test_results.xml > Test_results.html )
 
 # libstm32.a
 

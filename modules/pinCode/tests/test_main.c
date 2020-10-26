@@ -356,7 +356,7 @@ int main(void)
     {
       ret[i] = -1;
     }
-    printf("End of test test: %s - ", test_list_config[i].functionName);
+    printf("End of test: %s - ", test_list_config[i].functionName);
     if(ret[i] == 0)
     {
       printf("PASSED\n");
@@ -396,5 +396,5 @@ int main(void)
   printf("%d failed - %d passed - %d unexecuted - total: %d tests\n", test_failed, test_passed, test_notrun, test_passed+test_failed+test_notrun);
   printf("-------------------\n");
 
-  return 0;
+  return test_failed;
 }
