@@ -516,8 +516,6 @@ Wire Wire Line
 	4800 3900 4950 3900
 Wire Wire Line
 	4950 4000 4800 4000
-Wire Wire Line
-	6550 3400 6750 3400
 Text GLabel 6650 3600 2    50   Input ~ 0
 USART3_RX
 Wire Wire Line
@@ -528,64 +526,25 @@ Wire Wire Line
 	4950 4600 4800 4600
 Wire Wire Line
 	10150 3450 9950 3450
-$Comp
-L Connector_Generic:Conn_01x04 J5
-U 1 1 5B81A704
-P 6700 1000
-F 0 "J5" H 6780 992 50  0000 L CNN
-F 1 "Conn_01x04" H 6780 901 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 6700 1000 50  0001 C CNN
-F 3 "~" H 6700 1000 50  0001 C CNN
-	1    6700 1000
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3V3 #PWR0115
-U 1 1 5B81E324
-P 6350 900
-F 0 "#PWR0115" H 6350 750 50  0001 C CNN
-F 1 "+3V3" H 6365 1073 50  0000 C CNN
-F 2 "" H 6350 900 50  0001 C CNN
-F 3 "" H 6350 900 50  0001 C CNN
-	1    6350 900 
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR0117
-U 1 1 5B81E3CD
-P 6000 1200
-F 0 "#PWR0117" H 6000 950 50  0001 C CNN
-F 1 "GND" H 6005 1027 50  0000 C CNN
-F 2 "" H 6000 1200 50  0001 C CNN
-F 3 "" H 6000 1200 50  0001 C CNN
-	1    6000 1200
-	1    0    0    -1  
-$EndComp
-Text GLabel 6400 1100 0    50   BiDi ~ 0
+Text GLabel 6400 1150 0    50   BiDi ~ 0
 SDA
-Text GLabel 6400 1200 0    50   Input ~ 0
+Text GLabel 6400 1250 0    50   Input ~ 0
 SCL
 Wire Wire Line
-	6500 900  6350 900 
+	6500 1150 6400 1150
 Wire Wire Line
-	6000 1000 6000 1200
-Wire Wire Line
-	6000 1000 6500 1000
-Wire Wire Line
-	6500 1100 6400 1100
-Wire Wire Line
-	6400 1200 6500 1200
-Text GLabel 4850 4800 0    50   BiDi ~ 0
+	6400 1250 6500 1250
+Text GLabel 4800 4600 0    50   BiDi ~ 0
 SDA
 Wire Wire Line
 	4950 4800 4850 4800
-Text GLabel 4850 4700 0    50   Output ~ 0
+Text GLabel 4800 4500 0    50   Output ~ 0
 SCL
 Wire Wire Line
 	4950 4700 4850 4700
-Text GLabel 4800 4600 0    50   Input ~ 0
+Text GLabel 4850 4800 0    50   Input ~ 0
 SW_DOWN
-Text GLabel 4800 4500 0    50   Input ~ 0
+Text GLabel 4850 4700 0    50   Input ~ 0
 SW_RIGHT
 Text GLabel 4800 4300 0    50   Input ~ 0
 SW_LEFT
@@ -1175,7 +1134,7 @@ F 3 "" H 6450 3100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L perso:MAX3232_convertor U3
+L stm_proto_board-rescue:MAX3232_convertor-perso U3
 U 1 1 5B6FB7F9
 P 8800 3200
 F 0 "U3" H 8725 3565 50  0000 C CNN
@@ -1551,19 +1510,6 @@ F 3 "~" H 4950 1000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6750 3400 6750 3250
-$Comp
-L power:+3V3 #PWR0118
-U 1 1 5B89DD8A
-P 6750 3250
-F 0 "#PWR0118" H 6750 3100 50  0001 C CNN
-F 1 "+3V3" H 6765 3423 50  0000 C CNN
-F 2 "" H 6750 3250 50  0001 C CNN
-F 3 "" H 6750 3250 50  0001 C CNN
-	1    6750 3250
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
 	1850 4550 2350 4550
 $Comp
 L Device:R R11
@@ -1610,6 +1556,60 @@ F 3 "" H 1150 5000 50  0001 C CNN
 	1    1150 5000
 	1    0    0    -1  
 $EndComp
+$Comp
+L Connector_Generic:Conn_01x02 J5
+U 1 1 5FABC2C9
+P 6700 900
+F 0 "J5" H 6780 892 50  0000 L CNN
+F 1 "Conn_01x02" H 6780 801 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 6700 900 50  0001 C CNN
+F 3 "~" H 6700 900 50  0001 C CNN
+	1    6700 900 
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x02 J17
+U 1 1 5FAE99A1
+P 6700 1150
+F 0 "J17" H 6780 1142 50  0000 L CNN
+F 1 "Conn_01x02" H 6780 1051 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 6700 1150 50  0001 C CNN
+F 3 "~" H 6700 1150 50  0001 C CNN
+	1    6700 1150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6750 3400 6750 3250
+Wire Wire Line
+	6550 3400 6750 3400
+$Comp
+L power:+3V3 #PWR0118
+U 1 1 5B89DD8A
+P 6750 3250
+F 0 "#PWR0118" H 6750 3100 50  0001 C CNN
+F 1 "+3V3" H 6765 3423 50  0000 C CNN
+F 2 "" H 6750 3250 50  0001 C CNN
+F 3 "" H 6750 3250 50  0001 C CNN
+	1    6750 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR0115
+U 1 1 5B81E324
+P 6350 900
+F 0 "#PWR0115" H 6350 750 50  0001 C CNN
+F 1 "+3V3" H 6365 1073 50  0000 C CNN
+F 2 "" H 6350 900 50  0001 C CNN
+F 3 "" H 6350 900 50  0001 C CNN
+	1    6350 900 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 900  6350 900 
+Text GLabel 6350 1000 0    50   Input ~ 0
+GND_SCL
+Wire Wire Line
+	6350 1000 6500 1000
 Wire Bus Line
 	4300 3300 4300 5250
 Wire Bus Line
