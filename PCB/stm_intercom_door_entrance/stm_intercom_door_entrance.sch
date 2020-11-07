@@ -4,8 +4,8 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title "STM32 proto board"
-Date "2020-10-21"
+Title "STM32 intercom door entrance"
+Date "2020-11-07"
 Rev "1.1"
 Comp ""
 Comment1 ""
