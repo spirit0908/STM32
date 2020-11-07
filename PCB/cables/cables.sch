@@ -637,4 +637,155 @@ Text Notes 2300 6800 2    50   ~ 0
 pinHeader\nmale
 Text Notes 2450 6800 0    50   ~ 0
 pinHeader\nfemelle
+Text Notes 5600 2750 0    50   ~ 0
+header 4 pins femele\nPN532 side
+$Comp
+L Connector_Generic:Conn_01x04 J?
+U 1 1 5FA74E37
+P 6100 3200
+F 0 "J?" H 6180 3192 50  0000 L CNN
+F 1 "Conn_01x04" H 6180 3101 50  0000 L CNN
+F 2 "" H 6100 3200 50  0001 C CNN
+F 3 "~" H 6100 3200 50  0001 C CNN
+	1    6100 3200
+	1    0    0    -1  
+$EndComp
+Text Notes 5800 3900 0    50   ~ 0
+I2C to PN532 cable\nI2C-PN-01
+$Comp
+L Connector_Generic:Conn_01x02 J?
+U 1 1 5FA81273
+P 4400 3100
+F 0 "J?" H 4318 2775 50  0000 C CNN
+F 1 "Conn_01x02" H 4318 2866 50  0000 C CNN
+F 2 "" H 4400 3100 50  0001 C CNN
+F 3 "~" H 4400 3100 50  0001 C CNN
+	1    4400 3100
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x02 J?
+U 1 1 5FA82619
+P 4400 3650
+F 0 "J?" H 4318 3325 50  0000 C CNN
+F 1 "Conn_01x02" H 4318 3416 50  0000 C CNN
+F 2 "" H 4400 3650 50  0001 C CNN
+F 3 "~" H 4400 3650 50  0001 C CNN
+	1    4400 3650
+	-1   0    0    1   
+$EndComp
+Text Label 4750 3650 0    50   ~ 0
+3.3V
+Text Label 4750 3550 0    50   ~ 0
+GND
+Text Label 5700 3100 0    50   ~ 0
+GND
+Text Label 5700 3200 0    50   ~ 0
+3.3V
+Text Label 5700 3300 0    50   ~ 0
+SDA
+Text Label 5700 3400 0    50   ~ 0
+SCL
+Text Notes 4000 2700 0    50   ~ 0
+header 4 pins femele\nproto board side
+Text Label 4750 3100 0    50   ~ 0
+SDA
+Text Label 4750 3000 0    50   ~ 0
+SCL
+Wire Wire Line
+	5900 3400 5250 3400
+Wire Wire Line
+	5250 3400 5250 3000
+Wire Wire Line
+	5900 3100 5350 3100
+Wire Wire Line
+	5350 3100 5350 3550
+Wire Wire Line
+	4600 3550 5350 3550
+Wire Wire Line
+	5450 3650 5450 3200
+Wire Wire Line
+	5450 3200 5900 3200
+Wire Wire Line
+	4600 3650 5450 3650
+Wire Wire Line
+	4600 3000 5250 3000
+Wire Wire Line
+	4600 3100 5150 3100
+Wire Wire Line
+	5150 3100 5150 3300
+Wire Wire Line
+	5150 3300 5900 3300
+$Comp
+L Connector_Generic:Conn_01x08 J?
+U 1 1 5FA7CE99
+P 6200 4800
+F 0 "J?" H 6280 4792 50  0000 L CNN
+F 1 "Conn_01x08" H 6280 4701 50  0000 L CNN
+F 2 "" H 6200 4800 50  0001 C CNN
+F 3 "~" H 6200 4800 50  0001 C CNN
+	1    6200 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x08 J?
+U 1 1 5FA7DE52
+P 4050 4800
+F 0 "J?" H 3968 5317 50  0000 C CNN
+F 1 "Conn_01x08" H 3968 5226 50  0000 C CNN
+F 2 "" H 4050 4800 50  0001 C CNN
+F 3 "~" H 4050 4800 50  0001 C CNN
+	1    4050 4800
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	4250 4500 6000 4500
+Wire Wire Line
+	4250 4600 6000 4600
+Wire Wire Line
+	4250 4700 6000 4700
+Wire Wire Line
+	4250 4800 6000 4800
+Wire Wire Line
+	4250 4900 6000 4900
+Wire Wire Line
+	4250 5000 6000 5000
+Wire Wire Line
+	4250 5100 6000 5100
+Wire Wire Line
+	4250 5200 6000 5200
+Text Label 4400 4500 0    50   ~ 0
+marron
+Text Label 4400 4600 0    50   ~ 0
+blanc-marron
+Text Label 5250 4500 0    50   ~ 0
+Door_lock
+Text Label 5250 4600 0    50   ~ 0
+COM_intercom
+Text Label 5250 4700 0    50   ~ 0
+bell
+Text Label 4400 4700 0    50   ~ 0
+orange
+Text Label 4400 4800 0    50   ~ 0
+blanc-orange
+Text Label 4400 4900 0    50   ~ 0
+vert
+Text Label 4400 5000 0    50   ~ 0
+blanc-vert
+Text Label 4400 5100 0    50   ~ 0
+bleu
+Text Label 4400 5200 0    50   ~ 0
+blanc-bleu
+Text Label 5250 4900 0    50   ~ 0
++5V
+Text Label 5250 5000 0    50   ~ 0
+GND
+Text Label 5250 5100 0    50   ~ 0
+SDA
+Text Label 5250 5200 0    50   ~ 0
+SDL
+Text Label 5250 4800 0    50   ~ 0
+door_sensor
+Text Notes 5750 5550 0    50   ~ 0
+RPI to intercom cable\nRPI-COM-01
 $EndSCHEMATC

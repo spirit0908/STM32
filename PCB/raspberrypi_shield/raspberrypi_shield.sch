@@ -1266,7 +1266,7 @@ Wire Wire Line
 Wire Wire Line
 	1800 4800 2250 4800
 Text GLabel 1000 4950 0    50   Input ~ 0
-Relay1
+Relay2
 Wire Wire Line
 	1550 5250 1800 5250
 Connection ~ 1800 5250
@@ -1391,7 +1391,7 @@ Wire Wire Line
 Wire Wire Line
 	1800 5700 2250 5700
 Text GLabel 1000 5850 0    50   Input ~ 0
-Relay1
+Relay3
 Wire Wire Line
 	1550 6150 1800 6150
 Connection ~ 1800 6150
@@ -1516,7 +1516,7 @@ Wire Wire Line
 Wire Wire Line
 	1800 6650 2250 6650
 Text GLabel 1000 6800 0    50   Input ~ 0
-Relay1
+Relay4
 Wire Wire Line
 	1550 7100 1800 7100
 Connection ~ 1800 7100
@@ -1590,13 +1590,13 @@ Wire Wire Line
 	9850 1400 10450 1400
 Wire Wire Line
 	2650 750  2650 1000
-Text GLabel 10650 3100 2    50   Input ~ 0
+Text GLabel 10500 2700 2    50   Input ~ 0
 Input1
-Text GLabel 10650 3200 2    50   Input ~ 0
+Text GLabel 10500 2800 2    50   Input ~ 0
 Input2
-Text GLabel 10650 3300 2    50   Input ~ 0
+Text GLabel 10500 2900 2    50   Input ~ 0
 Input3
-Text GLabel 10650 3400 2    50   Input ~ 0
+Text GLabel 10500 3000 2    50   Input ~ 0
 Input3
 $Comp
 L Connector_Generic:Conn_01x04 J15
@@ -1701,4 +1701,12 @@ Text GLabel 8800 1300 0    50   Input ~ 0
 LED1
 Wire Wire Line
 	8800 1300 9350 1300
+Text GLabel 8850 2400 0    50   Input ~ 0
+Relay1
+Text GLabel 8850 2500 0    50   Input ~ 0
+Relay2
+Text GLabel 8850 2600 0    50   Input ~ 0
+Relay3
+Text GLabel 8850 2700 0    50   Input ~ 0
+Relay4
 $EndSCHEMATC

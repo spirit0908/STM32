@@ -157,9 +157,9 @@ F 3 "" H 6000 1150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 6400 1050 0    50   BiDi ~ 0
-SDA
+I2C_SDA
 Text GLabel 6400 1150 0    50   Input ~ 0
-SCL
+I2C_SCL
 Wire Wire Line
 	6500 850  6350 850 
 Wire Wire Line
@@ -171,11 +171,11 @@ Wire Wire Line
 Wire Wire Line
 	6400 1150 6500 1150
 Text GLabel 4800 4900 0    50   BiDi ~ 0
-SDA
+I2C_SDA
 Wire Wire Line
 	4900 4900 4800 4900
 Text GLabel 4800 4800 0    50   Output ~ 0
-SCL
+I2C_SCL
 Wire Wire Line
 	4900 4800 4800 4800
 $Comp
@@ -189,8 +189,8 @@ F 3 "" H 4350 5100 50  0001 C CNN
 	1    4350 5100
 	1    0    0    -1  
 $EndComp
-Text Notes 6950 1450 0    50   ~ 0
-PN532
+Text Notes 6650 1450 0    50   ~ 0
+PN532 - I2C
 Wire Notes Line
 	7300 600  7300 1500
 Wire Notes Line
@@ -222,9 +222,9 @@ F 3 "" H 6350 2100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 6400 2300 0    50   BiDi ~ 0
-SDA
+I2C_SDA
 Text GLabel 6400 2400 0    50   Input ~ 0
-SCL
+I2C_SCL
 Wire Wire Line
 	6500 2100 6350 2100
 Wire Wire Line
@@ -606,7 +606,7 @@ $EndComp
 Wire Wire Line
 	6500 3300 6500 3500
 Text GLabel 6400 2200 0    50   Input ~ 0
-GND_SCL
+GND
 Wire Wire Line
 	6400 2200 6500 2200
 Text GLabel 4800 5300 0    50   Input ~ 0
@@ -1160,11 +1160,11 @@ F 3 "~" H 6700 1300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 6400 1300 0    50   Input ~ 0
-IRQ
+I2C_IRQ
 Wire Wire Line
 	6400 1300 6500 1300
 Text GLabel 4800 5000 0    50   Input ~ 0
-IRQ
+I2C_IRQ
 Connection ~ 800  3100
 Connection ~ 1750 3100
 Wire Wire Line
@@ -1207,7 +1207,7 @@ U 1 1 5FE60326
 P 8700 4950
 F 0 "D2" H 8700 5167 50  0000 C CNN
 F 1 "D" H 8700 5076 50  0000 C CNN
-F 2 "Diode_THT:Diode_Bridge_DIP-4_W7.62mm_P5.08mm" H 8700 4950 50  0001 C CNN
+F 2 "Diode_THT:D_5W_P10.16mm_Horizontal" H 8700 4950 50  0001 C CNN
 F 3 "~" H 8700 4950 50  0001 C CNN
 	1    8700 4950
 	0    1    1    0   
@@ -1297,7 +1297,7 @@ U 1 1 5FFB516B
 P 8700 5900
 F 0 "D3" H 8700 6117 50  0000 C CNN
 F 1 "D" H 8700 6026 50  0000 C CNN
-F 2 "Diode_THT:Diode_Bridge_DIP-4_W7.62mm_P5.08mm" H 8700 5900 50  0001 C CNN
+F 2 "Diode_THT:D_5W_P10.16mm_Horizontal" H 8700 5900 50  0001 C CNN
 F 3 "~" H 8700 5900 50  0001 C CNN
 	1    8700 5900
 	0    1    1    0   
@@ -1499,4 +1499,109 @@ Wire Wire Line
 	4900 3600 4750 3600
 Wire Wire Line
 	4750 3700 4900 3700
+$Comp
+L power:+3V3 #PWR0130
+U 1 1 5FA806A7
+P 5000 850
+F 0 "#PWR0130" H 5000 700 50  0001 C CNN
+F 1 "+3V3" H 5015 1023 50  0000 C CNN
+F 2 "" H 5000 850 50  0001 C CNN
+F 3 "" H 5000 850 50  0001 C CNN
+	1    5000 850 
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0131
+U 1 1 5FA806AD
+P 5150 950
+F 0 "#PWR0131" H 5150 700 50  0001 C CNN
+F 1 "GND" H 5155 777 50  0000 C CNN
+F 2 "" H 5150 950 50  0001 C CNN
+F 3 "" H 5150 950 50  0001 C CNN
+	1    5150 950 
+	1    0    0    -1  
+$EndComp
+Text GLabel 4450 900  0    50   BiDi ~ 0
+PN_MOSI
+Text GLabel 4450 800  0    50   Input ~ 0
+PN_MISO
+Wire Notes Line
+	5450 600  5450 1500
+Wire Notes Line
+	5450 1500 4000 1500
+Wire Notes Line
+	4000 1500 4000 600 
+Wire Notes Line
+	4000 600  5450 600 
+Text GLabel 4450 1000 0    50   Input ~ 0
+PN_SS
+Text GLabel 4450 700  0    50   Input ~ 0
+PN_SCK
+Text GLabel 4450 1300 0    50   Input ~ 0
+PN_IRQ
+Text GLabel 4450 1200 0    50   Input ~ 0
+GND
+Text GLabel 4450 1400 0    50   Input ~ 0
+PN_RSTO
+$Comp
+L Connector_Generic:Conn_01x08 J20
+U 1 1 5FB1BDFB
+P 4750 1000
+F 0 "J20" H 4830 992 50  0000 L CNN
+F 1 "Conn_01x08" H 4830 901 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical" H 4750 1000 50  0001 C CNN
+F 3 "~" H 4750 1000 50  0001 C CNN
+	1    4750 1000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4450 700  4550 700 
+Wire Wire Line
+	4450 800  4550 800 
+Wire Wire Line
+	4450 900  4550 900 
+Wire Wire Line
+	4450 1000 4550 1000
+Wire Wire Line
+	4450 1200 4550 1200
+Wire Wire Line
+	4450 1300 4550 1300
+Wire Wire Line
+	4450 1400 4550 1400
+Wire Wire Line
+	4450 1100 4550 1100
+Wire Wire Line
+	5150 850  5000 850 
+Text GLabel 4450 1100 0    50   Input ~ 0
+VCC
+Text GLabel 5150 850  2    50   Input ~ 0
+VCC
+Text GLabel 5150 950  2    50   Input ~ 0
+GND
+Text Notes 4900 1450 0    50   ~ 0
+PN532 - SPI
+Text GLabel 6600 4300 2    50   BiDi ~ 0
+PN_MOSI
+Text GLabel 6600 4400 2    50   Input ~ 0
+PN_MISO
+Text GLabel 6600 4500 2    50   Input ~ 0
+PN_SCK
+Text GLabel 6600 4100 2    50   Input ~ 0
+PN_IRQ
+Text GLabel 6600 4000 2    50   Input ~ 0
+PN_RSTO
+Wire Wire Line
+	6600 4500 6500 4500
+Wire Wire Line
+	6600 4400 6500 4400
+Wire Wire Line
+	6600 4300 6500 4300
+Wire Wire Line
+	6600 4200 6500 4200
+Wire Wire Line
+	6600 4100 6500 4100
+Wire Wire Line
+	6600 4000 6500 4000
+Text GLabel 6600 4200 2    50   Input ~ 0
+PN_SS
 $EndSCHEMATC
