@@ -1701,12 +1701,51 @@ Text GLabel 8800 1300 0    50   Input ~ 0
 LED1
 Wire Wire Line
 	8800 1300 9350 1300
-Text GLabel 8850 2400 0    50   Input ~ 0
+Text GLabel 8850 2400 0    50   Output ~ 0
 Relay1
-Text GLabel 8850 2500 0    50   Input ~ 0
+Text GLabel 8850 2500 0    50   Output ~ 0
 Relay2
-Text GLabel 8850 2600 0    50   Input ~ 0
+Text GLabel 8850 2600 0    50   Output ~ 0
 Relay3
-Text GLabel 8850 2700 0    50   Input ~ 0
+Text GLabel 8850 2700 0    50   Output ~ 0
 Relay4
+$Comp
+L Device:Buzzer BZ?
+U 1 1 5FA86580
+P 5850 6250
+F 0 "BZ?" H 6002 6279 50  0000 L CNN
+F 1 "Buzzer" H 6002 6188 50  0000 L CNN
+F 2 "" V 5825 6350 50  0001 C CNN
+F 3 "~" V 5825 6350 50  0001 C CNN
+	1    5850 6250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5FA99F14
+P 5550 6150
+F 0 "R?" V 5343 6150 50  0000 C CNN
+F 1 "R" V 5434 6150 50  0000 C CNN
+F 2 "" V 5480 6150 50  0001 C CNN
+F 3 "~" H 5550 6150 50  0001 C CNN
+	1    5550 6150
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5750 6150 5700 6150
+$Comp
+L power:GND #PWR?
+U 1 1 5FB10533
+P 5750 6350
+F 0 "#PWR?" H 5750 6100 50  0001 C CNN
+F 1 "GND" H 5755 6177 50  0000 C CNN
+F 2 "" H 5750 6350 50  0001 C CNN
+F 3 "" H 5750 6350 50  0001 C CNN
+	1    5750 6350
+	1    0    0    -1  
+$EndComp
+Text GLabel 5400 6150 0    50   Input ~ 0
+buzz
+Text GLabel 8850 2800 0    50   Output ~ 0
+buzz
 $EndSCHEMATC
