@@ -16,7 +16,7 @@
   </Interfaces>
   <switch>
     <pushButton id="1">
-      <name>PB_UP</name>
+      <name>doorSensor1</name>
       <port>GPIOB</port>
       <pin>PB5</pin>
       <pushConfig>

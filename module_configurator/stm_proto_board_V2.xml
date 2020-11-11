@@ -17,16 +17,16 @@
   <switch>
     <pushButton id="1">
       <name>PB_UP</name>
-      <port>GPIOB</port>
-      <pin>PB5</pin>
+      <port>GPIOA</port>
+      <pin>PA0</pin>
       <pushConfig>
         <shortPush>
           <action>LcdMenu_MenuUp</action>
-          <address>0x123</address>
+          <address></address>
         </shortPush>
         <longPush>
           <action>LcdMenu_MenuTop</action>
-          <address>0x123</address>
+          <address></address>
         </longPush>
         <configPush>
           <action>NULL</action>
@@ -41,12 +41,12 @@
     </pushButton>
     <pushButton id="2">
       <name>PB_DOWN</name>
-      <port>GPIOB</port>
-      <pin>PB7</pin>
+      <port>GPIOC</port>
+      <pin>PC14</pin>
       <pushConfig>
         <shortPush>
           <action>LcdMenu_MenuDown</action>
-          <address>0x123</address>
+          <address></address>
         </shortPush>
         <longPush>
           <action>NULL</action>
@@ -65,12 +65,12 @@
     </pushButton>
     <pushButton id="3">
       <name>PB_LEFT</name>
-      <port>GPIOB</port>
-      <pin>PB4</pin>
+      <port>GPIOC</port>
+      <pin>PC15</pin>
       <pushConfig>
         <shortPush>
           <action>LcdMenu_MenuDown</action>
-          <address>0x123</address>
+          <address></address>
         </shortPush>
         <longPush>
           <action>NULL</action>
@@ -89,12 +89,12 @@
     </pushButton>
     <pushButton id="4">
       <name>PB_RIGHT</name>
-      <port>GPIOB</port>
-      <pin>PB6</pin>
+      <port>GPIOA</port>
+      <pin>PA1</pin>
       <pushConfig>
         <shortPush>
           <action>LcdMenu_MenuDown</action>
-          <address>0x123</address>
+          <address></address>
         </shortPush>
         <longPush>
           <action>NULL</action>
@@ -114,69 +114,66 @@
   </switch>
   <lights>
     <light id="1">
-      <name>Living room</name>
+      <name>RGB_R</name>
       <type>
         <active>yes</active>
         <dimmer>no</dimmer>
         <timer>no</timer>
-        <ledStrip>no</ledStrip>
+        <ledStrip>yes</ledStrip>
       </type>
-      <port>GPIOA</port>
-      <pin>Pin1</pin>
+      <port>GPIOB</port>
+      <pin>PB0</pin>
       <defaultBrightness></defaultBrightness>
       <defaultTimer></defaultTimer>
     </light>
     <light id="2">
-      <name>Bed room</name>
+      <name>RGB_G</name>
       <type>
         <active>yes</active>
-        <dimmer>yes</dimmer>
+        <dimmer>no</dimmer>
         <timer>no</timer>
-        <ledStrip>no</ledStrip>
+        <ledStrip>yes</ledStrip>
       </type>
       <port>GPIOA</port>
-      <pin>Pin2</pin>
-      <defaultBrightness>60</defaultBrightness>
+      <pin>PA7</pin>
+      <defaultBrightness></defaultBrightness>
+      <defaultTimer></defaultTimer>
+    </light>
+    <light id="3">
+      <name>RGB_B</name>
+      <type>
+        <active>yes</active>
+        <dimmer>no</dimmer>
+        <timer>no</timer>
+        <ledStrip>yes</ledStrip>
+      </type>
+      <port>GPIOA</port>
+      <pin>PA6</pin>
+      <defaultBrightness></defaultBrightness>
       <defaultTimer></defaultTimer>
     </light>
   </lights>
   <heating>
     <heater id="1">
-      <name>Living room heater 1</name>
-      <zone>LivingRoom</zone>
+      <name>Heater1</name>
+      <zone>Zone1</zone>
       <type>elec</type> <!-- elec/chaudiere -->
-      <port>GPIOx</port>
-      <pin>PinY</pin>
+      <port>GPIOA</port>
+      <pin>PA4</pin>
       <temp_default>19.0</temp_default>
       <temp_confort>21.0</temp_confort>
       <mode_gestion>MODE4</mode_gestion>
     </heater>
     <heater id="2">
-      <name>Bedroom heater 1</name>
-      <zone>BedRoom</zone>
+      <name>Heater2</name>
+      <zone>Zone2</zone>
       <type>elec</type> <!-- elec/chaudiere -->
-      <port>GPIOx</port>
-      <pin>pin5</pin>
+      <port>GPIOA</port>
+      <pin>PA5</pin>
       <temp_default>18.0</temp_default>
       <temp_confort>22.0</temp_confort>
       <mode_gestion>MODE4</mode_gestion>
     </heater>
-    <thermostat id="1">
-      <name>Thermostat living room</name>
-      <addr></addr>
-    </thermostat>
-    <thermostat id="2">
-      <name>Thermostat bedroom</name>
-      <addr></addr>
-    </thermostat>
   </heating>
-  <Security>
-    <secuElem id='1'>
-      <type>door_1</type> <!-- door/magnet/portail/...-->
-      <zone>Z1</zone>
-      <port>GPIOX</port>
-      <pin>PINy</pin>
-      <mode>NC</mode> <!-- NC/NO -->
-    </secuElem>
-  </Security>
 </span>
+
