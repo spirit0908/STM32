@@ -124,6 +124,8 @@ int main(void)
     /* SPI init */
     //SpiInit();
 
+    /* I2C1Init() */
+
     /* CAN Bus */
     CanInit();
 

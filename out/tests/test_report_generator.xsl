@@ -7,22 +7,28 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template match="span">
 
 <html>
-    <!--<head>
-        <meta charset='UTF-8'>
+    <head>
+        <meta charset='UTF-8'/>
         <title>Test report</title>
-    </head>-->
+    </head>
     <body>
-        <h1 align='center'>Software test report</h1>
+        <h1 align='center'>Software Test Report</h1>
+
+        <h2>Test Execution details</h2>
+        <ul>
+          <li>Date: <xsl:value-of select="execinfo/date"/></li>
+          <li>Time: <xsl:value-of select="execinfo/time"/></li>
+        </ul>
+
         <h2>Summary</h2>
-       
         <table border='1'>
             <thead>
                 <tr>
-                    <th>moduleName</th>
-                    <th>passed</th>
-                    <th>not run</th>
-                    <th>failed</th>
-                    <th>total</th>
+                    <th>Module name</th>
+                    <th>Passed</th>
+                    <th>Not run</th>
+                    <th>Failed</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,9 +48,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         <table border='1'>
             <thead>
                 <tr>
-                    <th>moduleName</th>
-                    <th>testname</th>
-                    <th>teststatus</th>
+                    <th>Module name</th>
+                    <th>Test name</th>
+                    <th>Test status</th>
                 </tr>
             </thead>
             <tbody>

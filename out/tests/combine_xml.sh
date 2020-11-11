@@ -9,6 +9,11 @@ rm -f OUTPUT_FILE
 echo "<?xml version=\"1.0\"?>" >> $TMP_FILE
 echo "<span>" >> $TMP_FILE
 
+echo "<execinfo>" >> $TMP_FILE
+echo "<date>$(date +'%m/%d/%Y')</date>" >> $TMP_FILE
+echo "<time>$(date +'%H:%M:%S')</time>" >> $TMP_FILE
+echo "</execinfo>" >> $TMP_FILE
+
 FILES=*.xml
 
 #Read each xml file in the current foder
@@ -16,8 +21,6 @@ for i in $FILES
 do
 
 echo "process file: $i"
-
-
 
   #Read each line and remove xml header and footer (lines with "xml" or "span")
   while read -r line
