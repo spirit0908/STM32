@@ -19,6 +19,7 @@
 
 Distributed network based on CAN bus
 
+```
                         temp.                   wall
   I/O  I/O              sensor          light  switch
    |    |                 |               |       |
@@ -38,7 +39,7 @@ Distributed network based on CAN bus
          |       |              |
        RFID   iButton      smart meter
       reader  reader        interface
-
+```
 
 ## Boards
 

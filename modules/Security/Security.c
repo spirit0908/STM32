@@ -99,10 +99,10 @@ void Security_Mainfunction(void)
   unsigned char i;
   for(i=0; i<MAX_SECURITY_DEVICE_NUM ;i++)
   {
-    if( (SecurityState[ElemId].state>0) && (SecurityState[ElemId].state<255) )
+    if( (SecurityState[i].state>0) && (SecurityState[i].state<255) )
     {
-        SecurityState[ElemId].state--;
-        if(SecurityState[ElemId].state == 0)
+        SecurityState[i].state--;
+        if(SecurityState[i].state == 0)
         {
             //TODO: reset output
         }
