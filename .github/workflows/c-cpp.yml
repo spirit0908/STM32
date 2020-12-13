@@ -19,4 +19,8 @@ jobs:
       run: make
     - name: test
       run: make test
-
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: artifacts
+        path: out/tests/*.xml

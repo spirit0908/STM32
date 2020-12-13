@@ -147,6 +147,7 @@ unsigned char CanSendMessage(void)
 
     // Send CAN messages    
     NbMsgToSend = CAN_TX_FIFO.NumElem;
+    //TODO: use: unsigned char CAN_FIFO_GetNumOfElem(T_CAN_FIFO *pFIFO)
     
     for(i=0; i<NbMsgToSend; i++)
     {

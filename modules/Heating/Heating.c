@@ -37,13 +37,13 @@ void Heating_Init(void)
 
   for(i=0u; i<HEATING_MAX_DEVICES; i++)
   {
-  	HeatingState[i].state 				= HEATING_STATE_OFF;
-  	HeatingState[i].mode 				= HEATING_MODE_OFF;
+    HeatingState[i].state               = HEATING_STATE_OFF;
+    HeatingState[i].mode                = HEATING_MODE_OFF;
 
     HeatingState[i].threshold           = 1;
-   	HeatingState[i].temperature_default	= 20*2;
-   	HeatingState[i].temperature_confort = 21*2;
-   	HeatingState[i].temperature 		= 0;
+    HeatingState[i].temperature_default	= 20*2;
+    HeatingState[i].temperature_confort = 21*2;
+    HeatingState[i].temperature         = 0;
     HeatingState[i].consigne            = HeatingState[i].temperature_default;;
   }
 }

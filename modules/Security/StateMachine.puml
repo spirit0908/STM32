@@ -1,0 +1,38 @@
+@startuml
+skinparam defaultTextAlignment left
+
+state ALARME_INIT
+state ALARME_OFF
+state ALARME_SET
+state ALARME_CONFIG
+
+[*] --> ALARME_INIT
+
+ALARME_INIT --> ALARME_OFF
+
+ALARME_OFF --> ALARME_SET : Alarme_Set()
+ALARME_OFF -> ALARME_CONFIG
+
+ALARME_CONFIG -> ALARME_OFF
+
+ALARME_SET --> ALARME_OFF : Alarme_Unset()
+
+state ALARME_SET {
+  state ALARME_PRE_TIMER
+  state ALARME_IDLE 
+  state ALARME_TRIGGERED : activate buzzer
+  state ALARME_ALERT     : Deactivate buzzer
+  state ALARME_ALERT     : Activate siren
+  state ALARME_ALERT     : Notify user
+  state ALARME_END_ALERT : Deactivate siren
+
+  [*] --> ALARME_PRE_TIMER 
+  ALARME_PRE_TIMER --> ALARME_IDLE : PreTimerExpired
+  ALARME_IDLE --> ALARME_TRIGGERED : Alarm_TriggerAlarm()
+  ALARME_IDLE --> ALARME_TRIGGERED : WrongCode
+  ALARME_TRIGGERED --> ALARME_ALERT : TrigerTimerExpired
+  ALARME_ALERT --> ALARME_END_ALERT  : AlertTimerExpired
+  ALARME_END_ALERT --> ALARME_IDLE : AlertTimerExpired
+}
+
+@enduml

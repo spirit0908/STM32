@@ -23,34 +23,34 @@
 ************************************************************************/
 typedef enum
 {
-	HEATING_MODE_OFF = 0,
-	HEATING_MODE_NORMAL,
-	HEATING_MODE_ECO,
-	HEATING_MODE_CONFORT,
-	HEATING_MODE_FROST,
-//	HEATING_MODE_ERROR,
-//	HEATING_MODE_INIT,
-	HEATING_MODE_INHIBIT,
-	HEATING_MODE_ACTIVATE
+  HEATING_MODE_OFF = 0,
+  HEATING_MODE_NORMAL,
+  HEATING_MODE_ECO,
+  HEATING_MODE_CONFORT,
+  HEATING_MODE_FROST,
+//  HEATING_MODE_ERROR,
+//  HEATING_MODE_INIT,
+  HEATING_MODE_INHIBIT,
+  HEATING_MODE_ACTIVATE
 }T_Heating_Mode;
 
 typedef enum
 {
-	HEATING_STATE_OFF,
-	HEATING_STATE_WAIT,
-	HEATING_STATE_HEAT,
-	HEATING_STATE_,
+  HEATING_STATE_OFF,
+  HEATING_STATE_WAIT,
+  HEATING_STATE_HEAT,
+  HEATING_STATE_,
 }T_HeatingSM_State;
 
 typedef struct
 {
-	T_Heating_Mode mode; 
-	T_HeatingSM_State state;
-	unsigned char consigne;
-	unsigned char threshold;
-	unsigned char temperature;
-	unsigned char temperature_default;
-	unsigned char temperature_confort;
+  T_Heating_Mode mode; 
+  T_HeatingSM_State state;
+  unsigned char consigne;
+  unsigned char threshold;
+  unsigned char temperature;
+  unsigned char temperature_default;
+  unsigned char temperature_confort;
 }T_HeatingConfig;
 
 /************************************************************************

@@ -46,7 +46,7 @@ runtest: test_main
 	mkdir -p ../../../out/tests
 	cp test_result_$(MODULE_NAME).xml ../../../out/tests/test_result_$(MODULE_NAME).xml
 
-debug: test
+debug: test_main
 	gdb -tui test_main test_main.c
 
 clean:
