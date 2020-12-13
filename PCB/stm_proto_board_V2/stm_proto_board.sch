@@ -1126,9 +1126,9 @@ Wire Notes Line
 	4150 3700 2300 3700
 Text GLabel 4750 4100 0    50   Output ~ 0
 TP3
-Text GLabel 4750 3800 0    50   Output ~ 0
+Text GLabel 4100 3500 0    50   Output ~ 0
 TP2
-Text GLabel 4750 3700 0    50   Output ~ 0
+Text GLabel 4100 3400 0    50   Output ~ 0
 TP1
 Wire Wire Line
 	6400 2000 6500 2000
@@ -1267,10 +1267,6 @@ F 3 "" H 6450 3100 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	4750 4100 4950 4100
-Wire Wire Line
-	4750 3800 4950 3800
-Wire Wire Line
-	4950 3700 4750 3700
 Wire Wire Line
 	4750 3600 4950 3600
 Wire Wire Line
@@ -1607,99 +1603,10 @@ Wire Wire Line
 	1050 4650 1050 4850
 Wire Wire Line
 	1050 4850 1150 4850
-$Comp
-L Connector_Generic:Conn_01x04 J20
-U 1 1 5FB0F0D0
-P 9850 6000
-F 0 "J20" H 9930 5992 50  0000 L CNN
-F 1 "Conn_01x04" H 9930 5901 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 9850 6000 50  0001 C CNN
-F 3 "~" H 9850 6000 50  0001 C CNN
-	1    9850 6000
-	1    0    0    -1  
-$EndComp
-Text GLabel 9250 6200 0    50   Input ~ 0
-ibutton_led+
-Text GLabel 9500 5900 0    50   Input ~ 0
+Text GLabel 4850 3700 0    50   Input ~ 0
 ibutton_data
-Wire Wire Line
-	9650 5900 9550 5900
-Text Notes 10500 6200 0    50   ~ 0
-Wires color:\n1. red\n2. white\n3. black\n4. green
-$Comp
-L power:GND #PWR0117
-U 1 1 5FBB0AC2
-P 9650 6200
-F 0 "#PWR0117" H 9650 5950 50  0001 C CNN
-F 1 "GND" H 9655 6027 50  0000 C CNN
-F 2 "" H 9650 6200 50  0001 C CNN
-F 3 "" H 9650 6200 50  0001 C CNN
-	1    9650 6200
-	1    0    0    -1  
-$EndComp
-Text Notes 10400 6400 0    50   ~ 0
-ibutton reader
-$Comp
-L Device:R R14
-U 1 1 5FB24111
-P 9250 5800
-F 0 "R14" V 9043 5800 50  0000 C CNN
-F 1 "330" V 9134 5800 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 9180 5800 50  0001 C CNN
-F 3 "~" H 9250 5800 50  0001 C CNN
-	1    9250 5800
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	9550 5800 9550 5900
-Connection ~ 9550 5900
-Wire Wire Line
-	9550 5900 9500 5900
-Wire Wire Line
-	9400 5800 9550 5800
-Wire Notes Line
-	11000 5550 11000 6450
-Wire Notes Line
-	8650 5550 8650 6450
-Wire Notes Line
-	8650 5550 11000 5550
-Wire Notes Line
-	8650 6450 11000 6450
-Text GLabel 7100 5150 2    50   Input ~ 0
-ibutton_data
-Text GLabel 7100 5300 2    50   Input ~ 0
+Text GLabel 4850 3800 0    50   Input ~ 0
 ibutton_led+
-Wire Wire Line
-	9650 6100 9650 6200
-Connection ~ 9650 6200
-$Comp
-L Device:R R15
-U 1 1 5FD3DA1B
-P 9400 6200
-F 0 "R15" V 9193 6200 50  0000 C CNN
-F 1 "330" V 9284 6200 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 9330 6200 50  0001 C CNN
-F 3 "~" H 9400 6200 50  0001 C CNN
-	1    9400 6200
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	9550 6200 9550 6000
-Wire Wire Line
-	9550 6000 9650 6000
-$Comp
-L power:+3.3V #PWR0118
-U 1 1 5FDDA0F7
-P 8900 5800
-F 0 "#PWR0118" H 8900 5650 50  0001 C CNN
-F 1 "+3.3V" H 8915 5973 50  0000 C CNN
-F 2 "" H 8900 5800 50  0001 C CNN
-F 3 "" H 8900 5800 50  0001 C CNN
-	1    8900 5800
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	8900 5800 9100 5800
 Wire Wire Line
 	9600 3750 9950 3750
 Wire Wire Line
@@ -1764,6 +1671,99 @@ Wire Wire Line
 	9600 3850 10350 3850
 Text Label 9400 3000 0    50   ~ 0
 RS232_TX
+Wire Wire Line
+	8900 5800 9100 5800
+$Comp
+L power:+3.3V #PWR0118
+U 1 1 5FDDA0F7
+P 8900 5800
+F 0 "#PWR0118" H 8900 5650 50  0001 C CNN
+F 1 "+3.3V" H 8915 5973 50  0000 C CNN
+F 2 "" H 8900 5800 50  0001 C CNN
+F 3 "" H 8900 5800 50  0001 C CNN
+	1    8900 5800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9550 6000 9650 6000
+Wire Wire Line
+	9550 6200 9550 6000
+$Comp
+L Device:R R15
+U 1 1 5FD3DA1B
+P 9400 6200
+F 0 "R15" V 9193 6200 50  0000 C CNN
+F 1 "330" V 9284 6200 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 9330 6200 50  0001 C CNN
+F 3 "~" H 9400 6200 50  0001 C CNN
+	1    9400 6200
+	0    1    1    0   
+$EndComp
+Connection ~ 9650 6200
+Wire Wire Line
+	9650 6100 9650 6200
+Wire Notes Line
+	8650 6450 11000 6450
+Wire Notes Line
+	8650 5550 11000 5550
+Wire Notes Line
+	8650 5550 8650 6450
+Wire Notes Line
+	11000 5550 11000 6450
+Wire Wire Line
+	9400 5800 9550 5800
+Wire Wire Line
+	9550 5900 9500 5900
+Connection ~ 9550 5900
+Wire Wire Line
+	9550 5800 9550 5900
+$Comp
+L Device:R R14
+U 1 1 5FB24111
+P 9250 5800
+F 0 "R14" V 9043 5800 50  0000 C CNN
+F 1 "330" V 9134 5800 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal" V 9180 5800 50  0001 C CNN
+F 3 "~" H 9250 5800 50  0001 C CNN
+	1    9250 5800
+	0    1    1    0   
+$EndComp
+Text Notes 10400 6400 0    50   ~ 0
+ibutton reader
+$Comp
+L power:GND #PWR0117
+U 1 1 5FBB0AC2
+P 9650 6200
+F 0 "#PWR0117" H 9650 5950 50  0001 C CNN
+F 1 "GND" H 9655 6027 50  0000 C CNN
+F 2 "" H 9650 6200 50  0001 C CNN
+F 3 "" H 9650 6200 50  0001 C CNN
+	1    9650 6200
+	1    0    0    -1  
+$EndComp
+Text Notes 10500 6200 0    50   ~ 0
+Wires color:\n1. red\n2. white\n3. black\n4. green
+Wire Wire Line
+	9650 5900 9550 5900
+Text GLabel 9500 5900 0    50   Input ~ 0
+ibutton_data
+Text GLabel 9250 6200 0    50   Input ~ 0
+ibutton_led+
+$Comp
+L Connector_Generic:Conn_01x04 J20
+U 1 1 5FB0F0D0
+P 9850 6000
+F 0 "J20" H 9930 5992 50  0000 L CNN
+F 1 "Conn_01x04" H 9930 5901 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 9850 6000 50  0001 C CNN
+F 3 "~" H 9850 6000 50  0001 C CNN
+	1    9850 6000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4950 3800 4850 3800
+Wire Wire Line
+	4850 3700 4950 3700
 Wire Bus Line
 	4300 3300 4300 5250
 Wire Bus Line
