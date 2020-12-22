@@ -1,320 +1,6 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# Connector_Generic_Conn_01x02
-#
-DEF Connector_Generic_Conn_01x02 J 0 40 Y N 1 F N
-F0 "J" 0 100 50 H V C CNN
-F1 "Connector_Generic_Conn_01x02" 0 -200 50 H V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- Connector*:*_1x??_*
-$ENDFPLIST
-DRAW
-S -50 -95 0 -105 1 1 6 N
-S -50 5 0 -5 1 1 6 N
-S -50 50 50 -150 1 1 10 f
-X Pin_1 1 -200 0 150 R 50 50 1 1 P
-X Pin_2 2 -200 -100 150 R 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Connector_Generic_Conn_01x03
-#
-DEF Connector_Generic_Conn_01x03 J 0 40 Y N 1 F N
-F0 "J" 0 200 50 H V C CNN
-F1 "Connector_Generic_Conn_01x03" 0 -200 50 H V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- Connector*:*_1x??_*
-$ENDFPLIST
-DRAW
-S -50 -95 0 -105 1 1 6 N
-S -50 5 0 -5 1 1 6 N
-S -50 105 0 95 1 1 6 N
-S -50 150 50 -150 1 1 10 f
-X Pin_1 1 -200 100 150 R 50 50 1 1 P
-X Pin_2 2 -200 0 150 R 50 50 1 1 P
-X Pin_3 3 -200 -100 150 R 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Connector_Generic_Conn_01x04
-#
-DEF Connector_Generic_Conn_01x04 J 0 40 Y N 1 F N
-F0 "J" 0 200 50 H V C CNN
-F1 "Connector_Generic_Conn_01x04" 0 -300 50 H V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- Connector*:*_1x??_*
-$ENDFPLIST
-DRAW
-S -50 -195 0 -205 1 1 6 N
-S -50 -95 0 -105 1 1 6 N
-S -50 5 0 -5 1 1 6 N
-S -50 105 0 95 1 1 6 N
-S -50 150 50 -250 1 1 10 f
-X Pin_1 1 -200 100 150 R 50 50 1 1 P
-X Pin_2 2 -200 0 150 R 50 50 1 1 P
-X Pin_3 3 -200 -100 150 R 50 50 1 1 P
-X Pin_4 4 -200 -200 150 R 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Connector_Generic_Conn_01x08
-#
-DEF Connector_Generic_Conn_01x08 J 0 40 Y N 1 F N
-F0 "J" 0 400 50 H V C CNN
-F1 "Connector_Generic_Conn_01x08" 0 -500 50 H V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- Connector*:*_1x??_*
-$ENDFPLIST
-DRAW
-S -50 -395 0 -405 1 1 6 N
-S -50 -295 0 -305 1 1 6 N
-S -50 -195 0 -205 1 1 6 N
-S -50 -95 0 -105 1 1 6 N
-S -50 5 0 -5 1 1 6 N
-S -50 105 0 95 1 1 6 N
-S -50 205 0 195 1 1 6 N
-S -50 305 0 295 1 1 6 N
-S -50 350 50 -450 1 1 10 f
-X Pin_1 1 -200 300 150 R 50 50 1 1 P
-X Pin_2 2 -200 200 150 R 50 50 1 1 P
-X Pin_3 3 -200 100 150 R 50 50 1 1 P
-X Pin_4 4 -200 0 150 R 50 50 1 1 P
-X Pin_5 5 -200 -100 150 R 50 50 1 1 P
-X Pin_6 6 -200 -200 150 R 50 50 1 1 P
-X Pin_7 7 -200 -300 150 R 50 50 1 1 P
-X Pin_8 8 -200 -400 150 R 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Device_Buzzer
-#
-DEF Device_Buzzer BZ 0 1 Y N 1 F N
-F0 "BZ" 150 50 50 H V L CNN
-F1 "Device_Buzzer" 150 -50 50 H V L CNN
-F2 "" -25 100 50 V I C CNN
-F3 "" -25 100 50 V I C CNN
-$FPLIST
- *Buzzer*
-$ENDFPLIST
-DRAW
-A 0 0 125 -899 899 0 1 0 N 0 -125 0 125
-P 2 0 1 0 -65 75 -45 75 N
-P 2 0 1 0 -55 85 -55 65 N
-P 2 0 1 0 0 125 0 -125 N
-X - 1 -100 100 100 R 50 50 1 1 P
-X + 2 -100 -100 100 R 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Device_D_Bridge_+-AA
-#
-DEF Device_D_Bridge_+-AA D 0 0 Y Y 1 F N
-F0 "D" 100 275 50 H V L CNN
-F1 "Device_D_Bridge_+-AA" 100 200 50 H V L CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- D*Bridge*
- D*Rectifier*
-$ENDFPLIST
-DRAW
-C -200 0 10 0 1 0 F
-C 0 -200 10 0 1 0 F
-C 0 200 10 0 1 0 F
-C 200 0 10 0 1 0 F
-P 2 0 1 10 -100 150 -50 100 N
-P 2 0 1 10 -50 -100 -100 -150 N
-P 2 0 1 10 100 -50 150 -100 N
-P 2 0 1 10 100 50 150 100 N
-P 4 0 1 10 -150 100 -100 50 -75 125 -150 100 N
-P 4 0 1 10 -100 -50 -150 -100 -75 -125 -100 -50 N
-P 4 0 1 10 50 100 100 150 125 75 50 100 N
-P 4 0 1 10 125 -75 50 -100 100 -150 125 -75 N
-P 5 0 1 0 -200 0 0 -200 200 0 0 200 -200 0 N
-X + 1 300 0 100 L 50 50 1 1 P
-X - 2 -300 0 100 R 50 50 1 1 P
-X ~~ 3 0 300 100 D 50 50 1 1 P
-X ~~ 4 0 -300 100 U 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Device_R
-#
-DEF Device_R R 0 0 N Y 1 F N
-F0 "R" 80 0 50 V V C CNN
-F1 "Device_R" 0 0 50 V V C CNN
-F2 "" -70 0 50 V I C CNN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- R_*
-$ENDFPLIST
-DRAW
-S -40 -100 40 100 0 1 10 N
-X ~ 1 0 150 50 D 50 50 1 1 P
-X ~ 2 0 -150 50 U 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Device_R_POT
-#
-DEF Device_R_POT RV 0 40 Y N 1 F N
-F0 "RV" -175 0 50 V V C CNN
-F1 "Device_R_POT" -100 0 50 V V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- Potentiometer*
-$ENDFPLIST
-DRAW
-S 40 100 -40 -100 0 1 10 N
-P 2 0 1 0 100 0 60 0 N
-P 4 0 1 0 45 0 90 20 90 -20 45 0 F
-X 1 1 0 150 50 D 50 50 1 1 P
-X 2 2 150 0 50 L 50 50 1 1 P
-X 3 3 0 -150 50 U 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Interface_CAN_LIN_MCP2551-I-P
-#
-DEF Interface_CAN_LIN_MCP2551-I-P U 0 40 Y Y 1 F N
-F0 "U" -400 350 50 H V L CNN
-F1 "Interface_CAN_LIN_MCP2551-I-P" 100 350 50 H V L CNN
-F2 "Package_DIP:DIP-8_W7.62mm" 0 -500 50 H I C CIN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- DIP*W7.62mm*
-$ENDFPLIST
-DRAW
-S -400 300 400 -300 0 1 10 f
-X TXD 1 -500 200 100 R 50 50 1 1 I
-X VSS 2 0 -400 100 U 50 50 1 1 W
-X VDD 3 0 400 100 D 50 50 1 1 W
-X RXD 4 -500 100 100 R 50 50 1 1 O
-X Vref 5 -500 -100 100 R 50 50 1 1 w
-X CANL 6 500 -100 100 L 50 50 1 1 B
-X CANH 7 500 100 100 L 50 50 1 1 B
-X Rs 8 -500 -200 100 R 50 50 1 1 I
-ENDDRAW
-ENDDEF
-#
-# Isolator_4N25
-#
-DEF Isolator_4N25 U 0 40 Y Y 1 F N
-F0 "U" -200 200 50 H V L CNN
-F1 "Isolator_4N25" 0 200 50 H V L CNN
-F2 "Package_DIP:DIP-6_W7.62mm" -200 -200 50 H I L CIN
-F3 "" 0 0 50 H I L CNN
-ALIAS 4N26 TIL111 4N27 4N28 4N35 4N36 4N37
-$FPLIST
- DIP*W7.62mm*
-$ENDFPLIST
-DRAW
-S -200 150 200 -150 0 1 10 f
-P 2 0 1 10 -150 -25 -100 -25 N
-P 2 0 1 0 105 -55 150 -100 N
-P 2 0 1 0 105 -45 150 0 N
-P 2 0 1 0 150 -100 200 -100 N
-P 2 0 1 0 150 0 200 0 N
-P 3 0 1 14 105 -10 105 -90 105 -90 N
-P 4 0 1 0 -200 -100 -125 -100 -125 100 -200 100 N
-P 4 0 1 10 -125 -25 -150 25 -100 25 -125 -25 N
-P 4 0 1 0 145 -95 135 -75 125 -85 145 -95 N
-P 4 0 1 0 200 100 75 100 75 -50 100 -50 N
-P 5 0 1 0 -25 -20 25 -20 10 -25 10 -15 25 -20 N
-P 5 0 1 0 -25 20 25 20 10 15 10 25 25 20 N
-X ~ 1 -300 100 100 R 50 50 1 1 P
-X ~ 2 -300 -100 100 R 50 50 1 1 P
-X NC 3 -200 0 100 R 50 50 1 1 N N
-X ~ 4 300 -100 100 L 50 50 1 1 P
-X ~ 5 300 0 100 L 50 50 1 1 P
-X ~ 6 300 100 100 L 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Isolator_LTV-814
-#
-DEF Isolator_LTV-814 U 0 40 Y Y 1 F N
-F0 "U" -200 200 50 H V L CNN
-F1 "Isolator_LTV-814" 0 200 50 H V L CNN
-F2 "Package_DIP:DIP-4_W7.62mm" -200 -200 50 H I L CIN
-F3 "" 75 0 50 H I L CNN
-$FPLIST
- DIP*W7.62mm*
-$ENDFPLIST
-DRAW
-C -125 -100 5 0 1 0 N
-C -125 100 5 0 1 0 N
-S -200 150 200 -150 0 1 10 f
-P 2 0 1 0 -125 100 -125 -100 N
-P 2 0 1 10 -75 -25 -25 -25 N
-P 2 0 1 0 100 25 175 100 N
-P 2 0 1 0 175 -100 100 -25 F
-P 2 0 1 0 175 -100 200 -100 N
-P 2 0 1 0 175 100 200 100 N
-P 3 0 1 0 -200 100 -50 100 -50 -30 N
-P 3 0 1 0 -50 -25 -50 -100 -200 -100 N
-P 3 0 1 20 100 75 100 -75 100 -75 N
-P 4 0 1 10 -50 -25 -75 25 -25 25 -50 -25 N
-P 5 0 1 0 5 -20 55 -20 40 -25 40 -15 55 -20 N
-P 5 0 1 0 5 20 55 20 40 15 40 25 55 20 N
-P 5 0 1 0 120 -65 140 -45 160 -85 120 -65 120 -65 F
-P 2 1 1 10 -150 25 -100 25 N
-P 4 1 1 10 -125 25 -150 -25 -100 -25 -125 25 N
-X ~ 1 -300 100 100 R 50 50 1 1 P
-X ~ 2 -300 -100 100 R 50 50 1 1 P
-X ~ 3 300 -100 100 L 50 50 1 1 P
-X ~ 4 300 100 100 L 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
-# Regulator_Linear_L7805
-#
-DEF Regulator_Linear_L7805 U 0 10 Y Y 1 F N
-F0 "U" -150 125 50 H V C CNN
-F1 "Regulator_Linear_L7805" 0 125 50 H V L CNN
-F2 "" 25 -150 50 H I L CIN
-F3 "" 0 -50 50 H I C CNN
-ALIAS L7806 L7808 L7885 L7809 L7812 L7815 L7818 L7824
-$FPLIST
- TO?252*
- TO?263*
- TO?220*
-$ENDFPLIST
-DRAW
-S -200 75 200 -200 0 1 10 f
-X IN 1 -300 0 100 R 50 50 1 1 W
-X GND 2 0 -300 100 U 50 50 1 1 W
-X OUT 3 300 0 100 L 50 50 1 1 w
-ENDDRAW
-ENDDEF
-#
-# Switch_SW_Push
-#
-DEF Switch_SW_Push SW 0 40 N N 1 F N
-F0 "SW" 50 100 50 H V L CNN
-F1 "Switch_SW_Push" 0 -60 50 H V C CNN
-F2 "" 0 200 50 H I C CNN
-F3 "" 0 200 50 H I C CNN
-DRAW
-C -80 0 20 0 1 0 N
-C 80 0 20 0 1 0 N
-P 2 0 1 0 0 50 0 120 N
-P 2 0 1 0 100 50 -100 50 N
-X 1 1 -200 0 100 R 50 50 0 1 P
-X 2 2 200 0 100 L 50 50 0 1 P
-ENDDRAW
-ENDDEF
-#
 # YAAJ_BluePill_Part_Like_YAAJ_BluePill_Part_Like
 #
 DEF YAAJ_BluePill_Part_Like_YAAJ_BluePill_Part_Like U 0 40 Y Y 1 F N
@@ -442,27 +128,11 @@ X PA12 9 -800 100 200 R 50 50 1 1 B
 ENDDRAW
 ENDDEF
 #
-# power_+3.3V
+# stm_proto_board-rescue_+3.3V-power
 #
-DEF power_+3.3V #PWR 0 0 Y Y 1 F P
+DEF stm_proto_board-rescue_+3.3V-power #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power_+3.3V" 0 140 50 H V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-ALIAS +3.3V
-DRAW
-P 2 0 1 0 -30 50 0 100 N
-P 2 0 1 0 0 0 0 100 N
-P 2 0 1 0 0 100 30 50 N
-X +3V3 1 0 0 0 U 50 50 1 1 W N
-ENDDRAW
-ENDDEF
-#
-# power_+3V3
-#
-DEF power_+3V3 #PWR 0 0 Y Y 1 F P
-F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power_+3V3" 0 140 50 H V C CNN
+F1 "stm_proto_board-rescue_+3.3V-power" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -473,11 +143,26 @@ X +3V3 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# power_+5V
+# stm_proto_board-rescue_+3V3-power
 #
-DEF power_+5V #PWR 0 0 Y Y 1 F P
+DEF stm_proto_board-rescue_+3V3-power #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power_+5V" 0 140 50 H V C CNN
+F1 "stm_proto_board-rescue_+3V3-power" 0 140 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+P 2 0 1 0 -30 50 0 100 N
+P 2 0 1 0 0 0 0 100 N
+P 2 0 1 0 0 100 30 50 N
+X +3V3 1 0 0 0 U 50 50 1 1 W N
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_+5V-power
+#
+DEF stm_proto_board-rescue_+5V-power #PWR 0 0 Y Y 1 F P
+F0 "#PWR" 0 -150 50 H I C CNN
+F1 "stm_proto_board-rescue_+5V-power" 0 140 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -488,11 +173,205 @@ X +5V 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# power_GND
+# stm_proto_board-rescue_4N25-Isolator
 #
-DEF power_GND #PWR 0 0 Y Y 1 F P
+DEF stm_proto_board-rescue_4N25-Isolator U 0 40 Y Y 1 F N
+F0 "U" -200 200 50 H V L CNN
+F1 "stm_proto_board-rescue_4N25-Isolator" 0 200 50 H V L CNN
+F2 "Package_DIP:DIP-6_W7.62mm" -200 -200 50 H I L CIN
+F3 "" 0 0 50 H I L CNN
+$FPLIST
+ DIP*W7.62mm*
+$ENDFPLIST
+DRAW
+S -200 150 200 -150 0 1 10 f
+P 2 0 1 10 -150 -25 -100 -25 N
+P 2 0 1 0 105 -55 150 -100 N
+P 2 0 1 0 105 -45 150 0 N
+P 2 0 1 0 150 -100 200 -100 N
+P 2 0 1 0 150 0 200 0 N
+P 3 0 1 14 105 -10 105 -90 105 -90 N
+P 4 0 1 0 -200 -100 -125 -100 -125 100 -200 100 N
+P 4 0 1 10 -125 -25 -150 25 -100 25 -125 -25 N
+P 4 0 1 0 145 -95 135 -75 125 -85 145 -95 N
+P 4 0 1 0 200 100 75 100 75 -50 100 -50 N
+P 5 0 1 0 -25 -20 25 -20 10 -25 10 -15 25 -20 N
+P 5 0 1 0 -25 20 25 20 10 15 10 25 25 20 N
+X ~ 1 -300 100 100 R 50 50 1 1 P
+X ~ 2 -300 -100 100 R 50 50 1 1 P
+X NC 3 -200 0 100 R 50 50 1 1 N N
+X ~ 4 300 -100 100 L 50 50 1 1 P
+X ~ 5 300 0 100 L 50 50 1 1 P
+X ~ 6 300 100 100 L 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_Buzzer-Device
+#
+DEF stm_proto_board-rescue_Buzzer-Device BZ 0 1 Y N 1 F N
+F0 "BZ" 150 50 50 H V L CNN
+F1 "stm_proto_board-rescue_Buzzer-Device" 150 -50 50 H V L CNN
+F2 "" -25 100 50 V I C CNN
+F3 "" -25 100 50 V I C CNN
+$FPLIST
+ *Buzzer*
+$ENDFPLIST
+DRAW
+A 0 0 125 -899 899 0 1 0 N 0 -125 0 125
+P 2 0 1 0 -65 75 -45 75 N
+P 2 0 1 0 -55 85 -55 65 N
+P 2 0 1 0 0 125 0 -125 N
+X - 1 -100 100 100 R 50 50 1 1 P
+X + 2 -100 -100 100 R 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_CAP-pspice
+#
+DEF stm_proto_board-rescue_CAP-pspice C 0 10 Y Y 1 F N
+F0 "C" 100 150 50 V V C CNN
+F1 "stm_proto_board-rescue_CAP-pspice" 100 -150 50 V V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+P 2 0 1 0 -150 -50 150 -50 N
+P 2 0 1 0 -150 50 150 50 N
+X ~ 1 0 250 200 D 40 40 1 1 P
+X ~ 2 0 -250 200 U 40 40 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_Conn_01x02-Connector_Generic
+#
+DEF stm_proto_board-rescue_Conn_01x02-Connector_Generic J 0 40 Y N 1 F N
+F0 "J" 0 100 50 H V C CNN
+F1 "stm_proto_board-rescue_Conn_01x02-Connector_Generic" 0 -200 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ Connector*:*_1x??_*
+$ENDFPLIST
+DRAW
+S -50 -95 0 -105 1 1 6 N
+S -50 5 0 -5 1 1 6 N
+S -50 50 50 -150 1 1 10 f
+X Pin_1 1 -200 0 150 R 50 50 1 1 P
+X Pin_2 2 -200 -100 150 R 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_Conn_01x03-Connector_Generic
+#
+DEF stm_proto_board-rescue_Conn_01x03-Connector_Generic J 0 40 Y N 1 F N
+F0 "J" 0 200 50 H V C CNN
+F1 "stm_proto_board-rescue_Conn_01x03-Connector_Generic" 0 -200 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ Connector*:*_1x??_*
+$ENDFPLIST
+DRAW
+S -50 -95 0 -105 1 1 6 N
+S -50 5 0 -5 1 1 6 N
+S -50 105 0 95 1 1 6 N
+S -50 150 50 -150 1 1 10 f
+X Pin_1 1 -200 100 150 R 50 50 1 1 P
+X Pin_2 2 -200 0 150 R 50 50 1 1 P
+X Pin_3 3 -200 -100 150 R 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_Conn_01x04-Connector_Generic
+#
+DEF stm_proto_board-rescue_Conn_01x04-Connector_Generic J 0 40 Y N 1 F N
+F0 "J" 0 200 50 H V C CNN
+F1 "stm_proto_board-rescue_Conn_01x04-Connector_Generic" 0 -300 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ Connector*:*_1x??_*
+$ENDFPLIST
+DRAW
+S -50 -195 0 -205 1 1 6 N
+S -50 -95 0 -105 1 1 6 N
+S -50 5 0 -5 1 1 6 N
+S -50 105 0 95 1 1 6 N
+S -50 150 50 -250 1 1 10 f
+X Pin_1 1 -200 100 150 R 50 50 1 1 P
+X Pin_2 2 -200 0 150 R 50 50 1 1 P
+X Pin_3 3 -200 -100 150 R 50 50 1 1 P
+X Pin_4 4 -200 -200 150 R 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_Conn_01x08-Connector_Generic
+#
+DEF stm_proto_board-rescue_Conn_01x08-Connector_Generic J 0 40 Y N 1 F N
+F0 "J" 0 400 50 H V C CNN
+F1 "stm_proto_board-rescue_Conn_01x08-Connector_Generic" 0 -500 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ Connector*:*_1x??_*
+$ENDFPLIST
+DRAW
+S -50 -395 0 -405 1 1 6 N
+S -50 -295 0 -305 1 1 6 N
+S -50 -195 0 -205 1 1 6 N
+S -50 -95 0 -105 1 1 6 N
+S -50 5 0 -5 1 1 6 N
+S -50 105 0 95 1 1 6 N
+S -50 205 0 195 1 1 6 N
+S -50 305 0 295 1 1 6 N
+S -50 350 50 -450 1 1 10 f
+X Pin_1 1 -200 300 150 R 50 50 1 1 P
+X Pin_2 2 -200 200 150 R 50 50 1 1 P
+X Pin_3 3 -200 100 150 R 50 50 1 1 P
+X Pin_4 4 -200 0 150 R 50 50 1 1 P
+X Pin_5 5 -200 -100 150 R 50 50 1 1 P
+X Pin_6 6 -200 -200 150 R 50 50 1 1 P
+X Pin_7 7 -200 -300 150 R 50 50 1 1 P
+X Pin_8 8 -200 -400 150 R 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_D_Bridge_+-AA-Device
+#
+DEF stm_proto_board-rescue_D_Bridge_+-AA-Device D 0 0 Y Y 1 F N
+F0 "D" 100 275 50 H V L CNN
+F1 "stm_proto_board-rescue_D_Bridge_+-AA-Device" 100 200 50 H V L CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ D*Bridge*
+ D*Rectifier*
+$ENDFPLIST
+DRAW
+C -200 0 10 0 1 0 F
+C 0 -200 10 0 1 0 F
+C 0 200 10 0 1 0 F
+C 200 0 10 0 1 0 F
+P 2 0 1 10 -100 150 -50 100 N
+P 2 0 1 10 -50 -100 -100 -150 N
+P 2 0 1 10 100 -50 150 -100 N
+P 2 0 1 10 100 50 150 100 N
+P 4 0 1 10 -150 100 -100 50 -75 125 -150 100 N
+P 4 0 1 10 -100 -50 -150 -100 -75 -125 -100 -50 N
+P 4 0 1 10 50 100 100 150 125 75 50 100 N
+P 4 0 1 10 125 -75 50 -100 100 -150 125 -75 N
+P 5 0 1 0 -200 0 0 -200 200 0 0 200 -200 0 N
+X + 1 300 0 100 L 50 50 1 1 P
+X - 2 -300 0 100 R 50 50 1 1 P
+X ~~ 3 0 300 100 D 50 50 1 1 P
+X ~~ 4 0 -300 100 U 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_GND-power
+#
+DEF stm_proto_board-rescue_GND-power #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -250 50 H I C CNN
-F1 "power_GND" 0 -150 50 H V C CNN
+F1 "stm_proto_board-rescue_GND-power" 0 -150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -501,19 +380,59 @@ X GND 1 0 0 0 D 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# pspice_CAP
+# stm_proto_board-rescue_L7805-Regulator_Linear
 #
-DEF pspice_CAP C 0 10 Y Y 1 F N
-F0 "C" 100 150 50 V V C CNN
-F1 "pspice_CAP" 100 -150 50 V V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-ALIAS C
+DEF stm_proto_board-rescue_L7805-Regulator_Linear U 0 10 Y Y 1 F N
+F0 "U" -150 125 50 H V C CNN
+F1 "stm_proto_board-rescue_L7805-Regulator_Linear" 0 125 50 H V L CNN
+F2 "" 25 -150 50 H I L CIN
+F3 "" 0 -50 50 H I C CNN
+$FPLIST
+ TO?252*
+ TO?263*
+ TO?220*
+$ENDFPLIST
 DRAW
-P 2 0 1 0 -150 -50 150 -50 N
-P 2 0 1 0 -150 50 150 50 N
-X ~ 1 0 250 200 D 40 40 1 1 P
-X ~ 2 0 -250 200 U 40 40 1 1 P
+S -200 75 200 -200 0 1 10 f
+X IN 1 -300 0 100 R 50 50 1 1 W
+X GND 2 0 -300 100 U 50 50 1 1 W
+X OUT 3 300 0 100 L 50 50 1 1 w
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_LTV-814-Isolator
+#
+DEF stm_proto_board-rescue_LTV-814-Isolator U 0 40 Y Y 1 F N
+F0 "U" -200 200 50 H V L CNN
+F1 "stm_proto_board-rescue_LTV-814-Isolator" 0 200 50 H V L CNN
+F2 "Package_DIP:DIP-4_W7.62mm" -200 -200 50 H I L CIN
+F3 "" 75 0 50 H I L CNN
+$FPLIST
+ DIP*W7.62mm*
+$ENDFPLIST
+DRAW
+C -125 -100 5 0 1 0 N
+C -125 100 5 0 1 0 N
+S -200 150 200 -150 0 1 10 f
+P 2 0 1 0 -125 100 -125 -100 N
+P 2 0 1 10 -75 -25 -25 -25 N
+P 2 0 1 0 100 25 175 100 N
+P 2 0 1 0 175 -100 100 -25 F
+P 2 0 1 0 175 -100 200 -100 N
+P 2 0 1 0 175 100 200 100 N
+P 3 0 1 0 -200 100 -50 100 -50 -30 N
+P 3 0 1 0 -50 -25 -50 -100 -200 -100 N
+P 3 0 1 20 100 75 100 -75 100 -75 N
+P 4 0 1 10 -50 -25 -75 25 -25 25 -50 -25 N
+P 5 0 1 0 5 -20 55 -20 40 -25 40 -15 55 -20 N
+P 5 0 1 0 5 20 55 20 40 15 40 25 55 20 N
+P 5 0 1 0 120 -65 140 -45 160 -85 120 -65 120 -65 F
+P 2 1 1 10 -150 25 -100 25 N
+P 4 1 1 10 -125 25 -150 -25 -100 -25 -125 25 N
+X ~ 1 -300 100 100 R 50 50 1 1 P
+X ~ 2 -300 -100 100 R 50 50 1 1 P
+X ~ 3 300 -100 100 L 50 50 1 1 P
+X ~ 4 300 100 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
@@ -534,6 +453,83 @@ X VCC 3 -600 0 100 R 50 50 1 1 W
 X VCC 3 500 -100 100 L 50 50 1 1 W
 X GND 4 -600 100 100 R 50 50 1 1 w
 X GND 4 500 -200 100 L 50 50 1 1 w
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_MCP2551-I-P-Interface_CAN_LIN
+#
+DEF stm_proto_board-rescue_MCP2551-I-P-Interface_CAN_LIN U 0 40 Y Y 1 F N
+F0 "U" -400 350 50 H V L CNN
+F1 "stm_proto_board-rescue_MCP2551-I-P-Interface_CAN_LIN" 100 350 50 H V L CNN
+F2 "Package_DIP:DIP-8_W7.62mm" 0 -500 50 H I C CIN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ DIP*W7.62mm*
+$ENDFPLIST
+DRAW
+S -400 300 400 -300 0 1 10 f
+X TXD 1 -500 200 100 R 50 50 1 1 I
+X VSS 2 0 -400 100 U 50 50 1 1 W
+X VDD 3 0 400 100 D 50 50 1 1 W
+X RXD 4 -500 100 100 R 50 50 1 1 O
+X Vref 5 -500 -100 100 R 50 50 1 1 w
+X CANL 6 500 -100 100 L 50 50 1 1 B
+X CANH 7 500 100 100 L 50 50 1 1 B
+X Rs 8 -500 -200 100 R 50 50 1 1 I
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_R-Device
+#
+DEF stm_proto_board-rescue_R-Device R 0 0 N Y 1 F N
+F0 "R" 80 0 50 V V C CNN
+F1 "stm_proto_board-rescue_R-Device" 0 0 50 V V C CNN
+F2 "" -70 0 50 V I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ R_*
+$ENDFPLIST
+DRAW
+S -40 -100 40 100 0 1 10 N
+X ~ 1 0 150 50 D 50 50 1 1 P
+X ~ 2 0 -150 50 U 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_R_POT-Device
+#
+DEF stm_proto_board-rescue_R_POT-Device RV 0 40 Y N 1 F N
+F0 "RV" -175 0 50 V V C CNN
+F1 "stm_proto_board-rescue_R_POT-Device" -100 0 50 V V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ Potentiometer*
+$ENDFPLIST
+DRAW
+S 40 100 -40 -100 0 1 10 N
+P 2 0 1 0 100 0 60 0 N
+P 4 0 1 0 45 0 90 20 90 -20 45 0 F
+X 1 1 0 150 50 D 50 50 1 1 P
+X 2 2 150 0 50 L 50 50 1 1 P
+X 3 3 0 -150 50 U 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# stm_proto_board-rescue_SW_Push-Switch
+#
+DEF stm_proto_board-rescue_SW_Push-Switch SW 0 40 N N 1 F N
+F0 "SW" 50 100 50 H V L CNN
+F1 "stm_proto_board-rescue_SW_Push-Switch" 0 -60 50 H V C CNN
+F2 "" 0 200 50 H I C CNN
+F3 "" 0 200 50 H I C CNN
+DRAW
+C -80 0 20 0 1 0 N
+C 80 0 20 0 1 0 N
+P 2 0 1 0 0 50 0 120 N
+P 2 0 1 0 100 50 -100 50 N
+X 1 1 -200 0 100 R 50 50 0 1 P
+X 2 2 200 0 100 L 50 50 0 1 P
 ENDDRAW
 ENDDEF
 #
