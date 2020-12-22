@@ -16,7 +16,7 @@ open(OUTPUT_FILE,">".$output_file) or die "$output_file not writeable!";
 
 # Initialize result file:
 print OUTPUT_FILE "\<\?xml version=\"1.0\"\?\>"."\n\<span>\n";
-print OUTPUT_FILE "  <testModule>\n";
+#print OUTPUT_FILE "  <testModule>\n";
 
 print "\n";
 
