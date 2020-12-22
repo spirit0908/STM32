@@ -42,7 +42,7 @@ test: test_main
 
 runtest: test_main
 	./test_main > test_exec.log
-	perl generate_test_report.pl test_exec.log test_result_$(MODULE_NAME).xml
+	perl ../../../../../tools/test_report_generator/generate_test_report.pl test_exec.log test_result_$(MODULE_NAME).xml
 	mkdir -p ../../../out/tests
 	cp test_result_$(MODULE_NAME).xml ../../../out/tests/test_result_$(MODULE_NAME).xml
 

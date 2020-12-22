@@ -6,27 +6,17 @@ if ($num_args == 2 ) {
     $input_file=$ARGV[0];		# input file (log)
     $output_file=$ARGV[1];		# output file (xml)
 }
-elsif ($num_args == 3 ) {
-    if( $ARGV[0] == "-list" ){
-        $input_file=$ARGV[1];		# input file (log)
-        $output_file=$ARGV[2];		# output file (xml)
-    }
-    else{
-        print "\nUsage: generate_xml_report.pl -list <input_list_file> <output_xml_file>\n";
-    }
-}
 else {
     print "\nUsage: generate_xml_report.pl <input_log_file> <output_xml_file>\n";
     exit;
 }
-
-
 
 open(INPUT_FILE,$input_file) or die "$input_file not found!";
 open(OUTPUT_FILE,">".$output_file) or die "$output_file not writeable!";
 
 # Initialize result file:
 print OUTPUT_FILE "\<\?xml version=\"1.0\"\?\>"."\n\<span>\n";
+print OUTPUT_FILE "  <testModule>\n";
 
 print "\n";
 
