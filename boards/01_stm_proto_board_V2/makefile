@@ -34,39 +34,42 @@ MAIN_OUT_BIN = $(OUT_PATH)/$(MAIN_OUT).bin
 all: $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
 
 # main
+MODULES_PATH=../../modules
+#MODULES_PATH=./modules
+
 SRC_FILES = \
   main.c \
-  modules/nokia/n3310.c \
-  modules/Teleinfo/teleinfo.c \
-  modules/Fifo/Fifo.c \
-  modules/Fifo/Fifo_Cfg.c \
-  modules/TaskMan/Task_cfg.c \
-  modules/TaskMan/Task.c \
-  modules/OrderMgt/Order_mgt.c \
-  modules/Light/Light.c \
-  modules/LcdMenu/LcdMenu.c \
-  modules/PushButton/PushButton.c \
-  modules/LedStrip/LedStrip.c \
-  modules/Heating/Heating.c \
-  modules/Security/Security.c \
+  $(MODULES_PATH)/nokia/n3310.c \
+  $(MODULES_PATH)/Teleinfo/teleinfo.c \
+  $(MODULES_PATH)/Fifo/Fifo.c \
+  $(MODULES_PATH)/Fifo/Fifo_Cfg.c \
+  $(MODULES_PATH)/TaskMan/Task_cfg.c \
+  $(MODULES_PATH)/TaskMan/Task.c \
+  $(MODULES_PATH)/OrderMgt/Order_mgt.c \
+  $(MODULES_PATH)/Light/Light.c \
+  $(MODULES_PATH)/LcdMenu/LcdMenu.c \
+  $(MODULES_PATH)/PushButton/PushButton.c \
+  $(MODULES_PATH)/LedStrip/LedStrip.c \
+  $(MODULES_PATH)/Heating/Heating.c \
+  $(MODULES_PATH)/Security/Security.c \
   serial.c
 
 INC_FILES = \
   Std_Types.h \
-  modules/nokia/n3310.h \
-  modules/nokia/picture.h \
-  modules/Teleinfo/teleinfo.h \
-  modules/Fifo/Fifo.h \
-  modules/Fifo/Fifo_Cfg.h \
-  modules/TaskMan/Task.h \
-  modules/TaskMan/Task_cfg.h \
-  modules/OrderMgt/Order_mgt.h \
-  modules/Light/Light.h \
-  modules/LcdMenu/LcdMenu.h \
-  modules/PushButton/PushButton.h \
-  modules/LedStrip/LedStrip.h \
-  modules/Heating/Heating.h \
-  modules/Security/Security.h \
+  $(MODULES_PATH)/nokia/n3310.h \
+  $(MODULES_PATH)/nokia/picture.h \
+  $(MODULES_PATH)/Teleinfo/teleinfo.h \
+  $(MODULES_PATH)/Fifo/Fifo.h \
+  $(MODULES_PATH)/Fifo/Fifo_Cfg.h \
+  $(MODULES_PATH)/TaskMan/Task.h \
+  $(MODULES_PATH)/TaskMan/Task_cfg.h \
+  $(MODULES_PATH)/OrderMgt/Order_mgt.h \
+  $(MODULES_PATH)/Light/Light.h \
+  $(MODULES_PATH)/LcdMenu/LcdMenu.h \
+  $(MODULES_PATH)/PushButton/PushButton.h \
+  $(MODULES_PATH)/LedStrip/LedStrip.h \
+  $(MODULES_PATH)/Heating/Heating.h \
+  $(MODULES_PATH)/Security/Security.h \
   serial.h
 
 $(MAIN_OUT_ELF): updateIncFiles $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a
@@ -76,13 +79,13 @@ $(MAIN_OUT_BIN): $(MAIN_OUT_ELF)
 	$(OBJCP) $(OBJCPFLAGS) $< $@
 
 %.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS) -I build/inc
+	$(CC) -o $@ -c $< $(CFLAGS) -I build/inc -I lib/inc
 
 updateIncFiles:
 	mkdir -p build/src
 	mkdir -p build/inc
 	mkdir -p out/
-#	cp $(SRC_FILES) build/src
+	cp $(SRC_FILES) build/src
 	cp $(INC_FILES) build/inc
 
 # flash
@@ -153,7 +156,7 @@ $(LIBSTM32_OBJS): stm32f10x_conf.h
 
 clean:
 #	-rm lib/src/*.o obj/*.o out/*.map $(LIBSTM32_OUT) $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
-#	rm build/src/*.c
+	rm build/src/*.c
 	rm build/inc/*.h
 	find . -type f -name '*.o' -delete
 	rm out/main.bin
