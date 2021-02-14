@@ -114,8 +114,10 @@ test: $(MAIN_OUT_BIN)
 
 #Execute tests and generate report
 testreport: test
+	(cd tools; cp combine_xml.sh ../out/tests/combine_xml.sh)
 	(cd out/tests; ./combine_xml.sh test_results.xml)
-	(cd out/tests; xsltproc test_report_generator.xsl test_results.xml > Test_results.html )
+	(cd tools; xsltproc test_report_generator.xsl ../out/tests/test_results.xml > ../out/tests/Test_results.html )
+	(cd out/tests; rm combine_xml.sh)
 
 # libstm32.a
 
@@ -160,5 +162,3 @@ clean:
 	rm out/main.elf
 	rm out/main.map
 	rm out/tests/*.xml
-
-
