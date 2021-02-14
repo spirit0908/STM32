@@ -1,7 +1,7 @@
 # setup
 
 COMPILE_OPTS = -mcpu=cortex-m3 -mthumb -Wall -g -O0
-INCLUDE_DIRS = -I . -I lib/inc -I obj
+INCLUDE_DIRS = -I . -I build/inc -I lib/inc -I config/inc
 LIBRARY_DIRS = -L lib
 
 CC = arm-none-eabi-gcc
@@ -42,8 +42,6 @@ SRC_FILES = \
   $(MODULES_PATH)/nokia/n3310.c \
   $(MODULES_PATH)/Teleinfo/teleinfo.c \
   $(MODULES_PATH)/Fifo/Fifo.c \
-  $(MODULES_PATH)/Fifo/Fifo_Cfg.c \
-  $(MODULES_PATH)/TaskMan/Task_cfg.c \
   $(MODULES_PATH)/TaskMan/Task.c \
   $(MODULES_PATH)/OrderMgt/Order_mgt.c \
   $(MODULES_PATH)/Light/Light.c \
@@ -54,15 +52,17 @@ SRC_FILES = \
   $(MODULES_PATH)/Security/Security.c \
   serial.c
 
+SRC_CFG_FILES = \
+  $(MODULES_PATH)/Fifo/Fifo_Cfg.c \
+  $(MODULES_PATH)/TaskMan/Task_cfg.c
+
 INC_FILES = \
   Std_Types.h \
   $(MODULES_PATH)/nokia/n3310.h \
   $(MODULES_PATH)/nokia/picture.h \
   $(MODULES_PATH)/Teleinfo/teleinfo.h \
   $(MODULES_PATH)/Fifo/Fifo.h \
-  $(MODULES_PATH)/Fifo/Fifo_Cfg.h \
   $(MODULES_PATH)/TaskMan/Task.h \
-  $(MODULES_PATH)/TaskMan/Task_cfg.h \
   $(MODULES_PATH)/OrderMgt/Order_mgt.h \
   $(MODULES_PATH)/Light/Light.h \
   $(MODULES_PATH)/LcdMenu/LcdMenu.h \
@@ -72,11 +72,22 @@ INC_FILES = \
   $(MODULES_PATH)/Security/Security.h \
   serial.h
 
-SOURCES := $(wildcard build/src/*.c)
-OBJECTS := $(patsubst build/src/%.c, build/src/%.o, $(SOURCES))
+INC_CFG_FILES = \
+  $(MODULES_PATH)/Fifo/Fifo_Cfg.h \
+  $(MODULES_PATH)/TaskMan/Task_cfg.h
 
-$(MAIN_OUT_ELF): updateIncFiles $(OBJECTS) stm32f10x_it.o lib/libstm32.a
-	$(LD) $(LDFLAGS) $(OBJECTS) stm32f10x_it.o lib/libstm32.a --output $@
+SOURCES := $(wildcard build/src/*.c)
+CFG_SOURCES := $(wildcard config/src/*.c)
+OBJECTS := $(patsubst build/src/%.c, build/src/%.o, $(SOURCES))
+CFG_OBJECTS := $(patsubst config/src/%.c, config/src/%.o, $(CFG_SOURCES))
+
+#CFG_SOURCES := $(wildcard config/src/*.c)
+#CFG_OBJECTS := $(patsubst config/src/%.c, config/src/%.o, $(CFG_SOURCES))
+
+$(MAIN_OUT_ELF): updateIncFiles $(OBJECTS) $(CFG_SOURCES) stm32f10x_it.o lib/libstm32.a
+	echo toto $(SOURCES) tutu
+	$(LD) $(LDFLAGS) $(OBJECTS) $(CFG_SOURCES) stm32f10x_it.o lib/libstm32.a --output $@
+
 
 $(MAIN_OUT_BIN): $(MAIN_OUT_ELF)
 	$(OBJCP) $(OBJCPFLAGS) $< $@
@@ -159,12 +170,12 @@ $(LIBSTM32_OBJS): stm32f10x_conf.h
 
 clean:
 #	-rm lib/src/*.o obj/*.o out/*.map $(LIBSTM32_OUT) $(MAIN_OUT_ELF) $(MAIN_OUT_BIN)
-	rm build/src/*.c
-	rm build/inc/*.h
+	find ./build/src/ -type f -name '*.c' -delete
+	find ./build/inc/ -type f -name '*.h' -delete
 	find . -type f -name '*.o' -delete
-	rm out/main.bin
-	rm out/main.elf
-	rm out/main.map
-	rm out/tests/*.xml
+	rm -f out/main.bin
+	rm -f out/main.elf
+	rm -f out/main.map
+	rm -f out/tests/*.xml
 
 
