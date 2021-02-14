@@ -72,8 +72,11 @@ INC_FILES = \
   $(MODULES_PATH)/Security/Security.h \
   serial.h
 
-$(MAIN_OUT_ELF): updateIncFiles $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a
-	$(LD) $(LDFLAGS) $(SRC_FILES:%.c=%.o) stm32f10x_it.o lib/libstm32.a --output $@
+SOURCES := $(wildcard build/src/*.c)
+OBJECTS := $(patsubst build/src/%.c, build/src/%.o, $(SOURCES))
+
+$(MAIN_OUT_ELF): updateIncFiles $(OBJECTS) stm32f10x_it.o lib/libstm32.a
+	$(LD) $(LDFLAGS) $(OBJECTS) stm32f10x_it.o lib/libstm32.a --output $@
 
 $(MAIN_OUT_BIN): $(MAIN_OUT_ELF)
 	$(OBJCP) $(OBJCPFLAGS) $< $@
