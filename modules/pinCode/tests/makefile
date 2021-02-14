@@ -1,7 +1,7 @@
 # setup
 
 COMPILE_OPTS = -W -Wall -ansi -pedantic -std=c99 -g
-INCLUDE_DIRS = -I../ -I../../../lib/inc -I../../../
+INCLUDE_DIRS = -I../ -I../../../lib/inc -I../../Common
 #LIBRARY_DIRS = -L lib
 
 CC = gcc
@@ -42,9 +42,9 @@ test: test_main
 
 runtest: test_main
 	./test_main > test_exec.log
-	perl ../../../tools/generate_test_report.pl test_exec.log test_result_$(MODULE_NAME).xml
+	perl ../../../tools/test_report_generator/generate_test_report.pl test_exec.log test_result_$(MODULE_NAME).xml
 	mkdir -p ../../../out/tests
-	cp test_result_$(MODULE_NAME).xml ../../../out/tests/test_result_$(MODULE_NAME).xml
+#	cp test_result_$(MODULE_NAME).xml ../../../out/tests/test_result_$(MODULE_NAME).xml
 
 debug: test_main
 	gdb -tui test_main test_main.c
