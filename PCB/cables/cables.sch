@@ -927,4 +927,95 @@ Wire Notes Line
 	7000 4250 10900 4250
 Wire Notes Line
 	10900 4250 10900 6500
+Text Label 5550 6050 0    50   ~ 0
++Alt
+Text Label 5550 6250 0    50   ~ 0
+RXD
+Text Label 5550 6450 0    50   ~ 0
+TxD
+Text Label 5550 6850 0    50   ~ 0
+GND
+Text Label 5550 6350 0    50   ~ 0
+CAN_H
+Text Label 5550 6550 0    50   ~ 0
+CAN_L
+Text Label 5550 6750 0    50   ~ 0
+-Alt
+Wire Wire Line
+	5300 6450 5800 6450
+$Comp
+L Connector:DB9_Female J?
+U 1 1 6003F4CB
+P 6100 6450
+F 0 "J?" H 6280 6496 50  0000 L CNN
+F 1 "DB9_Female" H 6280 6405 50  0000 L CNN
+F 2 "" H 6100 6450 50  0001 C CNN
+F 3 " ~" H 6100 6450 50  0001 C CNN
+	1    6100 6450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x04 J?
+U 1 1 600773AE
+P 4400 6150
+F 0 "J?" H 4480 6142 50  0000 L CNN
+F 1 "Conn_01x04" H 4480 6051 50  0000 L CNN
+F 2 "" H 4400 6150 50  0001 C CNN
+F 3 "~" H 4400 6150 50  0001 C CNN
+	1    4400 6150
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x03 J?
+U 1 1 60093003
+P 4400 7000
+F 0 "J?" H 4480 7042 50  0000 L CNN
+F 1 "Conn_01x03" H 4480 6951 50  0000 L CNN
+F 2 "" H 4400 7000 50  0001 C CNN
+F 3 "~" H 4400 7000 50  0001 C CNN
+	1    4400 7000
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	4800 6350 4600 6350
+Wire Wire Line
+	4600 6050 5800 6050
+Wire Wire Line
+	4800 6750 4800 6350
+Wire Wire Line
+	4800 6750 5800 6750
+Wire Wire Line
+	4900 6250 4900 6550
+Wire Wire Line
+	4900 6550 5800 6550
+Wire Wire Line
+	4600 6250 4900 6250
+Wire Wire Line
+	5000 6350 5000 6150
+Wire Wire Line
+	4600 6150 5000 6150
+Wire Wire Line
+	5000 6350 5800 6350
+Text Label 4650 6900 0    50   ~ 0
+RXD
+Text Label 4650 7000 0    50   ~ 0
+TXD
+Wire Wire Line
+	4600 7100 5550 7100
+Wire Wire Line
+	5550 7100 5550 6850
+Wire Wire Line
+	5800 6850 5550 6850
+Wire Wire Line
+	5300 6450 5300 7000
+Wire Wire Line
+	4600 7000 5300 7000
+Wire Wire Line
+	5200 6900 5200 6250
+Wire Wire Line
+	4600 6900 5200 6900
+Wire Wire Line
+	5200 6250 5800 6250
+Text Notes 5750 7200 0    50   ~ 0
+Hascsys Inner connector\nHINC_01\n
 $EndSCHEMATC
