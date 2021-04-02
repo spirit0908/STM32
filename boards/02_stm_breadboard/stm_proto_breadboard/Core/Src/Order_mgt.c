@@ -81,6 +81,7 @@ void OrderProcess(unsigned int CanId, unsigned char msgData[8], unsigned char ms
 {
     unsigned char DeviceId, Order;
     unsigned char *paramPtr;
+    unsigned char ret_val = 0;
 
     if( CanId == OWN_CAN_ID )
     {
@@ -96,7 +97,13 @@ void OrderProcess(unsigned int CanId, unsigned char msgData[8], unsigned char ms
                 DeviceId = COMMAND_ID(msgData);
                 paramPtr = COMMAND_PARAM_PTR(msgData);
 
-                LightOrderTmt(DeviceId, Order, paramPtr);
+                ret_val = LightOrderTmt(DeviceId, Order, paramPtr);
+
+                if(ret_val == LIGHT_E_INVALID_LIGHTID )
+                {
+                    /* send notification */
+                }
+
             break;
 
             case ORDER_HEATING:
@@ -113,7 +120,6 @@ void OrderProcess(unsigned int CanId, unsigned char msgData[8], unsigned char ms
             case ORDER_MEASUREMENT:
                 //MesurementOrderTmt(DeviceId, Order, &param);
             break;
-
         }
     }
 }

@@ -90,7 +90,8 @@ unsigned char Task_100ms(void)
 
 unsigned char order=0;
 unsigned char sens=0;
-
+extern CAN_HandleTypeDef hcan;
+uint32_t pTxMailbox;
 unsigned char Task_1s(void)
 {
     unsigned char i;
@@ -148,6 +149,25 @@ unsigned char Task_1s(void)
             GPIO_ResetBits(LightConfig[i].GPIO_Port, LightConfig[i].GPIO_Pin);
         }
 */
+    }
+
+
+    {
+        uint32_t TxMailbox;
+        uint8_t TxData[8];
+        CAN_TxHeaderTypeDef TxMessage;
+
+
+        TxData[0] = 0x12;
+        TxData[1] = 0x00;
+
+        TxMessage.DLC = 2;
+        TxMessage.IDE = CAN_ID_STD;
+        TxMessage.RTR = CAN_RTR_DATA;
+        TxMessage.StdId = 0x100;
+        TxMessage.TransmitGlobalTime = DISABLE;
+
+        HAL_CAN_AddTxMessage(&hcan, &TxMessage, TxData, &TxMailbox);
     }
 
     return 0;
